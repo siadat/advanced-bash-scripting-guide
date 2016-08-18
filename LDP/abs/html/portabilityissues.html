@@ -1,0 +1,518 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Portability Issues</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellany"
+HREF="miscellany.html"><LINK
+REL="PREVIOUS"
+TITLE="Security Issues"
+HREF="http://tldp.org/LDP/abs/html/securityissues.html"><LINK
+REL="NEXT"
+TITLE="Shell Scripting Under Windows"
+HREF="http://tldp.org/LDP/abs/html/winscript.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="http://tldp.org/LDP/abs/html/securityissues.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 36. Miscellany</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="http://tldp.org/LDP/abs/html/winscript.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PORTABILITYISSUES"
+></A
+>36.9. Portability Issues</H1
+><TABLE
+BORDER="0"
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+CLASS="EPIGRAPH"
+><TR
+><TD
+WIDTH="45%"
+>&nbsp;</TD
+><TD
+WIDTH="45%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+><P
+><I
+>It is easier to port a shell than a shell script.</I
+></P
+><P
+><I
+>--Larry Wall</I
+></P
+></I
+></TD
+></TR
+></TABLE
+><P
+>This book deals specifically with Bash scripting on
+	  a GNU/Linux system. All the same, users of <B
+CLASS="COMMAND"
+>sh</B
+>
+	  and <B
+CLASS="COMMAND"
+>ksh</B
+> will find much of value here.</P
+><P
+><A
+NAME="POSIX3REF"
+></A
+>As it happens, many of the various
+	  shells and scripting languages seem to be converging toward the
+	  <A
+HREF="sha-bang.html#POSIX2REF"
+>POSIX</A
+> 1003.2 standard. Invoking
+	  Bash with the <TT
+CLASS="OPTION"
+>--posix</TT
+> option or inserting
+	  a <B
+CLASS="COMMAND"
+>set -o posix</B
+> at the head of a script
+	  causes Bash to conform very closely to this standard. Another
+	  alternative is to use a <I
+CLASS="FIRSTTERM"
+>#!/bin/sh</I
+> <A
+HREF="sha-bang.html#SHABANGREF"
+>sha-bang header</A
+> in the script,
+	  rather than <I
+CLASS="FIRSTTERM"
+>#!/bin/bash</I
+>.
+
+	    <A
+NAME="AEN20799"
+HREF="portabilityissues.html#FTN.AEN20799"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+
+	  Note that <TT
+CLASS="FILENAME"
+>/bin/sh</TT
+> is a <A
+HREF="basic.html#LINKREF"
+>link</A
+> to <TT
+CLASS="FILENAME"
+>/bin/bash</TT
+>
+	  in Linux and certain other flavors of UNIX, and a script invoked
+	  this way disables extended Bash functionality.</P
+><P
+>Most Bash scripts will run as-is under
+	  <B
+CLASS="COMMAND"
+>ksh</B
+>, and vice-versa, since Chet Ramey has
+	  been busily porting <B
+CLASS="COMMAND"
+>ksh</B
+> features to the
+	  latest versions of Bash.</P
+><P
+>On a commercial UNIX machine, scripts using GNU-specific
+	  features of standard commands may not work. This has become less
+	  of a problem in the last few years, as the GNU utilities have
+	  pretty much displaced their proprietary
+	  counterparts even on <SPAN
+CLASS="QUOTE"
+>"big-iron"</SPAN
+> UNIX.
+	  <A
+HREF="http://linux.oreillynet.com/pub/a/linux/2002/02/28/caldera.html"
+TARGET="_top"
+>Caldera's
+	  release of the source</A
+> to many of the original UNIX
+	  utilities has accelerated the trend.</P
+><P
+><A
+NAME="BASHCOMPAT"
+></A
+></P
+><P
+>Bash has certain features that the traditional <A
+HREF="why-shell.html#BASHDEF"
+>Bourne shell</A
+> lacks. Among these are:
+
+	<P
+></P
+><UL
+><LI
+><P
+>Certain extended <A
+HREF="options.html#INVOCATIONOPTIONSREF"
+>invocation options</A
+></P
+></LI
+><LI
+><P
+><A
+HREF="commandsub.html#COMMANDSUBREF"
+>Command substitution</A
+> using
+	  <B
+CLASS="COMMAND"
+>$(    )</B
+> notation</P
+></LI
+><LI
+><P
+><A
+HREF="http://tldp.org/LDP/abs/html/bashver3.html#BRACEEXPREF3"
+>Brace expansion</A
+></P
+></LI
+><LI
+><P
+>Certain <A
+HREF="arrays.html#ARRAYREF"
+>array</A
+> operations,
+          and <A
+HREF="bashver4.html#ASSOCARR"
+>associative arrays</A
+></P
+></LI
+><LI
+><P
+>The <A
+HREF="testconstructs.html#DBLBRACKETS"
+>double brackets</A
+>
+	  extended test construct</P
+></LI
+><LI
+><P
+>The <A
+HREF="dblparens.html#DBLPARENSREF"
+>double-parentheses</A
+>
+	  arithmetic-evaluation construct</P
+></LI
+><LI
+><P
+>Certain <A
+HREF="string-manipulation.html#STRINGMANIP"
+>string manipulation</A
+>
+	  operations</P
+></LI
+><LI
+><P
+><A
+HREF="process-sub.html#PROCESSSUBREF"
+>Process substitution</A
+></P
+></LI
+><LI
+><P
+>A Regular Expression <A
+HREF="http://tldp.org/LDP/abs/html/bashver3.html#REGEXMATCHREF"
+>matching
+	  operator</A
+></P
+></LI
+><LI
+><P
+>Bash-specific <A
+HREF="internal.html#BUILTINREF"
+>builtins</A
+></P
+></LI
+><LI
+><P
+><A
+HREF="bashver4.html#COPROCREF"
+>Coprocesses</A
+></P
+></LI
+></UL
+>
+	</P
+><P
+>See the <A
+HREF="ftp://ftp.cwru.edu/pub/bash/FAQ"
+TARGET="_top"
+>Bash
+	   F.A.Q.</A
+> for a complete listing.</P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN20853"
+></A
+>36.9.1. A Test Suite</H2
+><P
+><A
+NAME="TESTSUITE0"
+></A
+>Let us illustrate some of the
+	   incompatibilities between Bash and the classic
+	   Bourne shell. Download and install the <A
+HREF="http://freshmeat.net/projects/bournesh"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"Heirloom
+	   Bourne Shell"</SPAN
+></A
+> and run the following
+	   script, first using Bash, then the classic
+	   <I
+CLASS="FIRSTTERM"
+>sh</I
+>.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="TESTSUITE"
+></A
+><P
+><B
+>Example 36-23. Test Suite</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# test-suite.sh
+# A partial Bash compatibility test suite.
+# Run this on your version of Bash, or some other shell.
+
+default_option=FAIL         # Tests below will fail unless . . .
+
+echo
+echo -n "Testing "
+sleep 1; echo -n ". "
+sleep 1; echo -n ". "
+sleep 1; echo ". "
+echo
+
+# Double brackets
+String="Double brackets supported?"
+echo -n "Double brackets test: "
+if [[ "$String" = "Double brackets supported?" ]]
+then
+  echo "PASS"
+else
+  echo "FAIL"
+fi
+
+
+# Double brackets and regex matching
+String="Regex matching supported?"
+echo -n "Regex matching: "
+if [[ "$String" =~ R.....matching* ]]
+then
+  echo "PASS"
+else
+  echo "FAIL"
+fi
+
+
+# Arrays
+test_arr=$default_option     # FAIL
+Array=( If supports arrays will print PASS )
+test_arr=${Array[5]}
+echo "Array test: $test_arr"
+
+
+# Command Substitution
+csub_test ()
+{
+  echo "PASS"
+}
+
+test_csub=$default_option    # FAIL
+test_csub=$(csub_test)
+echo "Command substitution test: $test_csub"
+
+echo
+
+#  Completing this script is an exercise for the reader.
+#  Add to the above similar tests for double parentheses,
+#+ brace expansion, process substitution, etc.
+
+exit $?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN20799"
+HREF="portabilityissues.html#AEN20799"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Or, better yet, <A
+HREF="system.html#ENVV2REF"
+>#!/bin/env sh</A
+>.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="http://tldp.org/LDP/abs/html/securityissues.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="http://tldp.org/LDP/abs/html/winscript.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Security Issues</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="miscellany.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Shell Scripting Under Windows</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

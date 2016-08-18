@@ -1,0 +1,1569 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Gotchas</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Topics"
+HREF="part5.html"><LINK
+REL="PREVIOUS"
+TITLE="Options"
+HREF="options.html"><LINK
+REL="NEXT"
+TITLE="Scripting With Style"
+HREF="scrstyle.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="options.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="scrstyle.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="GOTCHAS"
+></A
+>Chapter 34. Gotchas</H1
+><TABLE
+BORDER="0"
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+CLASS="EPIGRAPH"
+><TR
+><TD
+WIDTH="45%"
+>&nbsp;</TD
+><TD
+WIDTH="45%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+><P
+><I
+>Turandot: <I
+CLASS="FOREIGNPHRASE"
+>Gli enigmi sono tre, la morte
+        una!</I
+></I
+></P
+><P
+><I
+>Caleph: <I
+CLASS="FOREIGNPHRASE"
+>No, no! Gli enigmi sono tre, una la
+        vita!</I
+></I
+></P
+><P
+><I
+>--Puccini</I
+></P
+></I
+></TD
+></TR
+></TABLE
+><P
+><A
+NAME="BASH3GOTCHA"
+></A
+></P
+><P
+>Here are some (non-recommended!) scripting practices that
+        will bring excitement into an otherwise dull life.</P
+><P
+></P
+><UL
+><LI
+><P
+><A
+NAME="INAPPVN"
+></A
+></P
+><P
+>Assigning reserved words or characters to variable names.</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>case=value0       # Causes problems.
+23skidoo=value1   # Also problems.
+# Variable names starting with a digit are reserved by the shell.
+# Try _23skidoo=value1. Starting variables with an underscore is okay.
+
+# However . . .   using just an underscore will not work.
+_=25
+echo $_           # $_ is a special variable set to last arg of last command.
+# But . . .       _ is a valid function name!
+
+xyz((!*=value2    # Causes severe problems.
+# As of version 3 of Bash, periods are not allowed within variable names.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	</P
+></LI
+><LI
+><P
+>Using a hyphen or other reserved characters in a variable name (or
+        function name).</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>var-1=23
+# Use 'var_1' instead.
+
+function-whatever ()   # Error
+# Use 'function_whatever ()' instead.
+
+ 
+# As of version 3 of Bash, periods are not allowed within function names.
+function.whatever ()   # Error
+# Use 'functionWhatever ()' instead.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+></LI
+><LI
+><P
+>Using the same name for a variable and a function. This can make a
+        script difficult to understand.</P
+><P
+>        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>do_something ()
+{
+  echo "This function does something with \"$1\"."
+}
+
+do_something=do_something
+
+do_something do_something
+
+# All this is legal, but highly confusing.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	</P
+></LI
+><LI
+><P
+><A
+NAME="WSBAD"
+></A
+>Using <A
+HREF="special-chars.html#WHITESPACEREF"
+>whitespace</A
+> inappropriately.
+	In contrast to other programming languages, Bash can be quite
+	finicky about whitespace.</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>var1 = 23   # 'var1=23' is correct.
+# On line above, Bash attempts to execute command "var1"
+# with the arguments "=" and "23".
+	
+let c = $a - $b   # Instead:   let c=$a-$b   or   let "c = $a - $b"
+
+if [ $a -le 5]    # if [ $a -le 5 ]   is correct.
+#           ^^      if [ "$a" -le 5 ]   is even better.
+                  # [[ $a -le 5 ]] also works.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	</P
+></LI
+><LI
+><P
+><A
+NAME="OMITSEMICOLON"
+></A
+></P
+><P
+>Not terminating with a <A
+HREF="special-chars.html#SEMICOLONREF"
+>semicolon</A
+> the final command
+        in a <A
+HREF="special-chars.html#CODEBLOCKREF"
+>code block within curly
+        brackets</A
+>.</P
+><P
+>        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>{ ls -l; df; echo "Done." }
+# bash: syntax error: unexpected end of file
+
+{ ls -l; df; echo "Done."; }
+#                        ^     ### Final command needs semicolon.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+></LI
+><LI
+><P
+><A
+NAME="UNINITVAR"
+></A
+></P
+><P
+>        Assuming uninitialized variables (variables before a value is
+	assigned to them) are <SPAN
+CLASS="QUOTE"
+>"zeroed out"</SPAN
+>. An
+	uninitialized variable has a value of <I
+CLASS="FIRSTTERM"
+>null</I
+>,
+	<EM
+>not</EM
+> zero.</P
+><P
+><A
+NAME="BASH4.2-UNINITIALIZED"
+></A
+></P
+><P
+>	   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+echo "uninitialized_var = $uninitialized_var"
+# uninitialized_var =
+
+# However . . .
+# if $BASH_VERSION &#8805; 4.2; then
+
+if [[ ! -v uninitialized_var ]]
+then
+  uninitialized_var=0   # Initialize it to zero!
+fi
+&#13;</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+
+      </P
+></LI
+><LI
+><P
+><A
+NAME="EQDIF"
+></A
+></P
+><P
+>Mixing up <I
+CLASS="FIRSTTERM"
+>=</I
+> and
+	  <I
+CLASS="FIRSTTERM"
+>-eq</I
+> in a test. Remember,
+	  <I
+CLASS="FIRSTTERM"
+>=</I
+> is for comparing literal variables
+	  and <I
+CLASS="FIRSTTERM"
+>-eq</I
+> for integers.</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>if [ "$a" = 273 ]      # Is $a an integer or string?
+if [ "$a" -eq 273 ]    # If $a is an integer.
+
+# Sometimes you can interchange -eq and = without adverse consequences.
+# However . . .
+
+
+a=273.0   # Not an integer.
+	   
+if [ "$a" = 273 ]
+then
+  echo "Comparison works."
+else  
+  echo "Comparison does not work."
+fi    # Comparison does not work.
+
+# Same with   a=" 273"  and a="0273".
+
+
+# Likewise, problems trying to use "-eq" with non-integer values.
+	   
+if [ "$a" -eq 273.0 ]
+then
+  echo "a = $a"
+fi  # Aborts with an error message.  
+# test.sh: [: 273.0: integer expression expected</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+        </P
+></LI
+><LI
+><P
+><A
+NAME="NUMSTRCOMPNE"
+></A
+></P
+><P
+>Misusing <A
+HREF="comparison-ops.html#SCOMPARISON1"
+>string comparison</A
+>
+        operators.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="BADOP"
+></A
+><P
+><B
+>Example 34-1. Numerical and string comparison are not equivalent</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# bad-op.sh: Trying to use a string comparison on integers.
+
+echo
+number=1
+
+#  The following while-loop has two errors:
+#+ one blatant, and the other subtle.
+
+while [ "$number" &#60; 5 ]    # Wrong! Should be:  while [ "$number" -lt 5 ]
+do
+  echo -n "$number "
+  let "number += 1"
+done  
+#  Attempt to run this bombs with the error message:
+#+ bad-op.sh: line 10: 5: No such file or directory
+#  Within single brackets, "&#60;" must be escaped,
+#+ and even then, it's still wrong for comparing integers.
+
+echo "---------------------"
+
+while [ "$number" \&#60; 5 ]    #  1 2 3 4
+do                          #
+  echo -n "$number "        #  It *seems* to work, but . . .
+  let "number += 1"         #+ it actually does an ASCII comparison,
+done                        #+ rather than a numerical one.
+
+echo; echo "---------------------"
+
+# This can cause problems. For example:
+
+lesser=5
+greater=105
+
+if [ "$greater" \&#60; "$lesser" ]
+then
+  echo "$greater is less than $lesser"
+fi                          # 105 is less than 5
+#  In fact, "105" actually is less than "5"
+#+ in a string comparison (ASCII sort order).
+
+echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+><LI
+><P
+><A
+NAME="LETBAD"
+></A
+></P
+><P
+>Attempting to use <A
+HREF="internal.html#LETREF"
+>let</A
+>
+                to set string variables.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>let "a = hello, you"
+echo "$a"   # 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></LI
+><LI
+><P
+><A
+NAME="FAILQUOTE"
+></A
+></P
+><P
+>Sometimes variables within <SPAN
+CLASS="QUOTE"
+>"test"</SPAN
+> brackets
+	([ ]) need to be quoted (double quotes).  Failure to do so may
+	cause unexpected behavior. See <A
+HREF="comparison-ops.html#STRTEST"
+>Example 7-6</A
+>, <A
+HREF="redircb.html#REDIR2"
+>Example 20-5</A
+>, and <A
+HREF="internalvariables.html#ARGLIST"
+>Example 9-6</A
+>.</P
+></LI
+><LI
+><P
+><A
+NAME="FAILNOTQUOTE"
+></A
+></P
+><P
+>Quoting a variable containing whitespace <A
+HREF="quotingvar.html#WSQUO"
+>prevents splitting</A
+>. Sometimes
+	this produces <A
+HREF="quotingvar.html#VARSPLITTING"
+>unintended
+	consequences</A
+>.</P
+></LI
+><LI
+><P
+><A
+NAME="EXECPERM"
+></A
+></P
+><P
+>Commands issued from a script may fail to execute because
+	the script owner lacks execute permission for them. If a user
+	cannot invoke a command from the command-line, then putting it
+	into a script will likewise fail. Try changing the attributes of
+	the command in question, perhaps even setting the suid bit
+	(as <I
+CLASS="FIRSTTERM"
+>root</I
+>, of course).</P
+></LI
+><LI
+><P
+><A
+NAME="DASHNREDR"
+></A
+></P
+><P
+>Attempting to use <B
+CLASS="COMMAND"
+>-</B
+> as a redirection
+        operator (which it is not) will usually result in an unpleasant
+	surprise.</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>command1 2&#62; - | command2
+# Trying to redirect error output of command1 into a pipe . . .
+# . . . will not work.	
+
+command1 2&#62;&#38; - | command2  # Also futile.
+
+Thanks, S.C.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></LI
+><LI
+><P
+><A
+NAME="LATEVERF"
+></A
+></P
+><P
+>Using Bash <A
+HREF="bashver2.html#BASH2REF"
+>version 2+</A
+>
+	functionality may cause a bailout with error messages. Older
+	Linux machines may have version 1.XX of Bash as the default
+	installation.</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+minimum_version=2
+# Since Chet Ramey is constantly adding features to Bash,
+# you may set $minimum_version to 2.XX, 3.XX, or whatever is appropriate.
+E_BAD_VERSION=80
+
+if [ "$BASH_VERSION" \&#60; "$minimum_version" ]
+then
+  echo "This script works only with Bash, version $minimum or greater."
+  echo "Upgrade strongly recommended."
+  exit $E_BAD_VERSION
+fi
+
+...</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></LI
+><LI
+><P
+>Using Bash-specific functionality in a <A
+HREF="why-shell.html#BASHDEF"
+>Bourne shell</A
+> script
+	(<TT
+CLASS="USERINPUT"
+><B
+>#!/bin/sh</B
+></TT
+>) on a non-Linux machine
+	<A
+HREF="gotchas.html#BINSH"
+>may cause unexpected behavior</A
+>.
+	A Linux system usually aliases <B
+CLASS="COMMAND"
+>sh</B
+> to
+	<B
+CLASS="COMMAND"
+>bash</B
+>, but this does not necessarily hold true
+	for a generic UNIX machine.</P
+></LI
+><LI
+><P
+><A
+NAME="UNDOCF"
+></A
+></P
+><P
+>Using undocumented features in Bash turns out to be a
+	dangerous practice. In previous releases of this
+	book there were several scripts that depended on the
+	<SPAN
+CLASS="QUOTE"
+>"feature"</SPAN
+> that, although the maximum value
+	of an <A
+HREF="exit-status.html#EXITSTATUSREF"
+>exit</A
+> or <A
+HREF="complexfunct.html#RETURNREF"
+>return</A
+> value was 255, that limit
+	did not apply to <EM
+>negative</EM
+> integers.
+	Unfortunately, in version 2.05b and later, that loophole
+	disappeared.  See <A
+HREF="complexfunct.html#RETURNTEST"
+>Example 24-9</A
+>.</P
+></LI
+><LI
+><P
+><A
+NAME="GOTCHAEXITVALANAMALIES"
+></A
+></P
+><P
+>In certain contexts, a misleading <A
+HREF="exit-status.html#EXITSTATUSREF"
+>exit status</A
+>
+        may be returned. This may occur when <A
+HREF="localvar.html#EXITVALANOMALY01"
+>setting a local variable within a
+        function</A
+> or when <A
+HREF="internal.html#EXITVALANOMALY02"
+>assigning
+        an arithmetic value to a variable</A
+>.</P
+></LI
+><LI
+><P
+><A
+NAME="ARXS1"
+></A
+>The <A
+HREF="testconstructs.html#ARXS"
+>exit
+            status of an arithmetic expression</A
+> is
+            <EM
+>not</EM
+> equivalent to an <I
+CLASS="FIRSTTERM"
+>error
+            code</I
+>.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>var=1 &#38;&#38; ((--var)) &#38;&#38; echo $var
+#        ^^^^^^^^^ Here the and-list terminates with exit status 1.
+#                     $var doesn't echo!
+echo $?   # 1</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></LI
+><LI
+><P
+><A
+NAME="DOSNEWLINES"
+></A
+></P
+><P
+>        A script with DOS-type newlines (<TT
+CLASS="REPLACEABLE"
+><I
+>\r\n</I
+></TT
+>)
+	will fail to execute, since <TT
+CLASS="USERINPUT"
+><B
+>#!/bin/bash\r\n</B
+></TT
+>
+	is <EM
+>not</EM
+> recognized, <EM
+>not</EM
+>
+	the same as the expected <TT
+CLASS="USERINPUT"
+><B
+>#!/bin/bash\n</B
+></TT
+>. The
+	fix is to convert the script to UNIX-style newlines.</P
+><P
+>	  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+echo "Here"
+
+unix2dos $0    # Script changes itself to DOS format.
+chmod 755 $0   # Change back to execute permission.
+               # The 'unix2dos' command removes execute permission.
+
+./$0           # Script tries to run itself again.
+               # But it won't work as a DOS file.
+
+echo "There"
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+></LI
+><LI
+><P
+><A
+NAME="BINSH"
+></A
+></P
+><P
+>A shell script headed by <TT
+CLASS="USERINPUT"
+><B
+>#!/bin/sh</B
+></TT
+>
+	will not run in full Bash-compatibility mode. Some Bash-specific
+	functions might be disabled. Scripts that need complete
+	access to all the Bash-specific extensions should start with
+	<TT
+CLASS="USERINPUT"
+><B
+>#!/bin/bash</B
+></TT
+>.</P
+></LI
+><LI
+><P
+><A
+HREF="here-docs.html#INDENTEDLS"
+>Putting whitespace in front of
+	the terminating limit string</A
+> of a <A
+HREF="here-docs.html#HEREDOCREF"
+>here document</A
+> will cause unexpected
+	behavior in a script.</P
+></LI
+><LI
+><P
+><A
+NAME="RVTCAUTION2"
+></A
+>Putting more than one
+	<I
+CLASS="FIRSTTERM"
+>echo</I
+> statement in a function <A
+HREF="assortedtips.html#RVT"
+>whose output is captured</A
+>.
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>add2 ()
+{
+  echo "Whatever ... "   # Delete this line!
+  let "retval = $1 + $2"
+    echo $retval
+    }
+
+    num1=12
+    num2=43
+    echo "Sum of $num1 and $num2 = $(add2 $num1 $num2)"
+
+#   Sum of 12 and 43 = Whatever ... 
+#   55
+
+#        The "echoes" concatenate.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	This <A
+HREF="assortedtips.html#RVTCAUTION"
+>will not work</A
+>.</P
+></LI
+><LI
+><P
+><A
+NAME="PARCHILDPROBREF"
+></A
+></P
+><P
+>A script may not <B
+CLASS="COMMAND"
+>export</B
+> variables back
+	to its <A
+HREF="internal.html#FORKREF"
+>parent process</A
+>, the shell,
+	or to the environment. Just as we learned in biology, a child
+	process can inherit from a parent, but not vice versa.</P
+><P
+>	  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>WHATEVER=/home/bozo
+export WHATEVER
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+          <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><B
+CLASS="COMMAND"
+>echo $WHATEVER</B
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+></TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>        Sure enough, back at the command prompt, $WHATEVER remains unset.
+       </P
+></LI
+><LI
+><P
+><A
+NAME="VARSUBSH"
+></A
+></P
+><P
+>Setting and manipulating variables in a <A
+HREF="subshells.html#SUBSHELLSREF"
+>subshell</A
+>, then attempting
+        to use those same variables outside the scope of the subshell will
+	result an unpleasant surprise.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="SUBPIT"
+></A
+><P
+><B
+>Example 34-2. Subshell Pitfalls</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# Pitfalls of variables in a subshell.
+
+outer_variable=outer
+echo
+echo "outer_variable = $outer_variable"
+echo
+
+(
+# Begin subshell
+
+echo "outer_variable inside subshell = $outer_variable"
+inner_variable=inner  # Set
+echo "inner_variable inside subshell = $inner_variable"
+outer_variable=inner  # Will value change globally?
+echo "outer_variable inside subshell = $outer_variable"
+
+# Will 'exporting' make a difference?
+#    export inner_variable
+#    export outer_variable
+# Try it and see.
+
+# End subshell
+)
+
+echo
+echo "inner_variable outside subshell = $inner_variable"  # Unset.
+echo "outer_variable outside subshell = $outer_variable"  # Unchanged.
+echo
+
+exit 0
+
+# What happens if you uncomment lines 19 and 20?
+# Does it make a difference?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+><LI
+><P
+><A
+NAME="BADREAD0"
+></A
+></P
+><P
+><A
+HREF="special-chars.html#PIPEREF"
+>Piping</A
+>
+	<B
+CLASS="COMMAND"
+>echo</B
+> output to a <A
+HREF="internal.html#READREF"
+>read</A
+> may produce unexpected
+	results.  In this scenario, the <B
+CLASS="COMMAND"
+>read</B
+>
+	acts as if it were running in a subshell. Instead, use
+	the <A
+HREF="internal.html#SETREF"
+>set</A
+> command (as in <A
+HREF="internal.html#SETPOS"
+>Example 15-18</A
+>).</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="BADREAD"
+></A
+><P
+><B
+>Example 34-3. Piping the output of <I
+CLASS="FIRSTTERM"
+>echo</I
+> to a
+	<I
+CLASS="FIRSTTERM"
+>read</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+#  badread.sh:
+#  Attempting to use 'echo and 'read'
+#+ to assign variables non-interactively.
+
+#   shopt -s lastpipe
+
+a=aaa
+b=bbb
+c=ccc
+
+echo "one two three" | read a b c
+# Try to reassign a, b, and c.
+
+echo
+echo "a = $a"  # a = aaa
+echo "b = $b"  # b = bbb
+echo "c = $c"  # c = ccc
+# Reassignment failed.
+
+### However . . .
+##  Uncommenting line 6:
+#   shopt -s lastpipe
+##+ fixes the problem!
+### This is a new feature in Bash, version 4.2.
+
+# ------------------------------
+
+# Try the following alternative.
+
+var=`echo "one two three"`
+set -- $var
+a=$1; b=$2; c=$3
+
+echo "-------"
+echo "a = $a"  # a = one
+echo "b = $b"  # b = two
+echo "c = $c"  # c = three 
+# Reassignment succeeded.
+
+# ------------------------------
+
+#  Note also that an echo to a 'read' works within a subshell.
+#  However, the value of the variable changes *only* within the subshell.
+
+a=aaa          # Starting all over again.
+b=bbb
+c=ccc
+
+echo; echo
+echo "one two three" | ( read a b c;
+echo "Inside subshell: "; echo "a = $a"; echo "b = $b"; echo "c = $c" )
+# a = one
+# b = two
+# c = three
+echo "-----------------"
+echo "Outside subshell: "
+echo "a = $a"  # a = aaa
+echo "b = $b"  # b = bbb
+echo "c = $c"  # c = ccc
+echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="PIPELOOP"
+></A
+></P
+><P
+>In fact, as Anthony Richardson points out, piping to
+        <EM
+>any</EM
+> loop can cause a similar problem.</P
+><P
+>	
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># Loop piping troubles.
+#  This example by Anthony Richardson,
+#+ with addendum by Wilbert Berendsen.
+
+
+foundone=false
+find $HOME -type f -atime +30 -size 100k |
+while true
+do
+   read f
+   echo "$f is over 100KB and has not been accessed in over 30 days"
+   echo "Consider moving the file to archives."
+   foundone=true
+   # ------------------------------------
+     echo "Subshell level = $BASH_SUBSHELL"
+   # Subshell level = 1
+   # Yes, we're inside a subshell.
+   # ------------------------------------
+done
+   
+#  foundone will always be false here since it is
+#+ set to true inside a subshell
+if [ $foundone = false ]
+then
+   echo "No files need archiving."
+fi
+
+# =====================Now, here is the correct way:=================
+
+foundone=false
+for f in $(find $HOME -type f -atime +30 -size 100k)  # No pipe here.
+do
+   echo "$f is over 100KB and has not been accessed in over 30 days"
+   echo "Consider moving the file to archives."
+   foundone=true
+done
+   
+if [ $foundone = false ]
+then
+   echo "No files need archiving."
+fi
+
+# ==================And here is another alternative==================
+
+#  Places the part of the script that reads the variables
+#+ within a code block, so they share the same subshell.
+#  Thank you, W.B.
+
+find $HOME -type f -atime +30 -size 100k | {
+     foundone=false
+     while read f
+     do
+       echo "$f is over 100KB and has not been accessed in over 30 days"
+       echo "Consider moving the file to archives."
+       foundone=true
+     done
+
+     if ! $foundone
+     then
+       echo "No files need archiving."
+     fi
+}</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+><A
+NAME="PTAILGREP"
+></A
+></P
+><P
+>        A lookalike problem occurs when trying to write the
+	<TT
+CLASS="FILENAME"
+>stdout</TT
+> of a <B
+CLASS="COMMAND"
+>tail -f</B
+>
+	piped to <A
+HREF="textproc.html#GREPREF"
+>grep</A
+>.
+	  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>tail -f /var/log/messages | grep "$ERROR_MSG" &#62;&#62; error.log
+#  The "error.log" file will not have anything written to it.
+#  As Samuli Kaipiainen points out, this results from grep
+#+ buffering its output.
+#  The fix is to add the "--line-buffered" parameter to grep.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+></LI
+><LI
+><P
+><A
+NAME="SUIDSCR"
+></A
+></P
+><P
+>Using <SPAN
+CLASS="QUOTE"
+>"suid"</SPAN
+> commands within scripts is risky,
+	as it may compromise system security.
+	  <A
+NAME="AEN19993"
+HREF="gotchas.html#FTN.AEN19993"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+      </P
+></LI
+><LI
+><P
+><A
+NAME="CGIREF"
+></A
+></P
+><P
+>Using shell scripts for CGI programming may be problematic. Shell
+        script variables are not <SPAN
+CLASS="QUOTE"
+>"typesafe,"</SPAN
+> and this can cause
+	undesirable behavior as far as CGI is concerned. Moreover, it is
+	difficult to <SPAN
+CLASS="QUOTE"
+>"cracker-proof"</SPAN
+> shell scripts.</P
+></LI
+><LI
+><P
+>Bash does not handle the <A
+HREF="internal.html#DOUBLESLASHREF"
+>double slash
+        (<SPAN
+CLASS="TOKEN"
+>//</SPAN
+>) string</A
+> correctly.</P
+></LI
+><LI
+><P
+><A
+NAME="GNUREF"
+></A
+></P
+><P
+>Bash scripts written for Linux or BSD systems may need
+	fixups to run on a commercial UNIX machine. Such
+	scripts often employ the GNU set of commands and filters,
+	which have greater functionality than their generic UNIX
+	counterparts. This is particularly true of such text processing
+	utilites as <A
+HREF="textproc.html#TRREF"
+>tr</A
+>.</P
+></LI
+><LI
+><P
+><A
+NAME="UPDATEBREAKS"
+></A
+></P
+><P
+>Sadly, updates to Bash itself have broken older scripts
+        that <A
+HREF="string-manipulation.html#PARAGRAPHSPACE"
+>used to work perfectly
+        fine</A
+>. Let us recall <A
+HREF="gotchas.html#UNDOCF"
+>how
+        risky it is to use undocumented Bash features</A
+>.</P
+></LI
+></UL
+><TABLE
+BORDER="0"
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+CLASS="EPIGRAPH"
+><TR
+><TD
+WIDTH="45%"
+>&nbsp;</TD
+><TD
+WIDTH="45%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+><P
+><I
+>Danger is near thee --</I
+></P
+><P
+><I
+>Beware, beware, beware, beware.</I
+></P
+><P
+><I
+>Many brave hearts are asleep in the deep.</I
+></P
+><P
+><I
+>So beware --</I
+></P
+><P
+><I
+>Beware.</I
+></P
+><P
+><I
+>--A.J. Lamb and H.W. Petrie</I
+></P
+></I
+></TD
+></TR
+></TABLE
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN19993"
+HREF="gotchas.html#AEN19993"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Setting the <A
+HREF="fto.html#SUIDREF"
+>suid</A
+>
+	  permission on the script itself has no effect in Linux
+	  and most other UNIX flavors.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="options.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="scrstyle.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Options</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part5.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Scripting With Style</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

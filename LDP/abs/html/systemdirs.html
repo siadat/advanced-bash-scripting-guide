@@ -1,0 +1,514 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Important System Directories</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE=" Important Files"
+HREF="files.html"><LINK
+REL="NEXT"
+TITLE="An Introduction to Programmable Completion"
+HREF="tabexpansion.html"></HEAD
+><BODY
+CLASS="APPENDIX"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="files.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="tabexpansion.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="APPENDIX"
+><H1
+><A
+NAME="SYSTEMDIRS"
+></A
+>Appendix I. Important System Directories</H1
+><P
+>Sysadmins and anyone else writing administrative scripts
+        should be intimately familiar with the following system
+        directories.</P
+><P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/bin</TT
+></P
+><P
+>Binaries (executables). Basic system programs
+	      and utilities (such as <B
+CLASS="COMMAND"
+>bash</B
+>).</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/usr/bin</TT
+>
+
+            <A
+NAME="AEN23969"
+HREF="systemdirs.html#FTN.AEN23969"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+
+	    </P
+><P
+>More system binaries.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/usr/local/bin</TT
+></P
+><P
+>Miscellaneous binaries local to the particular machine.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/sbin</TT
+></P
+><P
+>System binaries. Basic system administrative programs
+	      and utilities (such as <B
+CLASS="COMMAND"
+>fsck</B
+>).</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/usr/sbin</TT
+></P
+><P
+>More system administrative programs and utilities.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/etc</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Et cetera</I
+>. Systemwide configuration
+	      scripts.</P
+><P
+>Of particular interest are the
+	      <A
+HREF="system.html#FSTABREF"
+><TT
+CLASS="FILENAME"
+>/etc/fstab</TT
+></A
+>
+	      (filesystem table),
+	      <TT
+CLASS="FILENAME"
+>/etc/mtab</TT
+>
+	      (mounted filesystem table), and the <A
+HREF="system.html#INITTABREF"
+><TT
+CLASS="FILENAME"
+>/etc/inittab</TT
+></A
+>
+	      files.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/etc/rc.d</TT
+></P
+><P
+>Boot scripts, on Red Hat and derivative distributions
+	      of Linux.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/usr/share/doc</TT
+></P
+><P
+>Documentation for installed packages.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/usr/man</TT
+></P
+><P
+>The systemwide <A
+HREF="basic.html#MANREF"
+>manpages</A
+>.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/dev</TT
+></P
+><P
+>Device directory. Entries (but <EM
+>not</EM
+>
+	      mount points) for physical and virtual devices.
+	      See <A
+HREF="devproc.html"
+>Chapter 29</A
+>.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/proc</TT
+></P
+><P
+>Process directory. Contains information and statistics
+	      about running processes and kernel parameters.
+	      See <A
+HREF="devproc.html"
+>Chapter 29</A
+>.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/sys</TT
+></P
+><P
+>Systemwide device directory. Contains information and
+	      statistics about device and device names. This is newly
+	      added to Linux with the 2.6.X kernels.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/mnt</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Mount</I
+>. Directory for mounting
+	      hard drive partitions, such as <TT
+CLASS="FILENAME"
+>/mnt/dos</TT
+>, and physical
+	      devices. In newer Linux distros, the <TT
+CLASS="FILENAME"
+>/media</TT
+> directory has taken
+	      over as the preferred mount point for I/O devices.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/media</TT
+></P
+><P
+>In newer Linux distros, the preferred mount point for
+	      I/O devices, such as CD/DVD drives or USB flash drives.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/var</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Variable</I
+> (changeable) system
+	      files. This is a catchall <SPAN
+CLASS="QUOTE"
+>"scratchpad"</SPAN
+>
+	      directory for data generated while a Linux/UNIX machine
+	      is running.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/var/log</TT
+></P
+><P
+>Systemwide log files.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/var/spool/mail</TT
+></P
+><P
+>User mail spool.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/lib</TT
+></P
+><P
+>Systemwide library files.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/usr/lib</TT
+></P
+><P
+>More systemwide library files.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/tmp</TT
+></P
+><P
+>System temporary files.</P
+></LI
+><LI
+><P
+><TT
+CLASS="FILENAME"
+>/boot</TT
+></P
+><P
+>System <I
+CLASS="FIRSTTERM"
+>boot</I
+> directory. The kernel,
+	      module links, system map, and boot manager reside here.</P
+><DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/warning.gif"
+HSPACE="5"
+ALT="Warning"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Altering files in this directory may result in an
+	      unbootable system.</P
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+></UL
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN23969"
+HREF="systemdirs.html#AEN23969"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Some early UNIX systems had a fast, small-capacity fixed
+	      disk (containing <TT
+CLASS="FILENAME"
+>/</TT
+>,
+	      the root partition), and a second drive which
+	      was larger, but slower (containing <TT
+CLASS="FILENAME"
+>/usr</TT
+> and other
+	      partitions). The most frequently used programs and
+	      utilities therefore resided on the small-but-fast
+	      drive, in <TT
+CLASS="FILENAME"
+>/bin</TT
+>,
+	      and the others on the slower drive, in <TT
+CLASS="FILENAME"
+>/usr/bin</TT
+>.</P
+><P
+>This likewise accounts for the split between
+	      <TT
+CLASS="FILENAME"
+>/sbin</TT
+> and
+	      <TT
+CLASS="FILENAME"
+>/usr/sbin</TT
+>,
+	      <TT
+CLASS="FILENAME"
+>/lib</TT
+> and <TT
+CLASS="FILENAME"
+>/usr/lib</TT
+>, etc.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="files.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="tabexpansion.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Important Files</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>An Introduction to Programmable Completion</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

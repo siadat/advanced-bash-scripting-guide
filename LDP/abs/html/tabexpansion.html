@@ -1,0 +1,738 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>An Introduction to Programmable Completion</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Important System Directories"
+HREF="systemdirs.html"><LINK
+REL="NEXT"
+TITLE="Localization"
+HREF="localization.html"></HEAD
+><BODY
+CLASS="APPENDIX"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="systemdirs.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="localization.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="APPENDIX"
+><H1
+><A
+NAME="TABEXPANSION"
+></A
+>Appendix J. An Introduction to Programmable Completion</H1
+><P
+>The <I
+CLASS="FIRSTTERM"
+>programmable completion</I
+> feature in
+      Bash permits typing a partial command, then pressing the
+      <B
+CLASS="KEYCAP"
+>[Tab]</B
+> key to auto-complete the command sequence.
+
+      <A
+NAME="AEN24082"
+HREF="tabexpansion.html#FTN.AEN24082"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+
+      If multiple completions are possible, then <B
+CLASS="KEYCAP"
+>[Tab]</B
+>
+      lists them all. Let's see how it works.</P
+><P
+>      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>xtra[Tab]</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>xtraceroute       xtrapin           xtrapproto
+ xtraceroute.real  xtrapinfo         xtrapreset
+ xtrapchar         xtrapout          xtrapstats</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>xtrac[Tab]</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>xtraceroute       xtraceroute.real</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>xtraceroute.r[Tab]</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>xtraceroute.real</TT
+>
+      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>Tab completion also works for variables and path names.</P
+><P
+>      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo $BASH[Tab]</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>$BASH                 $BASH_COMPLETION      $BASH_SUBSHELL
+ $BASH_ARGC            $BASH_COMPLETION_DIR  $BASH_VERSINFO
+ $BASH_ARGV            $BASH_LINENO          $BASH_VERSION
+ $BASH_COMMAND         $BASH_SOURCE</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo /usr/local/[Tab]</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bin/     etc/     include/ libexec/ sbin/    src/     
+ doc/     games/   lib/     man/     share/</TT
+>
+      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+><A
+NAME="COMPLETEREF"
+></A
+></P
+><P
+>The Bash <B
+CLASS="COMMAND"
+>complete</B
+> and
+      <B
+CLASS="COMMAND"
+>compgen</B
+> <A
+HREF="internal.html#BUILTINREF"
+>builtins</A
+> make it
+      possible for <I
+CLASS="FIRSTTERM"
+>tab completion</I
+> to
+      recognize partial <I
+CLASS="FIRSTTERM"
+>parameters</I
+> and
+      <I
+CLASS="FIRSTTERM"
+>options</I
+> to commands. In a very simple case,
+      we can use <B
+CLASS="COMMAND"
+>complete</B
+> from the command-line to
+      specify a short list of acceptable parameters.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>touch sample_command</B
+></TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>touch file1.txt file2.txt file2.doc file30.txt file4.zzz</B
+></TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>chmod +x sample_command</B
+></TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>complete -f -X '!*.txt' sample_command</B
+></TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>./sample[Tab][Tab]</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>sample_command</TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>file1.txt   file2.txt   file30.txt</TT
+>
+  </PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>The <TT
+CLASS="OPTION"
+>-f</TT
+> option to
+      <I
+CLASS="FIRSTTERM"
+>complete</I
+> specifies filenames,
+      and <TT
+CLASS="OPTION"
+>-X</TT
+> the filter pattern.</P
+><P
+><A
+NAME="COMPGENREF"
+></A
+></P
+><P
+>For anything more complex, we could write a script that
+      specifies a list of acceptable command-line parameters.
+      The <B
+CLASS="COMMAND"
+>compgen</B
+> builtin expands a list of
+      <I
+CLASS="FIRSTTERM"
+>arguments</I
+> to <I
+CLASS="FIRSTTERM"
+>generate</I
+>
+      completion matches. </P
+><P
+>Let us take a <A
+HREF="contributed-scripts.html#USEGETOPT2"
+>modified version</A
+>
+      of the <EM
+>UseGetOpt.sh</EM
+> script as an example
+      command. This script accepts a number of command-line parameters,
+      preceded by either a single or double dash. And here is the
+      corresponding <I
+CLASS="FIRSTTERM"
+>completion script</I
+>, by
+      convention given a filename corresponding to its associated
+      command.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="USEGETOPTEX"
+></A
+><P
+><B
+>Example J-1. Completion script for
+      <I
+CLASS="FIRSTTERM"
+>UseGetOpt.sh</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># file: UseGetOpt-2
+# UseGetOpt-2.sh parameter-completion
+
+_UseGetOpt-2 ()   #  By convention, the function name
+{                 #+ starts with an underscore.
+  local cur
+  # Pointer to current completion word.
+  # By convention, it's named "cur" but this isn't strictly necessary.
+
+  COMPREPLY=()   # Array variable storing the possible completions.
+  cur=${COMP_WORDS[COMP_CWORD]}
+
+  case "$cur" in
+    -*)
+    COMPREPLY=( $( compgen -W '-a -d -f -l -t -h --aoption --debug \
+                               --file --log --test --help --' -- $cur ) );;
+#   Generate the completion matches and load them into $COMPREPLY array.
+#   xx) May add more cases here.
+#   yy)
+#   zz)
+  esac
+
+  return 0
+}
+
+complete -F _UseGetOpt-2 -o filenames ./UseGetOpt-2.sh
+#        ^^ ^^^^^^^^^^^^  Invokes the function _UseGetOpt-2.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Now, let's try it.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>source UseGetOpt-2</B
+></TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>./UseGetOpt-2.sh -[Tab]</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>--         --aoption  --debug    --file     --help     --log     --test
+ -a         -d         -f         -h         -l         -t</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>./UseGetOpt-2.sh --[Tab]</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>--         --aoption  --debug    --file     --help     --log     --test</TT
+>
+  </PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>      We begin by <A
+HREF="internal.html#SOURCEREF"
+>sourcing</A
+> the <SPAN
+CLASS="QUOTE"
+>"completion
+      script."</SPAN
+> This sets the command-line parameters.
+        <A
+NAME="AEN24160"
+HREF="tabexpansion.html#FTN.AEN24160"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>
+    </P
+><P
+>In the first instance, hitting <B
+CLASS="KEYCAP"
+>[Tab]</B
+> after
+      a single dash, the output is all the possible parameters preceded by
+      <EM
+>one or more</EM
+> dashes. Hitting <B
+CLASS="KEYCAP"
+>[Tab]</B
+>
+      after <EM
+>two</EM
+> dashes gives the possible parameters
+      preceded by <EM
+>two or more</EM
+> dashes.</P
+><P
+>Now, just what is the point of having to jump through flaming
+      hoops to enable command-line tab completion? <EM
+>It saves
+      keystrokes.</EM
+>
+         <A
+NAME="AEN24173"
+HREF="tabexpansion.html#FTN.AEN24173"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>
+      </P
+><P
+>--</P
+><P
+><EM
+>Resources:</EM
+></P
+><P
+>Bash <A
+HREF="http://freshmeat.net/projects/bashcompletion"
+TARGET="_top"
+>      programmable completion</A
+> project</P
+><P
+>Mitch Frazier's <A
+HREF="http://www.linuxjournal.com"
+TARGET="_top"
+><I
+CLASS="CITETITLE"
+>Linux Journal</I
+></A
+> article, <A
+HREF="http://www.linuxjournal.com/content/more-using-bash-complete-command"
+TARGET="_top"
+><EM
+>More
+    on Using the Bash Complete Command</EM
+></A
+></P
+><P
+>Steve's excellent two-part article, <SPAN
+CLASS="QUOTE"
+>"An Introduction to Bash
+      Completion"</SPAN
+>:
+
+    <A
+HREF="http://www.debian-administration.org/article/An_introduction_to_bash_completion_part_1"
+TARGET="_top"
+>Part
+    1</A
+> and
+
+    <A
+HREF="http://www.debian-administration.org/article/An_introduction_to_bash_completion_part_2"
+TARGET="_top"
+>Part 2</A
+></P
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN24082"
+HREF="tabexpansion.html#AEN24082"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>This works only from the <I
+CLASS="FIRSTTERM"
+>command
+        line</I
+>, of course, and not within a
+        script.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN24160"
+HREF="tabexpansion.html#AEN24160"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Normally the default parameter completion files reside
+        in either the <TT
+CLASS="FILENAME"
+>/etc/profile.d</TT
+>
+	directory or in <TT
+CLASS="FILENAME"
+>/etc/bash_completion</TT
+>. These autoload on
+	system startup. So, after writing a useful completion script, you
+	might wish to move it (as <I
+CLASS="FIRSTTERM"
+>root</I
+>, of course)
+	to one of these directories.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN24173"
+HREF="tabexpansion.html#AEN24173"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>It has been extensively documented that
+         programmers are willing to put in long hours of effort in
+         order to save ten minutes of <SPAN
+CLASS="QUOTE"
+>"unnecessary"</SPAN
+>
+         labor. This is known as
+         <I
+CLASS="FIRSTTERM"
+>optimization</I
+>.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="systemdirs.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="localization.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Important System Directories</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Localization</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

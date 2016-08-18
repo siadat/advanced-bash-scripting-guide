@@ -1,0 +1,1787 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Complex Commands</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="External Filters, Programs and Commands"
+HREF="external.html"><LINK
+REL="PREVIOUS"
+TITLE="Basic Commands"
+HREF="basic.html"><LINK
+REL="NEXT"
+TITLE="Time / Date Commands"
+HREF="timedate.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="basic.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. External Filters, Programs and Commands</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="timedate.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MOREADV"
+></A
+>16.2. Complex Commands</H1
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="CCLISTING1"
+></A
+>Commands for more advanced users</B
+></P
+><DL
+><DT
+><A
+NAME="FINDREF"
+></A
+><B
+CLASS="COMMAND"
+>find</B
+></DT
+><DD
+><P
+><A
+NAME="FINDREF0"
+></A
+></P
+><P
+>-exec <TT
+CLASS="REPLACEABLE"
+><I
+>COMMAND</I
+></TT
+> \;</P
+><P
+>Carries out <TT
+CLASS="REPLACEABLE"
+><I
+>COMMAND</I
+></TT
+> on
+	      each file that <B
+CLASS="COMMAND"
+>find</B
+> matches.  The
+	      command sequence terminates with <SPAN
+CLASS="TOKEN"
+>;</SPAN
+> (the
+	      <SPAN
+CLASS="QUOTE"
+>";"</SPAN
+> is <A
+HREF="escapingsection.html#ESCP"
+>escaped</A
+> to
+	      make certain the shell passes it to <B
+CLASS="COMMAND"
+>find</B
+>
+	      literally, without interpreting it as a special character).</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>find ~/ -name '*.txt'</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>/home/bozo/.kde/share/apps/karm/karmdata.txt
+ /home/bozo/misc/irmeyc.txt
+ /home/bozo/test-scripts/1.txt</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	  </P
+><P
+><A
+NAME="CURLYBRACKETSREF"
+></A
+></P
+><P
+>If <TT
+CLASS="REPLACEABLE"
+><I
+>COMMAND</I
+></TT
+> contains
+	      <SPAN
+CLASS="TOKEN"
+>{}</SPAN
+>, then <B
+CLASS="COMMAND"
+>find</B
+>
+	      substitutes the full path name of the selected file for
+	      <SPAN
+CLASS="QUOTE"
+>"{}"</SPAN
+>.</P
+><P
+>          <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>find ~/ -name 'core*' -exec rm {} \;
+# Removes all core dump files from user's home directory.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	  </P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>find /home/bozo/projects -mtime -1
+#                               ^   Note minus sign!
+#  Lists all files in /home/bozo/projects directory tree
+#+ that were modified within the last day (current_day - 1).
+#
+find /home/bozo/projects -mtime 1
+#  Same as above, but modified *exactly* one day ago.
+#
+#  mtime = last modification time of the target file
+#  ctime = last status change time (via 'chmod' or otherwise)
+#  atime = last access time
+
+DIR=/home/bozo/junk_files
+find "$DIR" -type f -atime +5 -exec rm {} \;
+#                          ^           ^^
+#  Curly brackets are placeholder for the path name output by "find."
+#
+#  Deletes all files in "/home/bozo/junk_files"
+#+ that have not been accessed in *at least* 5 days (plus sign ... +5).
+#
+#  "-type filetype", where
+#  f = regular file
+#  d = directory
+#  l = symbolic link, etc.
+#
+#  (The 'find' manpage and info page have complete option listings.)</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+          </P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>find /etc -exec grep '[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*' {} \;
+
+# Finds all IP addresses (xxx.xxx.xxx.xxx) in /etc directory files.
+# There a few extraneous hits. Can they be filtered out?
+
+# Possibly by:
+
+find /etc -type f -exec cat '{}' \; | tr -c '.[:digit:]' '\n' \
+| grep '^[^.][^.]*\.[^.][^.]*\.[^.][^.]*\.[^.][^.]*$'
+#
+#  [:digit:] is one of the character classes
+#+ introduced with the POSIX 1003.2 standard. 
+
+# Thanks, Stéphane Chazelas. </PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <TT
+CLASS="OPTION"
+>-exec</TT
+> option to
+	      <B
+CLASS="COMMAND"
+>find</B
+> should not be confused with the <A
+HREF="internal.html#EXECREF"
+>exec</A
+> shell builtin.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX57"
+></A
+><P
+><B
+>Example 16-3. <I
+CLASS="FIRSTTERM"
+>Badname</I
+>, eliminate file names
+		in current directory containing bad characters and <A
+HREF="special-chars.html#WHITESPACEREF"
+>whitespace</A
+>.</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# badname.sh
+# Delete filenames in current directory containing bad characters.
+
+for filename in *
+do
+  badname=`echo "$filename" | sed -n /[\+\{\;\"\\\=\?~\(\)\&#60;\&#62;\&#38;\*\|\$]/p`
+# badname=`echo "$filename" | sed -n '/[+{;"\=?~()&#60;&#62;&#38;*|$]/p'`  also works.
+# Deletes files containing these nasties:     + { ; " \ = ? ~ ( ) &#60; &#62; &#38; * | $
+#
+  rm $badname 2&#62;/dev/null
+#             ^^^^^^^^^^^ Error messages deep-sixed.
+done
+
+# Now, take care of files containing all manner of whitespace.
+find . -name "* *" -exec rm -f {} \;
+# The path name of the file that _find_ finds replaces the "{}".
+# The '\' ensures that the ';' is interpreted literally, as end of command.
+
+exit 0
+
+#---------------------------------------------------------------------
+# Commands below this line will not execute because of _exit_ command.
+
+# An alternative to the above script:
+find . -name '*[+{;"\\=?~()&#60;&#62;&#38;*|$ ]*' -maxdepth 0 \
+-exec rm -f '{}' \;
+#  The "-maxdepth 0" option ensures that _find_ will not search
+#+ subdirectories below $PWD.
+
+# (Thanks, S.C.)</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="IDELETE"
+></A
+><P
+><B
+>Example 16-4. Deleting a file by its <I
+CLASS="FIRSTTERM"
+>inode</I
+>
+	        number</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# idelete.sh: Deleting a file by its inode number.
+
+#  This is useful when a filename starts with an illegal character,
+#+ such as ? or -.
+
+ARGCOUNT=1                      # Filename arg must be passed to script.
+E_WRONGARGS=70
+E_FILE_NOT_EXIST=71
+E_CHANGED_MIND=72
+
+if [ $# -ne "$ARGCOUNT" ]
+then
+  echo "Usage: `basename $0` filename"
+  exit $E_WRONGARGS
+fi  
+
+if [ ! -e "$1" ]
+then
+  echo "File \""$1"\" does not exist."
+  exit $E_FILE_NOT_EXIST
+fi  
+
+inum=`ls -i | grep "$1" | awk '{print $1}'`
+# inum = inode (index node) number of file
+# -----------------------------------------------------------------------
+# Every file has an inode, a record that holds its physical address info.
+# -----------------------------------------------------------------------
+
+echo; echo -n "Are you absolutely sure you want to delete \"$1\" (y/n)? "
+# The '-v' option to 'rm' also asks this.
+read answer
+case "$answer" in
+[nN]) echo "Changed your mind, huh?"
+      exit $E_CHANGED_MIND
+      ;;
+*)    echo "Deleting file \"$1\".";;
+esac
+
+find . -inum $inum -exec rm {} \;
+#                           ^^
+#        Curly brackets are placeholder
+#+       for text output by "find."
+echo "File "\"$1"\" deleted!"
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>The <B
+CLASS="COMMAND"
+>find</B
+> command also works
+	      without the <TT
+CLASS="OPTION"
+>-exec</TT
+> option.</P
+><P
+>	    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+#  Find suid root files.
+#  A strange suid file might indicate a security hole,
+#+ or even a system intrusion.
+
+directory="/usr/sbin"
+# Might also try /sbin, /bin, /usr/bin, /usr/local/bin, etc.
+permissions="+4000"  # suid root (dangerous!)
+
+
+for file in $( find "$directory" -perm "$permissions" )
+do
+  ls -ltF --author "$file"
+done</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>See <A
+HREF="filearchiv.html#EX48"
+>Example 16-30</A
+>, <A
+HREF="special-chars.html#EX58"
+>Example 3-4</A
+>,
+	      and <A
+HREF="loops1.html#FINDSTRING"
+>Example 11-10</A
+> for scripts using
+	      <B
+CLASS="COMMAND"
+>find</B
+>. Its <A
+HREF="basic.html#MANREF"
+>manpage</A
+> provides more detail
+	      on this complex and powerful command.</P
+></DD
+><DT
+><A
+NAME="XARGSREF"
+></A
+><B
+CLASS="COMMAND"
+>xargs</B
+></DT
+><DD
+><P
+>A filter for feeding arguments to a command, and also
+	      a tool for assembling the commands themselves. It breaks
+	      a data stream into small enough chunks for filters and
+	      commands to process.  Consider it as a powerful replacement
+	      for <A
+HREF="commandsub.html#BACKQUOTESREF"
+>backquotes</A
+>.
+	      In situations where <A
+HREF="commandsub.html#COMMANDSUBREF"
+>command
+	      substitution</A
+> fails with a <SPAN
+CLASS="ERRORNAME"
+>too
+	      many arguments</SPAN
+> error,
+	      substituting <B
+CLASS="COMMAND"
+>xargs</B
+> often
+	      works.
+	        <A
+NAME="AEN10465"
+HREF="moreadv.html#FTN.AEN10465"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+	      Normally, <B
+CLASS="COMMAND"
+>xargs</B
+> reads from
+	      <TT
+CLASS="FILENAME"
+>stdin</TT
+> or from a pipe, but it can also
+	      be given the output of a file.</P
+><P
+>The default command for <B
+CLASS="COMMAND"
+>xargs</B
+> is
+	      <A
+HREF="internal.html#ECHOREF"
+>echo</A
+>. This means that input
+	      piped to <B
+CLASS="COMMAND"
+>xargs</B
+> may have linefeeds and
+	      other whitespace characters stripped out.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ls -l</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>total 0
+ -rw-rw-r--    1 bozo  bozo         0 Jan 29 23:58 file1
+ -rw-rw-r--    1 bozo  bozo         0 Jan 29 23:58 file2</TT
+>
+
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ls -l | xargs</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>total 0 -rw-rw-r-- 1 bozo bozo 0 Jan 29 23:58 file1 -rw-rw-r-- 1 bozo bozo 0 Jan...</TT
+>
+
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>find ~/mail -type f | xargs grep "Linux"</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>./misc:User-Agent: slrn/0.9.8.1 (Linux)
+ ./sent-mail-jul-2005: hosted by the Linux Documentation Project.
+ ./sent-mail-jul-2005: (Linux Documentation Project Site, rtf version)
+ ./sent-mail-jul-2005: Subject: Criticism of Bozo's Windows/Linux article
+ ./sent-mail-jul-2005: while mentioning that the Linux ext2/ext3 filesystem
+ . . .</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>ls | xargs -p -l gzip</B
+></TT
+> <A
+HREF="filearchiv.html#GZIPREF"
+>gzips</A
+> every file in current
+	      directory, one at a time, prompting before each
+	      operation.</P
+><P
+><A
+NAME="XARGSONEATATIME"
+></A
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Note that <I
+CLASS="FIRSTTERM"
+>xargs</I
+> processes the
+	      arguments passed to it sequentially, <EM
+>one at
+	      a time</EM
+>.</P
+><P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>find /usr/bin | xargs file</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>/usr/bin:          directory
+ /usr/bin/foomatic-ppd-options:          perl script text executable
+ . . .</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="XARGSLIMARGS"
+></A
+></P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>An interesting <I
+CLASS="FIRSTTERM"
+>xargs</I
+>
+	      option is <TT
+CLASS="OPTION"
+>-n <TT
+CLASS="REPLACEABLE"
+><I
+>NN</I
+></TT
+></TT
+>,
+	      which limits to <TT
+CLASS="REPLACEABLE"
+><I
+>NN</I
+></TT
+> the number
+	      of arguments passed.</P
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>ls | xargs -n 8 echo</B
+></TT
+> lists the files in the
+	      current directory in <TT
+CLASS="LITERAL"
+>8</TT
+> columns.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="XARGSWS"
+></A
+></P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Another useful option is
+	      <TT
+CLASS="OPTION"
+>-0</TT
+>, in combination with <TT
+CLASS="USERINPUT"
+><B
+>find
+	      -print0</B
+></TT
+> or <TT
+CLASS="USERINPUT"
+><B
+>grep -lZ</B
+></TT
+>. This
+	      allows handling arguments containing whitespace or
+	      quotes.</P
+><P
+>	    <TT
+CLASS="USERINPUT"
+><B
+>find / -type f -print0 | xargs -0 grep -liwZ GUI | xargs -0 rm -f</B
+></TT
+>
+	    </P
+><P
+>	    <TT
+CLASS="USERINPUT"
+><B
+>grep -rliwZ GUI / | xargs -0 rm -f</B
+></TT
+>
+	    </P
+><P
+>Either of the above will remove any file containing <SPAN
+CLASS="QUOTE"
+>"GUI"</SPAN
+>.
+	      <EM
+>(Thanks, S.C.)</EM
+></P
+><P
+>Or:
+	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>cat /proc/"$pid"/"$OPTION" | xargs -0 echo
+#  Formats output:         ^^^^^^^^^^^^^^^
+#  From Han Holl's fixup of "get-commandline.sh"
+#+ script in "/dev and /proc" chapter.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><A
+NAME="XARGSMULTIPROCESS"
+></A
+></P
+><P
+>The <TT
+CLASS="OPTION"
+>-P</TT
+> option to
+		      <I
+CLASS="FIRSTTERM"
+>xargs</I
+> permits running
+		      processes in parallel. This speeds up execution
+		      in a machine with a multicore CPU.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+ls *gif | xargs -t -n1 -P2 gif2png
+# Converts all the gif images in current directory to png.
+
+# Options:
+# =======
+# -t    Print command to stderr.
+# -n1   At most 1 argument per command line.
+# -P2   Run up to 2 processes simultaneously.
+
+# Thank you, Roberto Polli, for the inspiration.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX41"
+></A
+><P
+><B
+>Example 16-5. Logfile: Using <I
+CLASS="FIRSTTERM"
+>xargs</I
+> to monitor system log</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# Generates a log file in current directory
+# from the tail end of /var/log/messages.
+
+# Note: /var/log/messages must be world readable
+# if this script invoked by an ordinary user.
+#         #root chmod 644 /var/log/messages
+
+LINES=5
+
+( date; uname -a ) &#62;&#62;logfile
+# Time and machine name
+echo ---------------------------------------------------------- &#62;&#62;logfile
+tail -n $LINES /var/log/messages | xargs | fmt -s &#62;&#62;logfile
+echo &#62;&#62;logfile
+echo &#62;&#62;logfile
+
+exit 0
+
+#  Note:
+#  ----
+#  As Frank Wang points out,
+#+ unmatched quotes (either single or double quotes) in the source file
+#+ may give xargs indigestion.
+#
+#  He suggests the following substitution for line 15:
+#  tail -n $LINES /var/log/messages | tr -d "\"'" | xargs | fmt -s &#62;&#62;logfile
+
+
+
+#  Exercise:
+#  --------
+#  Modify this script to track changes in /var/log/messages at intervals
+#+ of 20 minutes.
+#  Hint: Use the "watch" command. </PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="XARGSCURLYREF"
+></A
+></P
+><P
+><A
+HREF="moreadv.html#CURLYBRACKETSREF"
+>As in
+	      <B
+CLASS="COMMAND"
+>find</B
+></A
+>, a curly bracket
+	      pair serves as a placeholder for replacement text.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX42"
+></A
+><P
+><B
+>Example 16-6. Copying files in current directory to another</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# copydir.sh
+
+#  Copy (verbose) all files in current directory ($PWD)
+#+ to directory specified on command-line.
+
+E_NOARGS=85
+
+if [ -z "$1" ]   # Exit if no argument given.
+then
+  echo "Usage: `basename $0` directory-to-copy-to"
+  exit $E_NOARGS
+fi  
+
+ls . | xargs -i -t cp ./{} $1
+#            ^^ ^^      ^^
+#  -t is "verbose" (output command-line to stderr) option.
+#  -i is "replace strings" option.
+#  {} is a placeholder for output text.
+#  This is similar to the use of a curly-bracket pair in "find."
+#
+#  List the files in current directory (ls .),
+#+ pass the output of "ls" as arguments to "xargs" (-i -t options),
+#+ then copy (cp) these arguments ({}) to new directory ($1).  
+#
+#  The net result is the exact equivalent of
+#+   cp * $1
+#+ unless any of the filenames has embedded "whitespace" characters.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="KILLBYNAME"
+></A
+><P
+><B
+>Example 16-7. Killing processes by name</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# kill-byname.sh: Killing processes by name.
+# Compare this script with kill-process.sh.
+
+#  For instance,
+#+ try "./kill-byname.sh xterm" --
+#+ and watch all the xterms on your desktop disappear.
+
+#  Warning:
+#  -------
+#  This is a fairly dangerous script.
+#  Running it carelessly (especially as root)
+#+ can cause data loss and other undesirable effects.
+
+E_BADARGS=66
+
+if test -z "$1"  # No command-line arg supplied?
+then
+  echo "Usage: `basename $0` Process(es)_to_kill"
+  exit $E_BADARGS
+fi
+
+
+PROCESS_NAME="$1"
+ps ax | grep "$PROCESS_NAME" | awk '{print $1}' | xargs -i kill {} 2&#38;&#62;/dev/null
+#                                                       ^^      ^^
+
+# ---------------------------------------------------------------
+# Notes:
+# -i is the "replace strings" option to xargs.
+# The curly brackets are the placeholder for the replacement.
+# 2&#38;&#62;/dev/null suppresses unwanted error messages.
+#
+# Can  grep "$PROCESS_NAME" be replaced by pidof "$PROCESS_NAME"?
+# ---------------------------------------------------------------
+
+exit $?
+
+#  The "killall" command has the same effect as this script,
+#+ but using it is not quite as educational.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="WF2"
+></A
+><P
+><B
+>Example 16-8. Word frequency analysis using
+	      <I
+CLASS="FIRSTTERM"
+>xargs</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# wf2.sh: Crude word frequency analysis on a text file.
+
+# Uses 'xargs' to decompose lines of text into single words.
+# Compare this example to the "wf.sh" script later on.
+
+
+# Check for input file on command-line.
+ARGS=1
+E_BADARGS=85
+E_NOFILE=86
+
+if [ $# -ne "$ARGS" ]
+# Correct number of arguments passed to script?
+then
+  echo "Usage: `basename $0` filename"
+  exit $E_BADARGS
+fi
+
+if [ ! -f "$1" ]       # Does file exist?
+then
+  echo "File \"$1\" does not exist."
+  exit $E_NOFILE
+fi
+
+
+
+#####################################################
+cat "$1" | xargs -n1 | \
+#  List the file, one word per line. 
+tr A-Z a-z | \
+#  Shift characters to lowercase.
+sed -e 's/\.//g'  -e 's/\,//g' -e 's/ /\
+/g' | \
+#  Filter out periods and commas, and
+#+ change space between words to linefeed,
+sort | uniq -c | sort -nr
+#  Finally remove duplicates, prefix occurrence count
+#+ and sort numerically.
+#####################################################
+
+#  This does the same job as the "wf.sh" example,
+#+ but a bit more ponderously, and it runs more slowly (why?).
+
+exit $?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="EXPRREF"
+></A
+><TT
+CLASS="USERINPUT"
+><B
+>expr</B
+></TT
+></DT
+><DD
+><P
+>All-purpose expression evaluator:
+	      Concatenates and evaluates the arguments according
+	      to the operation given (arguments must be separated
+	      by spaces). Operations may be arithmetic, comparison,
+	      string, or logical.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="USERINPUT"
+><B
+>expr 3 + 5</B
+></TT
+></DT
+><DD
+><P
+>returns <TT
+CLASS="LITERAL"
+>8</TT
+></P
+></DD
+><DT
+><TT
+CLASS="USERINPUT"
+><B
+>expr 5 % 3</B
+></TT
+></DT
+><DD
+><P
+>returns 2</P
+></DD
+><DT
+><TT
+CLASS="USERINPUT"
+><B
+>expr 1 / 0</B
+></TT
+></DT
+><DD
+><P
+>returns the error message, <SPAN
+CLASS="ERRORCODE"
+>expr: division by
+		    zero</SPAN
+></P
+><P
+>Illegal arithmetic operations not allowed.</P
+></DD
+><DT
+><TT
+CLASS="USERINPUT"
+><B
+>expr 5 \* 3</B
+></TT
+></DT
+><DD
+><P
+>returns 15</P
+><P
+>The multiplication operator
+		  must be escaped when used in an arithmetic expression
+		  with <B
+CLASS="COMMAND"
+>expr</B
+>.</P
+></DD
+><DT
+><TT
+CLASS="USERINPUT"
+><B
+>y=`expr $y + 1`</B
+></TT
+></DT
+><DD
+><P
+>Increment a variable, with the same effect
+		    as <TT
+CLASS="USERINPUT"
+><B
+>let y=y+1</B
+></TT
+> and
+		    <TT
+CLASS="USERINPUT"
+><B
+>y=$(($y+1))</B
+></TT
+>. This is an
+		    example of <A
+HREF="arithexp.html#ARITHEXPREF"
+>arithmetic
+		    expansion</A
+>.</P
+></DD
+><DT
+><A
+NAME="EXPEXTRSUB"
+></A
+><TT
+CLASS="USERINPUT"
+><B
+>z=`expr substr
+		$string $position $length`</B
+></TT
+></DT
+><DD
+><P
+>Extract substring of $length characters, starting
+		    at $position.</P
+></DD
+></DL
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX45"
+></A
+><P
+><B
+>Example 16-9. Using <I
+CLASS="FIRSTTERM"
+>expr</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# Demonstrating some of the uses of 'expr'
+# =======================================
+
+echo
+
+# Arithmetic Operators
+# ---------- ---------
+
+echo "Arithmetic Operators"
+echo
+a=`expr 5 + 3`
+echo "5 + 3 = $a"
+
+a=`expr $a + 1`
+echo
+echo "a + 1 = $a"
+echo "(incrementing a variable)"
+
+a=`expr 5 % 3`
+# modulo
+echo
+echo "5 mod 3 = $a"
+
+echo
+echo
+
+# Logical Operators
+# ------- ---------
+
+#  Returns 1 if true, 0 if false,
+#+ opposite of normal Bash convention.
+
+echo "Logical Operators"
+echo
+
+x=24
+y=25
+b=`expr $x = $y`         # Test equality.
+echo "b = $b"            # 0  ( $x -ne $y )
+echo
+
+a=3
+b=`expr $a \&#62; 10`
+echo 'b=`expr $a \&#62; 10`, therefore...'
+echo "If a &#62; 10, b = 0 (false)"
+echo "b = $b"            # 0  ( 3 ! -gt 10 )
+echo
+
+b=`expr $a \&#60; 10`
+echo "If a &#60; 10, b = 1 (true)"
+echo "b = $b"            # 1  ( 3 -lt 10 )
+echo
+# Note escaping of operators.
+
+b=`expr $a \&#60;= 3`
+echo "If a &#60;= 3, b = 1 (true)"
+echo "b = $b"            # 1  ( 3 -le 3 )
+# There is also a "\&#62;=" operator (greater than or equal to).
+
+
+echo
+echo
+
+
+
+# String Operators
+# ------ ---------
+
+echo "String Operators"
+echo
+
+a=1234zipper43231
+echo "The string being operated upon is \"$a\"."
+
+# length: length of string
+b=`expr length $a`
+echo "Length of \"$a\" is $b."
+
+# index: position of first character in substring
+#        that matches a character in string
+b=`expr index $a 23`
+echo "Numerical position of first \"2\" in \"$a\" is \"$b\"."
+
+# substr: extract substring, starting position &#38; length specified
+b=`expr substr $a 2 6`
+echo "Substring of \"$a\", starting at position 2,\
+and 6 chars long is \"$b\"."
+
+
+#  The default behavior of the 'match' operations is to
+#+ search for the specified match at the BEGINNING of the string.
+#
+#       Using Regular Expressions ...
+b=`expr match "$a" '[0-9]*'`               #  Numerical count.
+echo Number of digits at the beginning of \"$a\" is $b.
+b=`expr match "$a" '\([0-9]*\)'`           #  Note that escaped parentheses
+#                   ==      ==             #+ trigger substring match.
+echo "The digits at the beginning of \"$a\" are \"$b\"."
+
+echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="IMPORTANT"
+><P
+></P
+><TABLE
+CLASS="IMPORTANT"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <A
+HREF="special-chars.html#NULLREF"
+>:
+	      (<I
+CLASS="FIRSTTERM"
+>null</I
+>)</A
+> operator
+	      can substitute for <B
+CLASS="COMMAND"
+>match</B
+>. For example,
+	      <TT
+CLASS="USERINPUT"
+><B
+>b=`expr $a : [0-9]*`</B
+></TT
+> is the
+	      exact equivalent of <TT
+CLASS="USERINPUT"
+><B
+>b=`expr match $a
+	      [0-9]*`</B
+></TT
+> in the above listing.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+echo
+echo "String operations using \"expr \$string : \" construct"
+echo "==================================================="
+echo
+
+a=1234zipper5FLIPPER43231
+
+echo "The string being operated upon is \"`expr "$a" : '\(.*\)'`\"."
+#     Escaped parentheses grouping operator.            ==  ==
+
+#       ***************************
+#+          Escaped parentheses
+#+           match a substring
+#       ***************************
+
+
+#  If no escaped parentheses ...
+#+ then 'expr' converts the string operand to an integer.
+
+echo "Length of \"$a\" is `expr "$a" : '.*'`."   # Length of string
+
+echo "Number of digits at the beginning of \"$a\" is `expr "$a" : '[0-9]*'`."
+
+# ------------------------------------------------------------------------- #
+
+echo
+
+echo "The digits at the beginning of \"$a\" are `expr "$a" : '\([0-9]*\)'`."
+#                                                             ==      ==
+echo "The first 7 characters of \"$a\" are `expr "$a" : '\(.......\)'`."
+#         =====                                          ==       ==
+# Again, escaped parentheses force a substring match.
+#
+echo "The last 7 characters of \"$a\" are `expr "$a" : '.*\(.......\)'`."
+#         ====                  end of string operator  ^^
+#  (In fact, means skip over one or more of any characters until specified
+#+  substring found.)
+
+echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+><P
+>The above script illustrates how
+	      <B
+CLASS="COMMAND"
+>expr</B
+> uses the <I
+CLASS="FIRSTTERM"
+>escaped
+	      parentheses -- \( ... \) --</I
+> grouping operator
+	      in tandem with <A
+HREF="regexp.html#REGEXREF"
+>regular
+	      expression</A
+> parsing to match a substring.
+	      Here is a another example, this time from <SPAN
+CLASS="QUOTE"
+>"real
+	      life."</SPAN
+>
+
+	        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># Strip the whitespace from the beginning and end.
+LRFDATE=`expr "$LRFDATE" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+
+#  From Peter Knowles' "booklistgen.sh" script
+#+ for converting files to Sony Librie/PRS-50X format.
+#  (http://booklistgensh.peterknowles.com)</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+
+	      </P
+><P
+><A
+HREF="wrapper.html#PERLREF"
+>Perl</A
+>,
+	      <A
+HREF="sedawk.html#SEDREF"
+>sed</A
+>, and <A
+HREF="awk.html#AWKREF"
+>awk</A
+> have far superior string
+	      parsing facilities. A short <B
+CLASS="COMMAND"
+>sed</B
+> or
+	      <B
+CLASS="COMMAND"
+>awk</B
+> <SPAN
+CLASS="QUOTE"
+>"subroutine"</SPAN
+> within
+	      a script (see <A
+HREF="wrapper.html"
+>Section 36.2</A
+>) is an attractive
+	      alternative to <B
+CLASS="COMMAND"
+>expr</B
+>.</P
+><P
+>See <A
+HREF="string-manipulation.html"
+>Section 10.1</A
+> for more on
+              using <B
+CLASS="COMMAND"
+>expr</B
+> in string operations.</P
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN10465"
+HREF="moreadv.html#AEN10465"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>And even when <I
+CLASS="FIRSTTERM"
+>xargs</I
+> is
+		not strictly necessary, it can speed up execution of a command
+		involving <A
+HREF="timedate.html#BATCHPROCREF"
+>batch-processing</A
+> of multiple
+		files.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="basic.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="timedate.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Basic Commands</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="external.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Time / Date Commands</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

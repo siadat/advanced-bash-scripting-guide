@@ -1,0 +1,446 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Standard Command-Line Options</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Command-Line Options"
+HREF="command-line-options.html"><LINK
+REL="PREVIOUS"
+TITLE="Command-Line Options"
+HREF="command-line-options.html"><LINK
+REL="NEXT"
+TITLE="Bash Command-Line Options"
+HREF="bash-options.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="command-line-options.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Appendix G. Command-Line Options</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="bash-options.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="STANDARD-OPTIONS"
+></A
+>G.1. Standard Command-Line Options</H1
+><P
+>Over time, there has evolved a loose standard for the
+        meanings of command-line option flags. The GNU utilities conform
+        more closely to this <SPAN
+CLASS="QUOTE"
+>"standard"</SPAN
+> than older UNIX
+        utilities.</P
+><P
+>Traditionally, UNIX command-line options consist of a dash,
+        followed by one or more lowercase letters. The GNU utilities
+        added a double-dash, followed by a complete word or compound
+        word.</P
+><P
+>The two most widely-accepted options are:</P
+><P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-h</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>--help</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Help</I
+>: Give usage message and exit.</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-v</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>--version</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Version</I
+>: Show program version and exit.</P
+></LI
+></UL
+><P
+>Other common options are:</P
+><P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-a</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>--all</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>All</I
+>: show <EM
+>all</EM
+>
+        information or operate on <EM
+>all</EM
+> arguments.</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-l</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>--list</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>List</I
+>: list files or arguments without
+        taking other action.</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-o</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Output</I
+> filename</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-q</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>--quiet</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Quiet</I
+>: suppress
+      <TT
+CLASS="FILENAME"
+>stdout</TT
+>.</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-r</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>-R</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>--recursive</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Recursive</I
+>: Operate recursively (down
+        directory tree).</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-v</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>--verbose</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Verbose</I
+>: output additional information to
+        <TT
+CLASS="FILENAME"
+>stdout</TT
+> or <TT
+CLASS="FILENAME"
+>stderr</TT
+>.</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-z</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>--compress</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Compress</I
+>: apply compression (usually
+        <A
+HREF="filearchiv.html#GZIPREF"
+>gzip</A
+>).</P
+></LI
+></UL
+><P
+>However:</P
+><P
+></P
+><UL
+><LI
+><P
+>In <B
+CLASS="COMMAND"
+>tar</B
+> and <B
+CLASS="COMMAND"
+>gawk</B
+>:</P
+><P
+><TT
+CLASS="OPTION"
+>-f</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>--file</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>File</I
+>: filename follows.</P
+></LI
+><LI
+><P
+>In <B
+CLASS="COMMAND"
+>cp</B
+>, <B
+CLASS="COMMAND"
+>mv</B
+>,
+        <B
+CLASS="COMMAND"
+>rm</B
+>:</P
+><P
+><TT
+CLASS="OPTION"
+>-f</TT
+></P
+><P
+><TT
+CLASS="OPTION"
+>--force</TT
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Force</I
+>: force overwrite of target file(s).</P
+></LI
+></UL
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Many UNIX and Linux utilities deviate from this
+      <SPAN
+CLASS="QUOTE"
+>"standard,"</SPAN
+> so it is dangerous to
+      <EM
+>assume</EM
+> that a given option will behave in a
+      standard way. Always check the man page for the command in question
+      when in doubt.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>A complete table of recommended options for the GNU utilities
+        is available at <A
+HREF="http://www.gnu.org/prep/standards/"
+TARGET="_top"
+>the GNU standards page</A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="command-line-options.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="bash-options.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Command-Line Options</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="command-line-options.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Bash Command-Line Options</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

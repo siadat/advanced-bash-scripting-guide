@@ -1,0 +1,4723 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>File and Archiving Commands</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="External Filters, Programs and Commands"
+HREF="external.html"><LINK
+REL="PREVIOUS"
+TITLE="Text Processing Commands"
+HREF="textproc.html"><LINK
+REL="NEXT"
+TITLE="Communications Commands"
+HREF="communications.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="textproc.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. External Filters, Programs and Commands</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="communications.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FILEARCHIV"
+></A
+>16.5. File and Archiving Commands</H1
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="FAARCHIVING1"
+></A
+>Archiving</B
+></P
+><DL
+><DT
+><A
+NAME="TARREF"
+></A
+><B
+CLASS="COMMAND"
+>tar</B
+></DT
+><DD
+><P
+>The standard UNIX archiving utility.
+
+	        <A
+NAME="AEN11885"
+HREF="filearchiv.html#FTN.AEN11885"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+
+	      Originally a
+	      <I
+CLASS="WORDASWORD"
+>Tape ARchiving</I
+> program, it has
+	      developed into a general purpose package that can handle
+	      all manner of archiving with all types of destination
+	      devices, ranging from tape drives to regular files to even
+	      <TT
+CLASS="FILENAME"
+>stdout</TT
+> (see <A
+HREF="special-chars.html#EX58"
+>Example 3-4</A
+>). GNU
+	      <I
+CLASS="FIRSTTERM"
+>tar</I
+> has been patched to accept
+	      various compression filters, for example: <B
+CLASS="COMMAND"
+>tar
+	      czvf archive_name.tar.gz *</B
+>, which recursively
+	      archives and <A
+HREF="filearchiv.html#GZIPREF"
+>gzips</A
+>
+	      all files in a directory tree except <A
+HREF="basic.html#DOTFILESREF"
+>dotfiles</A
+> in the current
+	      working directory (<A
+HREF="internalvariables.html#PWDREF"
+>$PWD</A
+>).
+
+		<A
+NAME="AEN11896"
+HREF="filearchiv.html#FTN.AEN11896"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>
+            </P
+><P
+>Some useful <B
+CLASS="COMMAND"
+>tar</B
+> options:  
+	      <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-c</TT
+> create (a new
+		  archive)</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-x</TT
+> extract (files from
+		  existing archive)</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>--delete</TT
+> delete (files
+		  from existing archive)</P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>This option will not work on magnetic tape
+		  devices.</P
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-r</TT
+> append (files to
+		  existing archive)</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-A</TT
+> append
+		  (<I
+CLASS="FIRSTTERM"
+>tar</I
+> files to
+		  existing archive)</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-t</TT
+> list (contents of
+                  existing archive)</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-u</TT
+> update archive</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-d</TT
+> compare archive with
+		  specified filesystem</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>--after-date</TT
+> only process
+		  files with a date stamp <EM
+>after</EM
+>
+		  specified date</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-z</TT
+> <A
+HREF="filearchiv.html#GZIPREF"
+>gzip</A
+> the archive</P
+><P
+>(compress or uncompress, depending on whether
+		combined with the <TT
+CLASS="OPTION"
+>-c</TT
+> or
+		<TT
+CLASS="OPTION"
+>-x</TT
+>) option</P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-j</TT
+>
+		  <A
+HREF="filearchiv.html#BZIPREF"
+>bzip2</A
+> the
+		  archive</P
+></LI
+></OL
+>
+	      </P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>It may be difficult to recover data from a
+	      corrupted <I
+CLASS="FIRSTTERM"
+>gzipped</I
+> tar
+	      archive. When archiving important files, make multiple
+	      backups.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="SHARREF"
+></A
+><B
+CLASS="COMMAND"
+>shar</B
+></DT
+><DD
+><P
+><I
+CLASS="FIRSTTERM"
+>Shell archiving</I
+> utility.
+              The text and/or binary files in a shell archive are
+              concatenated without compression, and the resultant
+              archive is essentially a shell script, complete with
+              <SPAN
+CLASS="TOKEN"
+>#!/bin/sh</SPAN
+> header, containing all the
+              necessary unarchiving commands, as well as the files
+              themselves. Unprintable binary characters in the target
+              file(s) are converted to printable ASCII characters in the
+              output <I
+CLASS="FIRSTTERM"
+>shar</I
+> file. <I
+CLASS="FIRSTTERM"
+>Shar
+              archives</I
+> still show up in Usenet newsgroups,
+              but otherwise <B
+CLASS="COMMAND"
+>shar</B
+> has been replaced
+              by <B
+CLASS="COMMAND"
+>tar</B
+>/<B
+CLASS="COMMAND"
+>gzip</B
+>.
+              The <B
+CLASS="COMMAND"
+>unshar</B
+> command unpacks
+              <I
+CLASS="FIRSTTERM"
+>shar</I
+> archives.</P
+><P
+>The
+              <B
+CLASS="COMMAND"
+>mailshar</B
+> command is a Bash script that
+              uses <B
+CLASS="COMMAND"
+>shar</B
+> to concatenate multiple files
+              into a single one for e-mailing.
+              This script supports compression and <A
+HREF="filearchiv.html#UUENCODEREF"
+>uuencoding</A
+>.</P
+></DD
+><DT
+><A
+NAME="ARREF"
+></A
+><B
+CLASS="COMMAND"
+>ar</B
+></DT
+><DD
+><P
+>Creation and manipulation utility for archives, mainly
+	      used for binary object file libraries.</P
+></DD
+><DT
+><A
+NAME="RPMREF"
+></A
+><B
+CLASS="COMMAND"
+>rpm</B
+></DT
+><DD
+><P
+>The <I
+CLASS="FIRSTTERM"
+>Red Hat Package Manager</I
+>, or
+	      <B
+CLASS="COMMAND"
+>rpm</B
+> utility provides a wrapper for
+	      source or binary archives. It includes commands for
+	      installing and checking the integrity of packages, among
+	      other things.</P
+><P
+>A simple <B
+CLASS="COMMAND"
+>rpm -i package_name.rpm</B
+>
+	      usually suffices to install a package, though there are many
+	      more options available.</P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>rpm -qf</B
+></TT
+> identifies which package a
+	      file originates from.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>rpm -qf /bin/ls</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>coreutils-5.2.1-31</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>rpm -qa</B
+></TT
+> gives a
+	      complete list of all installed <I
+CLASS="FIRSTTERM"
+>rpm</I
+> packages
+	      on a given system. An <TT
+CLASS="USERINPUT"
+><B
+>rpm -qa package_name</B
+></TT
+>
+	      lists only the package(s) corresponding to
+	      <TT
+CLASS="FILENAME"
+>package_name</TT
+>.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>rpm -qa</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>redhat-logos-1.1.3-1
+ glibc-2.2.4-13
+ cracklib-2.7-12
+ dosfstools-2.7-1
+ gdbm-1.8.0-10
+ ksymoops-2.4.1-1
+ mktemp-1.5-11
+ perl-5.6.0-17
+ reiserfs-utils-3.x.0j-2
+ ...</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>rpm -qa docbook-utils</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>docbook-utils-0.6.9-2</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>rpm -qa docbook | grep docbook</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>docbook-dtd31-sgml-1.0-10
+ docbook-style-dsssl-1.64-3
+ docbook-dtd30-sgml-1.0-10
+ docbook-dtd40-sgml-1.0-11
+ docbook-utils-pdf-0.6.9-2
+ docbook-dtd41-sgml-1.0-10
+ docbook-utils-0.6.9-2</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="CPIOREF"
+></A
+><B
+CLASS="COMMAND"
+>cpio</B
+></DT
+><DD
+><P
+>This specialized archiving copy command
+	      (<B
+CLASS="COMMAND"
+>c</B
+>o<B
+CLASS="COMMAND"
+>p</B
+>y
+	      <B
+CLASS="COMMAND"
+>i</B
+>nput and <B
+CLASS="COMMAND"
+>o</B
+>utput)
+	      is rarely seen any more, having been supplanted by
+	      <B
+CLASS="COMMAND"
+>tar</B
+>/<B
+CLASS="COMMAND"
+>gzip</B
+>. It still
+	      has its uses, such as moving a directory tree. With an
+	      appropriate block size (for copying) specified, it
+	      can be appreciably faster than <B
+CLASS="COMMAND"
+>tar</B
+>.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX48"
+></A
+><P
+><B
+>Example 16-30. Using <I
+CLASS="FIRSTTERM"
+>cpio</I
+> to move a directory tree</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# Copying a directory tree using cpio.
+
+# Advantages of using 'cpio':
+#   Speed of copying. It's faster than 'tar' with pipes.
+#   Well suited for copying special files (named pipes, etc.)
+#+  that 'cp' may choke on.
+
+ARGS=2
+E_BADARGS=65
+
+if [ $# -ne "$ARGS" ]
+then
+  echo "Usage: `basename $0` source destination"
+  exit $E_BADARGS
+fi  
+
+source="$1"
+destination="$2"
+
+###################################################################
+find "$source" -depth | cpio -admvp "$destination"
+#               ^^^^^         ^^^^^
+#  Read the 'find' and 'cpio' info pages to decipher these options.
+#  The above works only relative to $PWD (current directory) . . .
+#+ full pathnames are specified.
+###################################################################
+
+
+# Exercise:
+# --------
+
+#  Add code to check the exit status ($?) of the 'find | cpio' pipe
+#+ and output appropriate error messages if anything went wrong.
+
+exit $?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="RPM2CPIOREF"
+></A
+><B
+CLASS="COMMAND"
+>rpm2cpio</B
+></DT
+><DD
+><P
+>This command extracts a
+	      <B
+CLASS="COMMAND"
+>cpio</B
+> archive from an <A
+HREF="filearchiv.html#RPMREF"
+>rpm</A
+> one.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="DERPM"
+></A
+><P
+><B
+>Example 16-31. Unpacking an <I
+CLASS="FIRSTTERM"
+>rpm</I
+> archive</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# de-rpm.sh: Unpack an 'rpm' archive
+
+: ${1?"Usage: `basename $0` target-file"}
+# Must specify 'rpm' archive name as an argument.
+
+
+TEMPFILE=$$.cpio                         #  Tempfile with "unique" name.
+                                         #  $$ is process ID of script.
+
+rpm2cpio &#60; $1 &#62; $TEMPFILE                #  Converts rpm archive into
+                                         #+ cpio archive.
+cpio --make-directories -F $TEMPFILE -i  #  Unpacks cpio archive.
+rm -f $TEMPFILE                          #  Deletes cpio archive.
+
+exit 0
+
+#  Exercise:
+#  Add check for whether 1) "target-file" exists and
+#+                       2) it is an rpm archive.
+#  Hint:                    Parse output of 'file' command.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="PAXREF"
+></A
+><B
+CLASS="COMMAND"
+>pax</B
+></DT
+><DD
+><P
+>The <I
+CLASS="FIRSTTERM"
+>pax</I
+>
+            <B
+CLASS="COMMAND"
+>p</B
+>ortable <B
+CLASS="COMMAND"
+>a</B
+>rchive
+            e<B
+CLASS="COMMAND"
+>x</B
+>change toolkit facilitates periodic
+            file backups and is designed to be cross-compatible
+            between various flavors of UNIX. It was designed
+	    to replace <A
+HREF="filearchiv.html#TARREF"
+>tar</A
+> and <A
+HREF="filearchiv.html#CPIOREF"
+>cpio</A
+>.</P
+><P
+>	  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>pax -wf daily_backup.pax ~/linux-server/files 
+#  Creates a tar archive of all files in the target directory.
+#  Note that the options to pax must be in the correct order --
+#+ pax -fw     has an entirely different effect.
+
+pax -f daily_backup.pax
+#  Lists the files in the archive.
+
+pax -rf daily_backup.pax ~/bsd-server/files
+#  Restores the backed-up files from the Linux machine
+#+ onto a BSD one.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	  </P
+><P
+>Note that <I
+CLASS="FIRSTTERM"
+>pax</I
+> handles many of
+            the standard archiving and compression commands.</P
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="FACOMPRESSION1"
+></A
+>Compression</B
+></P
+><DL
+><DT
+><A
+NAME="GZIPREF"
+></A
+><B
+CLASS="COMMAND"
+>gzip</B
+></DT
+><DD
+><P
+>The standard GNU/UNIX compression utility, replacing
+	      the inferior and proprietary
+	      <B
+CLASS="COMMAND"
+>compress</B
+>. The corresponding decompression
+	      command is <B
+CLASS="COMMAND"
+>gunzip</B
+>, which is the equivalent of
+	      <B
+CLASS="COMMAND"
+>gzip -d</B
+>.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <TT
+CLASS="OPTION"
+>-c</TT
+> option sends the output of
+	      <B
+CLASS="COMMAND"
+>gzip</B
+> to <TT
+CLASS="FILENAME"
+>stdout</TT
+>. This
+	      is useful when <A
+HREF="special-chars.html#PIPEREF"
+>piping</A
+> to other
+	      commands.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="ZCATREF"
+></A
+></P
+><P
+>The <B
+CLASS="COMMAND"
+>zcat</B
+> filter decompresses a
+	      <I
+CLASS="FIRSTTERM"
+>gzipped</I
+> file to
+	      <TT
+CLASS="FILENAME"
+>stdout</TT
+>, as possible input to a pipe or
+	      redirection. This is, in effect, a <B
+CLASS="COMMAND"
+>cat</B
+>
+	      command that works on compressed files (including files
+	      processed with the older <A
+HREF="filearchiv.html#COMPRESSREF"
+>compress</A
+>
+	      utility). The <B
+CLASS="COMMAND"
+>zcat</B
+> command is equivalent to
+	      <B
+CLASS="COMMAND"
+>gzip -dc</B
+>.</P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>On some commercial UNIX systems, <B
+CLASS="COMMAND"
+>zcat</B
+>
+	      is a synonym for <B
+CLASS="COMMAND"
+>uncompress -c</B
+>,
+	      and will not work on <I
+CLASS="FIRSTTERM"
+>gzipped</I
+>
+	      files.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>See also <A
+HREF="comparison-ops.html#EX14"
+>Example 7-7</A
+>.</P
+></DD
+><DT
+><A
+NAME="BZIPREF"
+></A
+><B
+CLASS="COMMAND"
+>bzip2</B
+></DT
+><DD
+><P
+>An alternate compression utility, usually more efficient
+	      (but slower) than <B
+CLASS="COMMAND"
+>gzip</B
+>, especially on
+	      large files. The corresponding decompression command is
+	      <B
+CLASS="COMMAND"
+>bunzip2</B
+>.</P
+><P
+>Similar to the <B
+CLASS="COMMAND"
+>zcat</B
+> command,
+	      <B
+CLASS="COMMAND"
+>bzcat</B
+> decompresses a
+	      <I
+CLASS="FIRSTTERM"
+>bzipped2-ed</I
+> file to
+	      <TT
+CLASS="FILENAME"
+>stdout</TT
+>.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Newer versions of <A
+HREF="filearchiv.html#TARREF"
+>tar</A
+> have been patched with
+	      <B
+CLASS="COMMAND"
+>bzip2</B
+> support.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="COMPRESSREF"
+></A
+><B
+CLASS="COMMAND"
+>compress</B
+>, <A
+NAME="UNCOMPRESSREF"
+></A
+><B
+CLASS="COMMAND"
+>uncompress</B
+></DT
+><DD
+><P
+>This is an older, proprietary compression
+	      utility found in commercial UNIX distributions. The
+	      more efficient <B
+CLASS="COMMAND"
+>gzip</B
+> has largely
+	      replaced it. Linux distributions generally include a
+	      <B
+CLASS="COMMAND"
+>compress</B
+> workalike for compatibility,
+	      although <B
+CLASS="COMMAND"
+>gunzip</B
+> can unarchive files
+	      treated with <B
+CLASS="COMMAND"
+>compress</B
+>.</P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <B
+CLASS="COMMAND"
+>znew</B
+> command transforms
+	      <I
+CLASS="FIRSTTERM"
+>compressed</I
+> files into
+	      <I
+CLASS="FIRSTTERM"
+>gzipped</I
+> ones.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="SQREF"
+></A
+><B
+CLASS="COMMAND"
+>sq</B
+></DT
+><DD
+><P
+>Yet another compression (<B
+CLASS="COMMAND"
+>sq</B
+>ueeze)
+	      utility, a filter that works only on sorted
+	      <A
+HREF="special-chars.html#ASCIIDEF"
+>ASCII</A
+> word lists. It
+	      uses the standard invocation syntax for a filter,
+	      <B
+CLASS="COMMAND"
+>sq &#60; input-file &#62; output-file</B
+>.
+	      Fast, but not nearly as efficient as <A
+HREF="filearchiv.html#GZIPREF"
+>gzip</A
+>.  The corresponding
+	      uncompression filter is <B
+CLASS="COMMAND"
+>unsq</B
+>, invoked
+	      like <B
+CLASS="COMMAND"
+>sq</B
+>.</P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The output of <B
+CLASS="COMMAND"
+>sq</B
+> may be
+	        piped to <B
+CLASS="COMMAND"
+>gzip</B
+> for further
+		compression.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="ZIPREF"
+></A
+><B
+CLASS="COMMAND"
+>zip</B
+>, <B
+CLASS="COMMAND"
+>unzip</B
+></DT
+><DD
+><P
+>Cross-platform file archiving and compression utility
+	      compatible with DOS <I
+CLASS="FIRSTTERM"
+>pkzip.exe</I
+>.
+	      <SPAN
+CLASS="QUOTE"
+>"Zipped"</SPAN
+> archives seem to be a more
+	      common medium of file exchange on the Internet than
+	      <SPAN
+CLASS="QUOTE"
+>"tarballs."</SPAN
+></P
+></DD
+><DT
+><A
+NAME="UNARCREF"
+></A
+><B
+CLASS="COMMAND"
+>unarc</B
+>, <B
+CLASS="COMMAND"
+>unarj</B
+>, <B
+CLASS="COMMAND"
+>unrar</B
+></DT
+><DD
+><P
+>These Linux utilities permit unpacking archives
+	      compressed with the DOS <I
+CLASS="FIRSTTERM"
+>arc.exe</I
+>,
+	      <I
+CLASS="FIRSTTERM"
+>arj.exe</I
+>, and
+	      <I
+CLASS="FIRSTTERM"
+>rar.exe</I
+> programs.</P
+></DD
+><DT
+><A
+NAME="LZMAREF"
+></A
+><B
+CLASS="COMMAND"
+>lzma</B
+>, <B
+CLASS="COMMAND"
+>unlzma</B
+>, <B
+CLASS="COMMAND"
+>lzcat</B
+></DT
+><DD
+><P
+>Highly efficient Lempel-Ziv-Markov compression.
+	      The syntax of <I
+CLASS="FIRSTTERM"
+>lzma</I
+> is similar to
+              that of <I
+CLASS="FIRSTTERM"
+>gzip</I
+>. The <A
+HREF="http://www.7-zip.org/sdk.html"
+TARGET="_top"
+>7-zip Website</A
+>
+              has more information.</P
+></DD
+><DT
+><A
+NAME="XZREF"
+></A
+><B
+CLASS="COMMAND"
+>xz</B
+>, <B
+CLASS="COMMAND"
+>unxz</B
+>, <B
+CLASS="COMMAND"
+>xzcat</B
+></DT
+><DD
+><P
+>A new high-efficiency compression tool, backward compatible
+	      with <I
+CLASS="FIRSTTERM"
+>lzma</I
+>, and with an invocation
+	      syntax similar to <I
+CLASS="FIRSTTERM"
+>gzip</I
+>. For
+	      more information, see the <A
+HREF="http://en.wikipedia.org/wiki/Xz"
+TARGET="_top"
+>Wikipedia
+	      entry</A
+>.</P
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="FAINFORMATION1"
+></A
+>File Information</B
+></P
+><DL
+><DT
+><A
+NAME="FILEREF"
+></A
+><B
+CLASS="COMMAND"
+>file</B
+></DT
+><DD
+><P
+>A utility for identifying file types. The command
+	      <TT
+CLASS="USERINPUT"
+><B
+>file file-name</B
+></TT
+> will return a
+	      file specification for <TT
+CLASS="FILENAME"
+>file-name</TT
+>,
+	      such as <TT
+CLASS="COMPUTEROUTPUT"
+>ascii text</TT
+> or
+	      <TT
+CLASS="COMPUTEROUTPUT"
+>data</TT
+>. It references
+	      the <A
+HREF="sha-bang.html#MAGNUMREF"
+>magic numbers</A
+>
+	      found in <TT
+CLASS="FILENAME"
+>/usr/share/magic</TT
+>,
+	      <TT
+CLASS="FILENAME"
+>/etc/magic</TT
+>, or
+	      <TT
+CLASS="FILENAME"
+>/usr/lib/magic</TT
+>, depending on the
+	      Linux/UNIX distribution.</P
+><P
+>The <TT
+CLASS="OPTION"
+>-f</TT
+> option causes
+	      <B
+CLASS="COMMAND"
+>file</B
+> to run in <A
+HREF="timedate.html#BATCHPROCREF"
+>batch</A
+> mode, to read from
+	      a designated file a list of filenames to analyze. The
+	      <TT
+CLASS="OPTION"
+>-z</TT
+> option, when used on a compressed
+	      target file, forces an attempt to analyze the uncompressed
+	      file type.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>file test.tar.gz</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>test.tar.gz: gzip compressed data, deflated,
+ last modified: Sun Sep 16 13:34:51 2001, os: Unix</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash </TT
+><TT
+CLASS="USERINPUT"
+><B
+>file -z test.tar.gz</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>test.tar.gz: GNU tar archive (gzip compressed data, deflated,
+ last modified: Sun Sep 16 13:34:51 2001, os: Unix)</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># Find sh and Bash scripts in a given directory:
+
+DIRECTORY=/usr/local/bin
+KEYWORD=Bourne
+# Bourne and Bourne-Again shell scripts
+
+file $DIRECTORY/* | fgrep $KEYWORD
+
+# Output:
+
+# /usr/local/bin/burn-cd:          Bourne-Again shell script text executable
+# /usr/local/bin/burnit:           Bourne-Again shell script text executable
+# /usr/local/bin/cassette.sh:      Bourne shell script text executable
+# /usr/local/bin/copy-cd:          Bourne-Again shell script text executable
+# . . .</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="STRIPC"
+></A
+><P
+><B
+>Example 16-32. Stripping comments from C program files</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# strip-comment.sh: Strips out the comments (/* COMMENT */) in a C program.
+
+E_NOARGS=0
+E_ARGERROR=66
+E_WRONG_FILE_TYPE=67
+
+if [ $# -eq "$E_NOARGS" ]
+then
+  echo "Usage: `basename $0` C-program-file" &#62;&#38;2 # Error message to stderr.
+  exit $E_ARGERROR
+fi  
+
+# Test for correct file type.
+type=`file $1 | awk '{ print $2, $3, $4, $5 }'`
+# "file $1" echoes file type . . .
+# Then awk removes the first field, the filename . . .
+# Then the result is fed into the variable "type."
+correct_type="ASCII C program text"
+
+if [ "$type" != "$correct_type" ]
+then
+  echo
+  echo "This script works on C program files only."
+  echo
+  exit $E_WRONG_FILE_TYPE
+fi  
+
+
+# Rather cryptic sed script:
+#--------
+sed '
+/^\/\*/d
+/.*\*\//d
+' $1
+#--------
+# Easy to understand if you take several hours to learn sed fundamentals.
+
+
+#  Need to add one more line to the sed script to deal with
+#+ case where line of code has a comment following it on same line.
+#  This is left as a non-trivial exercise.
+
+#  Also, the above code deletes non-comment lines with a "*/" . . .
+#+ not a desirable result.
+
+exit 0
+
+
+# ----------------------------------------------------------------
+# Code below this line will not execute because of 'exit 0' above.
+
+# Stephane Chazelas suggests the following alternative:
+
+usage() {
+  echo "Usage: `basename $0` C-program-file" &#62;&#38;2
+  exit 1
+}
+
+WEIRD=`echo -n -e '\377'`   # or WEIRD=$'\377'
+[[ $# -eq 1 ]] || usage
+case `file "$1"` in
+  *"C program text"*) sed -e "s%/\*%${WEIRD}%g;s%\*/%${WEIRD}%g" "$1" \
+     | tr '\377\n' '\n\377' \
+     | sed -ne 'p;n' \
+     | tr -d '\n' | tr '\377' '\n';;
+  *) usage;;
+esac
+
+#  This is still fooled by things like:
+#  printf("/*");
+#  or
+#  /*  /* buggy embedded comment */
+#
+#  To handle all special cases (comments in strings, comments in string
+#+ where there is a \", \\" ...),
+#+ the only way is to write a C parser (using lex or yacc perhaps?).
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="WHICHREF"
+></A
+><B
+CLASS="COMMAND"
+>which</B
+></DT
+><DD
+><P
+><B
+CLASS="COMMAND"
+>which command</B
+> gives the full path
+	      to <SPAN
+CLASS="QUOTE"
+>"command."</SPAN
+> This is useful for finding
+	      out whether a particular command or utility is installed
+	      on the system.</P
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>$bash which rm</B
+></TT
+>
+<TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="COMPUTEROUTPUT"
+>/usr/bin/rm</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	  </P
+><P
+>For an interesting use of this command, see <A
+HREF="colorizing.html#HORSERACE"
+>Example 36-16</A
+>.</P
+></DD
+><DT
+><A
+NAME="WHEREISREF"
+></A
+><B
+CLASS="COMMAND"
+>whereis</B
+></DT
+><DD
+><P
+>Similar to <B
+CLASS="COMMAND"
+>which</B
+>, above,
+	      <B
+CLASS="COMMAND"
+>whereis command</B
+> gives the
+	      full path to <SPAN
+CLASS="QUOTE"
+>"command,"</SPAN
+> but also to its
+	      <A
+HREF="basic.html#MANREF"
+>manpage</A
+>.</P
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>$bash whereis rm</B
+></TT
+>
+<TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="COMPUTEROUTPUT"
+>rm: /bin/rm /usr/share/man/man1/rm.1.bz2</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	  </P
+></DD
+><DT
+><A
+NAME="WHATISREF"
+></A
+><B
+CLASS="COMMAND"
+>whatis</B
+></DT
+><DD
+><P
+><B
+CLASS="COMMAND"
+>whatis command</B
+> looks up
+	      <SPAN
+CLASS="QUOTE"
+>"command"</SPAN
+> in the
+	      <TT
+CLASS="REPLACEABLE"
+><I
+>whatis</I
+></TT
+> database. This is useful
+	      for identifying system commands and important configuration
+	      files. Consider it a simplified <B
+CLASS="COMMAND"
+>man</B
+>
+	      command.</P
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>$bash whatis whatis</B
+></TT
+>
+<TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="COMPUTEROUTPUT"
+>whatis               (1)  - search the whatis database for complete words</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	  </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="WHAT"
+></A
+><P
+><B
+>Example 16-33. Exploring <TT
+CLASS="FILENAME"
+>/usr/X11R6/bin</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# What are all those mysterious binaries in /usr/X11R6/bin?
+
+DIRECTORY="/usr/X11R6/bin"
+# Try also "/bin", "/usr/bin", "/usr/local/bin", etc.
+
+for file in $DIRECTORY/*
+do
+  whatis `basename $file`   # Echoes info about the binary.
+done
+
+exit 0
+
+#  Note: For this to work, you must create a "whatis" database
+#+ with /usr/sbin/makewhatis.
+#  You may wish to redirect output of this script, like so:
+#    ./what.sh &#62;&#62;whatis.db
+#  or view it a page at a time on stdout,
+#    ./what.sh | less</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>See also <A
+HREF="loops1.html#FILEINFO"
+>Example 11-3</A
+>.</P
+></DD
+><DT
+><A
+NAME="VDIRREF"
+></A
+><B
+CLASS="COMMAND"
+>vdir</B
+></DT
+><DD
+><P
+>Show a detailed directory listing. The effect is similar to
+	      <A
+HREF="basic.html#LSREF"
+>ls -lb</A
+>.</P
+><P
+>This is one of the GNU
+	    <I
+CLASS="FIRSTTERM"
+>fileutils</I
+>.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>vdir</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>total 10
+ -rw-r--r--    1 bozo  bozo      4034 Jul 18 22:04 data1.xrolo
+ -rw-r--r--    1 bozo  bozo      4602 May 25 13:58 data1.xrolo.bak
+ -rw-r--r--    1 bozo  bozo       877 Dec 17  2000 employment.xrolo</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ls -l</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>total 10
+ -rw-r--r--    1 bozo  bozo      4034 Jul 18 22:04 data1.xrolo
+ -rw-r--r--    1 bozo  bozo      4602 May 25 13:58 data1.xrolo.bak
+ -rw-r--r--    1 bozo  bozo       877 Dec 17  2000 employment.xrolo</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+></DD
+><DT
+><A
+NAME="LOCATEREF"
+></A
+><B
+CLASS="COMMAND"
+>locate</B
+>, <A
+NAME="SLOCATEREF"
+></A
+><B
+CLASS="COMMAND"
+>slocate</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>locate</B
+> command searches for
+	      files using a database stored for just that purpose. The
+	      <B
+CLASS="COMMAND"
+>slocate</B
+> command is the secure version of
+	      <B
+CLASS="COMMAND"
+>locate</B
+> (which may be aliased to
+	      <B
+CLASS="COMMAND"
+>slocate</B
+>).</P
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>$bash locate hickson</B
+></TT
+>
+<TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="COMPUTEROUTPUT"
+>/usr/lib/xephem/catalogs/hickson.edb</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><A
+NAME="GETFACLREF"
+></A
+><B
+CLASS="COMMAND"
+>getfacl</B
+>, <A
+NAME="SETFACLREF"
+></A
+><B
+CLASS="COMMAND"
+>setfacl</B
+></DT
+><DD
+><P
+>These commands <I
+CLASS="FIRSTTERM"
+>retrieve</I
+> or
+              <I
+CLASS="FIRSTTERM"
+>set</I
+> the <B
+CLASS="COMMAND"
+>f</B
+>ile
+              <B
+CLASS="COMMAND"
+>a</B
+>ccess <B
+CLASS="COMMAND"
+>c</B
+>ontrol
+              <B
+CLASS="COMMAND"
+>l</B
+>ist -- the <I
+CLASS="FIRSTTERM"
+>owner</I
+>,
+	      <I
+CLASS="FIRSTTERM"
+>group</I
+>, and file permissions.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>getfacl *</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+># file: test1.txt
+ # owner: bozo
+ # group: bozgrp
+ user::rw-
+ group::rw-
+ other::r--
+
+ # file: test2.txt
+ # owner: bozo
+ # group: bozgrp
+ user::rw-
+ group::rw-
+ other::r--</TT
+>
+ 
+
+ 
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>setfacl -m u:bozo:rw yearly_budget.csv</B
+></TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>getfacl yearly_budget.csv</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+># file: yearly_budget.csv
+ # owner: accountant
+ # group: budgetgrp
+ user::rw-
+ user:bozo:rw-
+ user:accountant:rw-
+ group::rw-
+ mask::rw-
+ other::r--</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="READLINKREF"
+></A
+><B
+CLASS="COMMAND"
+>readlink</B
+></DT
+><DD
+><P
+>Disclose the file that a symbolic link points to.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>readlink /usr/bin/awk</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>../../bin/gawk</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="STRINGSREF"
+></A
+><B
+CLASS="COMMAND"
+>strings</B
+></DT
+><DD
+><P
+>Use the <B
+CLASS="COMMAND"
+>strings</B
+> command to find
+	      printable strings in a binary or data file. It will list
+	      sequences of printable characters found in the target
+	      file. This might be handy for a quick 'n dirty examination
+	      of a core dump or for looking at an unknown graphic image
+	      file (<TT
+CLASS="USERINPUT"
+><B
+>strings image-file | more</B
+></TT
+> might
+	      show something like <I
+CLASS="FIRSTTERM"
+>JFIF</I
+>,
+	      which would identify the file as a <I
+CLASS="FIRSTTERM"
+>jpeg</I
+>
+	      graphic). In a script, you would probably
+	      parse the output of <B
+CLASS="COMMAND"
+>strings</B
+>
+	      with <A
+HREF="textproc.html#GREPREF"
+>grep</A
+> or <A
+HREF="sedawk.html#SEDREF"
+>sed</A
+>. See <A
+HREF="loops1.html#BINGREP"
+>Example 11-8</A
+>
+	      and <A
+HREF="loops1.html#FINDSTRING"
+>Example 11-10</A
+>.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="WSTRINGS"
+></A
+><P
+><B
+>Example 16-34. An <SPAN
+CLASS="QUOTE"
+>"improved"</SPAN
+>
+	      <I
+CLASS="FIRSTTERM"
+>strings</I
+> command</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# wstrings.sh: "word-strings" (enhanced "strings" command)
+#
+#  This script filters the output of "strings" by checking it
+#+ against a standard word list file.
+#  This effectively eliminates gibberish and noise,
+#+ and outputs only recognized words.
+
+# ===========================================================
+#                 Standard Check for Script Argument(s)
+ARGS=1
+E_BADARGS=85
+E_NOFILE=86
+
+if [ $# -ne $ARGS ]
+then
+  echo "Usage: `basename $0` filename"
+  exit $E_BADARGS
+fi
+
+if [ ! -f "$1" ]                      # Check if file exists.
+then
+    echo "File \"$1\" does not exist."
+    exit $E_NOFILE
+fi
+# ===========================================================
+
+
+MINSTRLEN=3                           #  Minimum string length.
+WORDFILE=/usr/share/dict/linux.words  #  Dictionary file.
+#  May specify a different word list file
+#+ of one-word-per-line format.
+#  For example, the "yawl" word-list package,
+#  http://bash.deta.in/yawl-0.3.2.tar.gz
+
+
+wlist=`strings "$1" | tr A-Z a-z | tr '[:space:]' Z | \
+       tr -cs '[:alpha:]' Z | tr -s '\173-\377' Z | tr Z ' '`
+
+# Translate output of 'strings' command with multiple passes of 'tr'.
+#  "tr A-Z a-z"  converts to lowercase.
+#  "tr '[:space:]'"  converts whitespace characters to Z's.
+#  "tr -cs '[:alpha:]' Z"  converts non-alphabetic characters to Z's,
+#+ and squeezes multiple consecutive Z's.
+#  "tr -s '\173-\377' Z"  converts all characters past 'z' to Z's
+#+ and squeezes multiple consecutive Z's,
+#+ which gets rid of all the weird characters that the previous
+#+ translation failed to deal with.
+#  Finally, "tr Z ' '" converts all those Z's to whitespace,
+#+ which will be seen as word separators in the loop below.
+
+#  ***********************************************************************
+#  Note the technique of feeding/piping the output of 'tr' back to itself,
+#+ but with different arguments and/or options on each successive pass.
+#  ***********************************************************************
+
+
+for word in $wlist                    #  Important:
+                                      #  $wlist must not be quoted here.
+                                      # "$wlist" does not work.
+                                      #  Why not?
+do
+  strlen=${#word}                     #  String length.
+  if [ "$strlen" -lt "$MINSTRLEN" ]   #  Skip over short strings.
+  then
+    continue
+  fi
+
+  grep -Fw $word "$WORDFILE"          #   Match whole words only.
+#      ^^^                            #  "Fixed strings" and
+                                      #+ "whole words" options. 
+done  
+
+exit $?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="COMPARISONN1"
+></A
+>Comparison</B
+></P
+><DL
+><DT
+><A
+NAME="DIFFREF"
+></A
+><B
+CLASS="COMMAND"
+>diff</B
+>, <B
+CLASS="COMMAND"
+>patch</B
+></DT
+><DD
+><P
+><B
+CLASS="COMMAND"
+>diff</B
+>: flexible file comparison
+	      utility. It compares the target files line-by-line
+	      sequentially.  In some applications, such as comparing
+	      word dictionaries, it may be helpful to filter the
+	      files through <A
+HREF="textproc.html#SORTREF"
+>sort</A
+>
+	      and <B
+CLASS="COMMAND"
+>uniq</B
+> before piping them
+	      to <B
+CLASS="COMMAND"
+>diff</B
+>. <TT
+CLASS="USERINPUT"
+><B
+>diff file-1
+	      file-2</B
+></TT
+> outputs the lines in the files that
+	      differ, with carets showing which file each particular
+	      line belongs to.</P
+><P
+>The <TT
+CLASS="OPTION"
+>--side-by-side</TT
+> option to
+	    <B
+CLASS="COMMAND"
+>diff</B
+> outputs each compared file, line by
+	    line, in separate columns, with non-matching lines marked. The
+	    <TT
+CLASS="OPTION"
+>-c</TT
+> and <TT
+CLASS="OPTION"
+>-u</TT
+> options likewise
+	    make the output of the command easier to interpret.</P
+><P
+>There are available various fancy frontends for
+	    <B
+CLASS="COMMAND"
+>diff</B
+>, such as <B
+CLASS="COMMAND"
+>sdiff</B
+>,
+	    <B
+CLASS="COMMAND"
+>wdiff</B
+>, <B
+CLASS="COMMAND"
+>xdiff</B
+>, and
+	    <B
+CLASS="COMMAND"
+>mgdiff</B
+>. </P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><A
+NAME="DIFFERR2"
+></A
+>The <B
+CLASS="COMMAND"
+>diff</B
+>
+              command returns an exit status of <SPAN
+CLASS="ERRORCODE"
+>0</SPAN
+>
+              if the compared files are identical, and
+              <SPAN
+CLASS="ERRORCODE"
+>1</SPAN
+> if they differ (or
+              <SPAN
+CLASS="ERRORCODE"
+>2</SPAN
+> when <I
+CLASS="FIRSTTERM"
+>binary</I
+>
+              files are being compared).  This permits use of
+              <B
+CLASS="COMMAND"
+>diff</B
+> in a test construct within a shell
+              script (see below).</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>A common use for <B
+CLASS="COMMAND"
+>diff</B
+> is generating
+	      difference files to be used with <B
+CLASS="COMMAND"
+>patch</B
+>
+	      The <TT
+CLASS="OPTION"
+>-e</TT
+> option outputs files suitable
+	      for <B
+CLASS="COMMAND"
+>ed</B
+> or <B
+CLASS="COMMAND"
+>ex</B
+>
+	      scripts.</P
+><P
+><A
+NAME="PATCHREF"
+></A
+></P
+><P
+><B
+CLASS="COMMAND"
+>patch</B
+>: flexible versioning
+	      utility. Given a difference file generated by
+	      <B
+CLASS="COMMAND"
+>diff</B
+>, <B
+CLASS="COMMAND"
+>patch</B
+> can
+	      upgrade a previous version of a package to a newer version.
+	      It is much more convenient to distribute a relatively
+	      small <SPAN
+CLASS="QUOTE"
+>"diff"</SPAN
+> file than the entire body of a
+	      newly revised package. Kernel <SPAN
+CLASS="QUOTE"
+>"patches"</SPAN
+> have
+	      become the preferred method of distributing the frequent
+	      releases of the Linux kernel.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>patch -p1 &#60;patch-file
+# Takes all the changes listed in 'patch-file'
+# and applies them to the files referenced therein.
+# This upgrades to a newer version of the package.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>Patching the kernel:</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>cd /usr/src
+gzip -cd patchXX.gz | patch -p0
+# Upgrading kernel source using 'patch'.
+# From the Linux kernel docs "README",
+# by anonymous author (Alan Cox?).</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <B
+CLASS="COMMAND"
+>diff</B
+> command can also
+	      recursively compare directories (for the filenames
+	      present).</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>diff -r ~/notes1 ~/notes2</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Only in /home/bozo/notes1: file02
+ Only in /home/bozo/notes1: file03
+ Only in /home/bozo/notes2: file04</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><A
+NAME="ZDIFFREF"
+></A
+></P
+><P
+>Use <B
+CLASS="COMMAND"
+>zdiff</B
+> to compare
+	       <I
+CLASS="FIRSTTERM"
+>gzipped</I
+> files.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><A
+NAME="DIFFSTATREF"
+></A
+></P
+><P
+>Use <B
+CLASS="COMMAND"
+>diffstat</B
+> to create
+	       a histogram (point-distribution graph) of output from
+	       <B
+CLASS="COMMAND"
+>diff</B
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="DIFF3REF"
+></A
+><B
+CLASS="COMMAND"
+>diff3</B
+>, <B
+CLASS="COMMAND"
+>merge</B
+></DT
+><DD
+><P
+>An extended version of <B
+CLASS="COMMAND"
+>diff</B
+> that compares
+	      three files at a time. This command returns an exit value
+	      of 0 upon successful execution, but unfortunately this gives
+	      no information about the results of the comparison.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>diff3 file-1 file-2 file-3</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>====
+ 1:1c
+   This is line 1 of "file-1".
+ 2:1c
+   This is line 1 of "file-2".
+ 3:1c
+   This is line 1 of "file-3"</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><P
+><A
+NAME="MERGEREF"
+></A
+>The <B
+CLASS="COMMAND"
+>merge</B
+>
+	      (3-way file merge) command is an interesting adjunct to
+	      <I
+CLASS="FIRSTTERM"
+>diff3</I
+>. Its syntax is
+	      <TT
+CLASS="USERINPUT"
+><B
+>merge Mergefile file1 file2</B
+></TT
+>.
+	      The result is to output to <TT
+CLASS="FILENAME"
+>Mergefile</TT
+>
+	      the changes that lead from <TT
+CLASS="FILENAME"
+>file1</TT
+>
+	      to <TT
+CLASS="FILENAME"
+>file2</TT
+>. Consider this command
+	      a stripped-down version of <I
+CLASS="FIRSTTERM"
+>patch</I
+>.</P
+></DD
+><DT
+><A
+NAME="SDIFFREF"
+></A
+><B
+CLASS="COMMAND"
+>sdiff</B
+></DT
+><DD
+><P
+>Compare and/or edit two files in order to merge
+	      them into an output file. Because of its interactive nature,
+	      this command would find little use in a script.</P
+></DD
+><DT
+><A
+NAME="CMPREF"
+></A
+><B
+CLASS="COMMAND"
+>cmp</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>cmp</B
+> command is a simpler version of
+	      <B
+CLASS="COMMAND"
+>diff</B
+>, above. Whereas <B
+CLASS="COMMAND"
+>diff</B
+>
+	      reports the differences between two files,
+	      <B
+CLASS="COMMAND"
+>cmp</B
+> merely shows at what point they
+	      differ.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Like <B
+CLASS="COMMAND"
+>diff</B
+>, <B
+CLASS="COMMAND"
+>cmp</B
+>
+	    returns an exit status of 0 if the compared files are
+	    identical, and 1 if they differ. This permits use in a test
+	    construct within a shell script.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="FILECOMP"
+></A
+><P
+><B
+>Example 16-35. Using <I
+CLASS="FIRSTTERM"
+>cmp</I
+> to compare two files
+	        within a script.</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# file-comparison.sh
+
+ARGS=2  # Two args to script expected.
+E_BADARGS=85
+E_UNREADABLE=86
+
+if [ $# -ne "$ARGS" ]
+then
+  echo "Usage: `basename $0` file1 file2"
+  exit $E_BADARGS
+fi
+
+if [[ ! -r "$1" || ! -r "$2" ]]
+then
+  echo "Both files to be compared must exist and be readable."
+  exit $E_UNREADABLE
+fi
+
+cmp $1 $2 &#38;&#62; /dev/null
+#   Redirection to /dev/null buries the output of the "cmp" command.
+#   cmp -s $1 $2  has same result ("-s" silent flag to "cmp")
+#   Thank you  Anders Gustavsson for pointing this out.
+#
+#  Also works with 'diff', i.e.,
+#+ diff $1 $2 &#38;&#62; /dev/null
+
+if [ $? -eq 0 ]         # Test exit status of "cmp" command.
+then
+  echo "File \"$1\" is identical to file \"$2\"."
+else  
+  echo "File \"$1\" differs from file \"$2\"."
+fi
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Use <B
+CLASS="COMMAND"
+>zcmp</B
+> on
+	      <I
+CLASS="FIRSTTERM"
+>gzipped</I
+> files.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="COMMREF"
+></A
+><B
+CLASS="COMMAND"
+>comm</B
+></DT
+><DD
+><P
+>Versatile file comparison utility. The files must be
+	      sorted for this to be useful.</P
+><P
+><B
+CLASS="COMMAND"
+>comm
+		<TT
+CLASS="REPLACEABLE"
+><I
+>-options</I
+></TT
+>
+		<TT
+CLASS="REPLACEABLE"
+><I
+>first-file</I
+></TT
+>
+		<TT
+CLASS="REPLACEABLE"
+><I
+>second-file</I
+></TT
+></B
+></P
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>comm file-1 file-2</B
+></TT
+> outputs three columns:
+	      <P
+></P
+><UL
+><LI
+><P
+>column 1 = lines unique to <TT
+CLASS="FILENAME"
+>file-1</TT
+></P
+></LI
+><LI
+><P
+>column 2 = lines unique to <TT
+CLASS="FILENAME"
+>file-2</TT
+></P
+></LI
+><LI
+><P
+>column 3 = lines common to both.</P
+></LI
+></UL
+></P
+><P
+>The options allow suppressing output of one or more columns.
+	      <P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-1</TT
+> suppresses column
+		    <TT
+CLASS="LITERAL"
+>1</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-2</TT
+> suppresses column
+		    <TT
+CLASS="LITERAL"
+>2</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-3</TT
+> suppresses column
+		    <TT
+CLASS="LITERAL"
+>3</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="OPTION"
+>-12</TT
+> suppresses both columns
+		    <TT
+CLASS="LITERAL"
+>1</TT
+> and <TT
+CLASS="LITERAL"
+>2</TT
+>, etc.</P
+></LI
+></UL
+>
+	    </P
+><P
+>This command is useful for comparing
+	      <SPAN
+CLASS="QUOTE"
+>"dictionaries"</SPAN
+> or <I
+CLASS="FIRSTTERM"
+>word
+	      lists</I
+> -- sorted text files with one word per
+	      line.</P
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="FAUTILS1"
+></A
+>Utilities</B
+></P
+><DL
+><DT
+><A
+NAME="BASENAMEREF"
+></A
+><B
+CLASS="COMMAND"
+>basename</B
+></DT
+><DD
+><P
+>Strips the path information from a file name, printing
+	      only the file name. The construction  <TT
+CLASS="USERINPUT"
+><B
+>basename
+		$0</B
+></TT
+> lets the script know its name, that is, the name it
+	      was invoked by. This can be used for <SPAN
+CLASS="QUOTE"
+>"usage"</SPAN
+> messages if, 
+	      for example a script is called with missing arguments:
+              <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>echo "Usage: `basename $0` arg1 arg2 ... argn"</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="DIRNAMEREF"
+></A
+><B
+CLASS="COMMAND"
+>dirname</B
+></DT
+><DD
+><P
+>Strips the <B
+CLASS="COMMAND"
+>basename</B
+> from
+	    a filename, printing only the path information.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><B
+CLASS="COMMAND"
+>basename</B
+> and <B
+CLASS="COMMAND"
+>dirname</B
+>
+		can operate on any arbitrary string. The argument
+		does not need to refer to an existing file, or
+		even be a filename for that matter (see <A
+HREF="contributed-scripts.html#DAYSBETWEEN"
+>Example A-7</A
+>).</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX35"
+></A
+><P
+><B
+>Example 16-36. <I
+CLASS="FIRSTTERM"
+>basename</I
+> and
+	      <I
+CLASS="FIRSTTERM"
+>dirname</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+address=/home/bozo/daily-journal.txt
+
+echo "Basename of /home/bozo/daily-journal.txt = `basename $address`"
+echo "Dirname of /home/bozo/daily-journal.txt = `dirname $address`"
+echo
+echo "My own home is `basename ~/`."         # `basename ~` also works.
+echo "The home of my home is `dirname ~/`."  # `dirname ~`  also works.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="SPLITREF"
+></A
+><B
+CLASS="COMMAND"
+>split</B
+>, <A
+NAME="CSPLITREF"
+></A
+><B
+CLASS="COMMAND"
+>csplit</B
+></DT
+><DD
+><P
+>These are utilities for splitting a file into smaller
+	      chunks. Their usual use is for splitting up large files
+	      in order to back them up on floppies or preparatory to
+	      e-mailing or uploading them.</P
+><P
+>The <B
+CLASS="COMMAND"
+>csplit</B
+> command splits a file
+	      according to <I
+CLASS="FIRSTTERM"
+>context</I
+>, the split occuring
+	      where patterns are matched.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="SPLITCOPY"
+></A
+><P
+><B
+>Example 16-37. A script that copies itself in sections</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# splitcopy.sh
+
+#  A script that splits itself into chunks,
+#+ then reassembles the chunks into an exact copy
+#+ of the original script.
+
+CHUNKSIZE=4    #  Size of first chunk of split files.
+OUTPREFIX=xx   #  csplit prefixes, by default,
+               #+ files with "xx" ...
+
+csplit "$0" "$CHUNKSIZE"
+
+# Some comment lines for padding . . .
+# Line 15
+# Line 16
+# Line 17
+# Line 18
+# Line 19
+# Line 20
+
+cat "$OUTPREFIX"* &#62; "$0.copy"  # Concatenate the chunks.
+rm "$OUTPREFIX"*               # Get rid of the chunks.
+
+exit $?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="FAENCENCR1"
+></A
+>Encoding and Encryption</B
+></P
+><DL
+><DT
+><A
+NAME="SUMREF"
+></A
+><B
+CLASS="COMMAND"
+>sum</B
+>, <A
+NAME="CKSUMREF"
+></A
+><B
+CLASS="COMMAND"
+>cksum</B
+>, <A
+NAME="MD5SUMREF"
+></A
+><B
+CLASS="COMMAND"
+>md5sum</B
+>, <A
+NAME="SHA1SUMREF"
+></A
+><B
+CLASS="COMMAND"
+>sha1sum</B
+></DT
+><DD
+><P
+><A
+NAME="CHECKSUMREF"
+></A
+>These are utilities for
+              generating <I
+CLASS="FIRSTTERM"
+>checksums</I
+>. A
+	      <I
+CLASS="FIRSTTERM"
+>checksum</I
+> is a number
+
+		<A
+NAME="AEN12840"
+HREF="filearchiv.html#FTN.AEN12840"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>
+
+              mathematically calculated from the contents of a file,
+              for the purpose of checking its integrity. A script might
+              refer to a list of checksums for security purposes, such
+              as ensuring that the contents of key system files have not
+              been altered or corrupted. For security applications, use
+              the <B
+CLASS="COMMAND"
+>md5sum</B
+> (<B
+CLASS="COMMAND"
+>m</B
+>essage
+              <B
+CLASS="COMMAND"
+>d</B
+>igest <B
+CLASS="COMMAND"
+>5</B
+>
+              check<B
+CLASS="COMMAND"
+>sum</B
+>) command, or better yet, the
+              newer <B
+CLASS="COMMAND"
+>sha1sum</B
+> (Secure Hash Algorithm).
+
+	        <A
+NAME="AEN12849"
+HREF="filearchiv.html#FTN.AEN12849"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+>
+            </P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>cksum /boot/vmlinuz</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>1670054224 804083 /boot/vmlinuz</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo -n "Top Secret" | cksum</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>3391003827 10</TT
+>
+
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>md5sum /boot/vmlinuz</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>0f43eccea8f09e0a0b2b5cf1dcf333ba  /boot/vmlinuz</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo -n "Top Secret" | md5sum</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>8babc97a6f62a4649716f4df8d61728f  -</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	  </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <B
+CLASS="COMMAND"
+>cksum</B
+> command shows the size,
+	    in bytes, of its target, whether file or
+	    <TT
+CLASS="FILENAME"
+>stdout</TT
+>.</P
+><P
+>The <B
+CLASS="COMMAND"
+>md5sum</B
+> and
+	    <B
+CLASS="COMMAND"
+>sha1sum</B
+> commands display a
+	    <A
+HREF="special-chars.html#DASHREF2"
+>dash</A
+> when they receive their input from
+	    <TT
+CLASS="FILENAME"
+>stdout</TT
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="FILEINTEGRITY"
+></A
+><P
+><B
+>Example 16-38. Checking file integrity</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# file-integrity.sh: Checking whether files in a given directory
+#                    have been tampered with.
+
+E_DIR_NOMATCH=80
+E_BAD_DBFILE=81
+
+dbfile=File_record.md5
+# Filename for storing records (database file).
+
+
+set_up_database ()
+{
+  echo ""$directory"" &#62; "$dbfile"
+  # Write directory name to first line of file.
+  md5sum "$directory"/* &#62;&#62; "$dbfile"
+  # Append md5 checksums and filenames.
+}
+
+check_database ()
+{
+  local n=0
+  local filename
+  local checksum
+
+  # ------------------------------------------- #
+  #  This file check should be unnecessary,
+  #+ but better safe than sorry.
+
+  if [ ! -r "$dbfile" ]
+  then
+    echo "Unable to read checksum database file!"
+    exit $E_BAD_DBFILE
+  fi
+  # ------------------------------------------- #
+
+  while read record[n]
+  do
+
+    directory_checked="${record[0]}"
+    if [ "$directory_checked" != "$directory" ]
+    then
+      echo "Directories do not match up!"
+      # Tried to use file for a different directory.
+      exit $E_DIR_NOMATCH
+    fi
+
+    if [ "$n" -gt 0 ]   # Not directory name.
+    then
+      filename[n]=$( echo ${record[$n]} | awk '{ print $2 }' )
+      #  md5sum writes records backwards,
+      #+ checksum first, then filename.
+      checksum[n]=$( md5sum "${filename[n]}" )
+
+
+      if [ "${record[n]}" = "${checksum[n]}" ]
+      then
+        echo "${filename[n]} unchanged."
+
+        elif [ "`basename ${filename[n]}`" != "$dbfile" ]
+               #  Skip over checksum database file,
+               #+ as it will change with each invocation of script.
+               #  ---
+               #  This unfortunately means that when running
+               #+ this script on $PWD, tampering with the
+               #+ checksum database file will not be detected.
+               #  Exercise: Fix this.
+        then
+          echo "${filename[n]} : CHECKSUM ERROR!"
+        # File has been changed since last checked.
+        fi
+
+      fi
+
+
+
+    let "n+=1"
+  done &#60;"$dbfile"       # Read from checksum database file. 
+
+}  
+
+# =================================================== #
+# main ()
+
+if [ -z  "$1" ]
+then
+  directory="$PWD"      #  If not specified,
+else                    #+ use current working directory.
+  directory="$1"
+fi  
+
+clear                   # Clear screen.
+echo " Running file integrity check on $directory"
+echo
+
+# ------------------------------------------------------------------ #
+  if [ ! -r "$dbfile" ] # Need to create database file?
+  then
+    echo "Setting up database file, \""$directory"/"$dbfile"\"."; echo
+    set_up_database
+  fi  
+# ------------------------------------------------------------------ #
+
+check_database          # Do the actual work.
+
+echo 
+
+#  You may wish to redirect the stdout of this script to a file,
+#+ especially if the directory checked has many files in it.
+
+exit 0
+
+#  For a much more thorough file integrity check,
+#+ consider the "Tripwire" package,
+#+ http://sourceforge.net/projects/tripwire/.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Also see <A
+HREF="contributed-scripts.html#DIRECTORYINFO"
+>Example A-19</A
+>, <A
+HREF="colorizing.html#HORSERACE"
+>Example 36-16</A
+>, and <A
+HREF="string-manipulation.html#RANDSTRING"
+>Example 10-2</A
+> for
+	    creative uses of the <B
+CLASS="COMMAND"
+>md5sum</B
+> command.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>	    There have been reports that the 128-bit
+	    <B
+CLASS="COMMAND"
+>md5sum</B
+> can be cracked, so the more secure
+	    160-bit <B
+CLASS="COMMAND"
+>sha1sum</B
+> is a welcome new addition
+	    to the checksum toolkit.
+          </P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>md5sum testfile</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>e181e2c8720c60522c4c4c981108e367  testfile</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>sha1sum testfile</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>5d7425a9c08a66c3177f1e31286fa40986ffc996  testfile</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Security consultants have demonstrated that even
+	      <B
+CLASS="COMMAND"
+>sha1sum</B
+> can be compromised. Fortunately,
+	      newer Linux distros include longer bit-length
+	      <B
+CLASS="COMMAND"
+>sha224sum</B
+>,
+	      <B
+CLASS="COMMAND"
+>sha256sum</B
+>,
+	      <B
+CLASS="COMMAND"
+>sha384sum</B
+>, and
+	      <B
+CLASS="COMMAND"
+>sha512sum</B
+> commands.</P
+></DD
+><DT
+><A
+NAME="UUENCODEREF"
+></A
+><B
+CLASS="COMMAND"
+>uuencode</B
+></DT
+><DD
+><P
+>This utility encodes binary files (images, sound files,
+		    compressed files, etc.) into <A
+HREF="special-chars.html#ASCIIDEF"
+>ASCII</A
+> characters, making
+		    them suitable for transmission in the body of an
+		    e-mail message or in a newsgroup posting. This is
+		    especially useful where MIME (multimedia) encoding
+		    is not available.</P
+></DD
+><DT
+><A
+NAME="UUDECODEREF"
+></A
+><B
+CLASS="COMMAND"
+>uudecode</B
+></DT
+><DD
+><P
+>This reverses the encoding, decoding
+	      <I
+CLASS="FIRSTTERM"
+>uuencoded</I
+> files back into the
+	      original binaries.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX52"
+></A
+><P
+><B
+>Example 16-39. Uudecoding encoded files</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# Uudecodes all uuencoded files in current working directory.
+
+lines=35        # Allow 35 lines for the header (very generous).
+
+for File in *   # Test all the files in $PWD.
+do
+  search1=`head -n $lines $File | grep begin | wc -w`
+  search2=`tail -n $lines $File | grep end | wc -w`
+  #  Uuencoded files have a "begin" near the beginning,
+  #+ and an "end" near the end.
+  if [ "$search1" -gt 0 ]
+  then
+    if [ "$search2" -gt 0 ]
+    then
+      echo "uudecoding - $File -"
+      uudecode $File
+    fi  
+  fi
+done  
+
+#  Note that running this script upon itself fools it
+#+ into thinking it is a uuencoded file,
+#+ because it contains both "begin" and "end".
+
+#  Exercise:
+#  --------
+#  Modify this script to check each file for a newsgroup header,
+#+ and skip to next if not found.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <A
+HREF="textproc.html#FOLDREF"
+>fold -s</A
+> command
+	    may be useful (possibly in a pipe) to process long uudecoded
+	    text messages downloaded from Usenet newsgroups.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="MIMENCODEREF"
+></A
+><B
+CLASS="COMMAND"
+>mimencode</B
+>, <A
+NAME="MMENCODEREF"
+></A
+><B
+CLASS="COMMAND"
+>mmencode</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>mimencode</B
+> and
+	      <B
+CLASS="COMMAND"
+>mmencode</B
+> commands process
+	      multimedia-encoded e-mail attachments. Although
+	      <I
+CLASS="FIRSTTERM"
+>mail user agents</I
+> (such as
+	      <I
+CLASS="FIRSTTERM"
+>pine</I
+> or <I
+CLASS="FIRSTTERM"
+>kmail</I
+>)
+	      normally handle this automatically, these particular
+	      utilities permit manipulating such attachments manually from
+	      the command-line or in <A
+HREF="timedate.html#BATCHPROCREF"
+>batch
+	      processing mode</A
+> by means of a shell script.</P
+></DD
+><DT
+><A
+NAME="CRYPTREF"
+></A
+><B
+CLASS="COMMAND"
+>crypt</B
+></DT
+><DD
+><P
+>At one time, this was the standard UNIX file encryption
+	      utility.
+
+              <A
+NAME="AEN12969"
+HREF="filearchiv.html#FTN.AEN12969"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+>
+
+	      Politically-motivated government regulations
+	      prohibiting the export of encryption software resulted
+	      in the disappearance of <B
+CLASS="COMMAND"
+>crypt</B
+>
+	      from much of the UNIX world, and it is still
+	      missing from most Linux distributions. Fortunately,
+	      programmers have come up with a number of decent
+	      alternatives to it, among them the author's very own <A
+HREF="ftp://metalab.unc.edu/pub/Linux/utils/file/cruft-0.2.tar.gz"
+TARGET="_top"
+>cruft</A
+>
+	      (see <A
+HREF="contributed-scripts.html#ENCRYPTEDPW"
+>Example A-4</A
+>).  </P
+></DD
+><DT
+><A
+NAME="OPENSSLREF"
+></A
+><B
+CLASS="COMMAND"
+>openssl</B
+></DT
+><DD
+><P
+>This is an Open Source implementation of
+             <I
+CLASS="FIRSTTERM"
+>Secure Sockets Layer</I
+> encryption.
+
+	     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># To encrypt a file:
+openssl aes-128-ecb -salt -in file.txt -out file.encrypted \
+-pass pass:my_password
+#          ^^^^^^^^^^^   User-selected password.
+#       aes-128-ecb      is the encryption method chosen.
+
+# To decrypt an openssl-encrypted file:
+openssl aes-128-ecb -d -salt -in file.encrypted -out file.txt \
+-pass pass:my_password
+#          ^^^^^^^^^^^   User-selected password.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+><A
+HREF="special-chars.html#PIPEREF"
+>Piping</A
+>
+             <I
+CLASS="FIRSTTERM"
+>openssl</I
+> to/from <A
+HREF="filearchiv.html#TARREF"
+>tar</A
+> makes it possible to encrypt
+             an entire directory tree.
+     
+            <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># To encrypt a directory:
+
+sourcedir="/home/bozo/testfiles"
+encrfile="encr-dir.tar.gz"
+password=my_secret_password
+
+tar czvf - "$sourcedir" |
+openssl des3 -salt -out "$encrfile" -pass pass:"$password"
+#       ^^^^   Uses des3 encryption.
+# Writes encrypted file "encr-dir.tar.gz" in current working directory.
+
+# To decrypt the resulting tarball:
+openssl des3 -d -salt -in "$encrfile" -pass pass:"$password" |
+tar -xzv
+# Decrypts and unpacks into current working directory.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+
+           </P
+><P
+>Of course, <I
+CLASS="FIRSTTERM"
+>openssl</I
+> has many other uses,
+             such as obtaining signed <I
+CLASS="FIRSTTERM"
+>certificates</I
+>
+	     for Web sites. See the <A
+HREF="basic.html#INFOREF"
+>info</A
+>
+	     page.</P
+></DD
+><DT
+><A
+NAME="SHREDREF"
+></A
+><B
+CLASS="COMMAND"
+>shred</B
+></DT
+><DD
+><P
+>Securely erase a file by overwriting it multiple times with
+	      random bit patterns before deleting it. This command has
+	      the same effect as <A
+HREF="extmisc.html#BLOTOUT"
+>Example 16-61</A
+>, but does it
+	      in a more thorough and elegant manner.</P
+><P
+>This is one of the GNU
+	    <I
+CLASS="FIRSTTERM"
+>fileutils</I
+>.</P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Advanced forensic technology may still be able to
+	      recover the contents of a file, even after application of
+	      <B
+CLASS="COMMAND"
+>shred</B
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="FAMISC1"
+></A
+>Miscellaneous</B
+></P
+><DL
+><DT
+><A
+NAME="MKTEMPREF"
+></A
+><B
+CLASS="COMMAND"
+>mktemp</B
+></DT
+><DD
+><P
+>Create a <I
+CLASS="FIRSTTERM"
+>temporary file</I
+>
+
+	       <A
+NAME="AEN13030"
+HREF="filearchiv.html#FTN.AEN13030"
+><SPAN
+CLASS="footnote"
+>[6]</SPAN
+></A
+>
+
+	      with a <SPAN
+CLASS="QUOTE"
+>"unique"</SPAN
+> filename. When invoked
+	      from the command-line without additional arguments,
+	      it creates a zero-length file in the <TT
+CLASS="FILENAME"
+>/tmp</TT
+> directory.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>mktemp</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>/tmp/tmp.zzsvql3154</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>PREFIX=filename
+tempfile=`mktemp $PREFIX.XXXXXX`
+#                        ^^^^^^ Need at least 6 placeholders
+#+                              in the filename template.
+#   If no filename template supplied,
+#+ "tmp.XXXXXXXXXX" is the default.
+
+echo "tempfile name = $tempfile"
+# tempfile name = filename.QA2ZpY
+#                 or something similar...
+
+#  Creates a file of that name in the current working directory
+#+ with 600 file permissions.
+#  A "umask 177" is therefore unnecessary,
+#+ but it's good programming practice nevertheless.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><A
+NAME="MAKEREF"
+></A
+><B
+CLASS="COMMAND"
+>make</B
+></DT
+><DD
+><P
+><A
+NAME="MAKEFILEREF"
+></A
+></P
+><P
+>Utility for building and compiling binary packages. 
+	      This can also be used for any set of operations triggered
+	      by incremental changes in source files.</P
+><P
+>The <I
+CLASS="FIRSTTERM"
+>make</I
+> command checks a
+	    <TT
+CLASS="FILENAME"
+>Makefile</TT
+>, a list of file dependencies and
+	      operations to be carried out.</P
+><P
+>The <I
+CLASS="FIRSTTERM"
+>make</I
+> utility is, in effect,
+	      a powerful scripting language similar in many ways to
+	      <I
+CLASS="FIRSTTERM"
+>Bash</I
+>, but with the capability of
+	      recognizing <I
+CLASS="FIRSTTERM"
+>dependencies</I
+>. For in-depth
+	      coverage of this useful tool set, see the <A
+HREF="http://www.gnu.org/manual/manual.html"
+TARGET="_top"
+>GNU software
+	      documentation site</A
+>.</P
+></DD
+><DT
+><A
+NAME="INSTALLREF"
+></A
+><B
+CLASS="COMMAND"
+>install</B
+></DT
+><DD
+><P
+>Special purpose file copying command, similar to
+	      <A
+HREF="basic.html#CPREF"
+>cp</A
+>, but capable of
+	      setting permissions and attributes of the copied
+	      files. This command seems tailormade for installing
+	      software packages, and as such it shows up frequently in
+	      <TT
+CLASS="FILENAME"
+>Makefiles</TT
+> (in the <TT
+CLASS="REPLACEABLE"
+><I
+>make
+	      install :</I
+></TT
+> section). It could likewise prove
+	      useful in installation scripts.</P
+></DD
+><DT
+><A
+NAME="DOS2UNIXREF"
+></A
+><B
+CLASS="COMMAND"
+>dos2unix</B
+></DT
+><DD
+><P
+>This utility, written by Benjamin Lin and collaborators,
+	      converts DOS-formatted text files (lines terminated by
+	      CR-LF) to UNIX format (lines terminated by LF only),
+	      and <A
+HREF="gotchas.html#DOSNEWLINES"
+>vice-versa</A
+>.</P
+></DD
+><DT
+><A
+NAME="PTXREF"
+></A
+><B
+CLASS="COMMAND"
+>ptx</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>ptx [targetfile]</B
+> command
+	      outputs a permuted index (cross-reference list) of the
+	      targetfile. This may be further filtered and formatted in a
+	      pipe, if necessary.</P
+></DD
+><DT
+><A
+NAME="MOREREF"
+></A
+><B
+CLASS="COMMAND"
+>more</B
+>, <A
+NAME="LESSREF"
+></A
+><B
+CLASS="COMMAND"
+>less</B
+></DT
+><DD
+><P
+>Pagers that display a text file or stream to
+	      <TT
+CLASS="FILENAME"
+>stdout</TT
+>, one screenful at a time.
+	      These may be used to filter the output of
+	      <TT
+CLASS="FILENAME"
+>stdout</TT
+> . . . or of a script.</P
+><P
+>	       An interesting application of <I
+CLASS="FIRSTTERM"
+>more</I
+>
+	       is to <SPAN
+CLASS="QUOTE"
+>"test drive"</SPAN
+> a command sequence,
+	       to forestall potentially unpleasant consequences.
+                 <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>ls /home/bozo | awk '{print "rm -rf " $1}' | more
+#                                            ^^^^
+		 
+# Testing the effect of the following (disastrous) command-line:
+#      ls /home/bozo | awk '{print "rm -rf " $1}' | sh
+#      Hand off to the shell to execute . . .       ^^</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+            </P
+><P
+>The <I
+CLASS="FIRSTTERM"
+>less</I
+> pager has the
+	      interesting property of doing a formatted display of
+	      <I
+CLASS="FIRSTTERM"
+>man page</I
+> source. See <A
+HREF="contributed-scripts.html#MANED"
+>Example A-39</A
+>.</P
+></DD
+></DL
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN11885"
+HREF="filearchiv.html#AEN11885"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>An <I
+CLASS="FIRSTTERM"
+>archive</I
+>,
+	        in the sense discussed here, is simply a set of related
+	        files stored in a single location.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN11896"
+HREF="filearchiv.html#AEN11896"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>		    A <TT
+CLASS="REPLACEABLE"
+><I
+>tar czvf ArchiveName.tar.gz *</I
+></TT
+>
+		    <EM
+>will</EM
+> include dotfiles in
+		    subdirectories <EM
+>below</EM
+> the current
+		    working directory. This is an undocumented GNU
+		    <B
+CLASS="COMMAND"
+>tar</B
+> <SPAN
+CLASS="QUOTE"
+>"feature."</SPAN
+>
+		  </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN12840"
+HREF="filearchiv.html#AEN12840"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>The checksum may be expressed as a
+		<I
+CLASS="FIRSTTERM"
+>hexadecimal</I
+> number, or to some
+		other base.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN12849"
+HREF="filearchiv.html#AEN12849"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>For even <EM
+>better</EM
+>
+		  security, use the <I
+CLASS="FIRSTTERM"
+>sha256sum</I
+>,
+		  <I
+CLASS="FIRSTTERM"
+>sha512</I
+>, and
+                  <I
+CLASS="FIRSTTERM"
+>sha1pass</I
+>
+                  commands.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN12969"
+HREF="filearchiv.html#AEN12969"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>This is a symmetric block cipher, used to
+		encrypt files on a single system or local network,
+		as opposed to the <I
+CLASS="FIRSTTERM"
+>public key</I
+>
+		cipher class, of which <I
+CLASS="FIRSTTERM"
+>pgp</I
+> is a
+		well-known example.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN13030"
+HREF="filearchiv.html#AEN13030"
+><SPAN
+CLASS="footnote"
+>[6]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Creates a temporary
+	       <I
+CLASS="FIRSTTERM"
+>directory</I
+> when invoked with the
+	       <TT
+CLASS="OPTION"
+>-d</TT
+> option.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="textproc.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="communications.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Text Processing Commands</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="external.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Communications Commands</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

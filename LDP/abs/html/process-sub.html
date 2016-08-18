@@ -1,0 +1,874 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Process Substitution</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Topics"
+HREF="part5.html"><LINK
+REL="PREVIOUS"
+TITLE="Restricted Shells"
+HREF="restricted-sh.html"><LINK
+REL="NEXT"
+TITLE="Functions"
+HREF="functions.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="restricted-sh.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="functions.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="PROCESS-SUB"
+></A
+>Chapter 23. Process Substitution</H1
+><P
+><A
+NAME="PROCESSSUBREF"
+></A
+><A
+HREF="special-chars.html#PIPEREF"
+>Piping</A
+> the <TT
+CLASS="FILENAME"
+>stdout</TT
+>
+	of a command into the <TT
+CLASS="FILENAME"
+>stdin</TT
+> of another
+	is a powerful technique.  But, what if you need to pipe the
+	<TT
+CLASS="FILENAME"
+>stdout</TT
+> of <EM
+>multiple</EM
+>
+	commands? This is where <TT
+CLASS="REPLACEABLE"
+><I
+>process
+	substitution</I
+></TT
+> comes in.</P
+><P
+><I
+CLASS="FIRSTTERM"
+>Process substitution</I
+> feeds the
+        output of a <A
+HREF="special-chars.html#PROCESSREF"
+>process</A
+> (or
+        processes) into the <TT
+CLASS="FILENAME"
+>stdin</TT
+> of another
+        process.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="COMMANDSPARENS1"
+></A
+>Template</B
+></P
+><DL
+><DT
+>Command list enclosed within parentheses</DT
+><DD
+><P
+><B
+CLASS="COMMAND"
+>&#62;(command_list)</B
+></P
+><P
+><B
+CLASS="COMMAND"
+>&#60;(command_list)</B
+></P
+><P
+>Process substitution uses
+	    <TT
+CLASS="FILENAME"
+>/dev/fd/&#60;n&#62;</TT
+> files to send the
+	    results of the process(es) within parentheses to another process.
+	      <A
+NAME="AEN18244"
+HREF="process-sub.html#FTN.AEN18244"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+	  </P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>There is <EM
+>no</EM
+> space between the
+            the <SPAN
+CLASS="QUOTE"
+>"&#60;"</SPAN
+> or <SPAN
+CLASS="QUOTE"
+>"&#62;"</SPAN
+> and the parentheses.
+            Space there would give an error message.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo &#62;(true)</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>/dev/fd/63</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo &#60;(true)</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>/dev/fd/63</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo &#62;(true) &#60;(true)</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>/dev/fd/63 /dev/fd/62</TT
+>
+
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>wc &#60;(cat /usr/share/dict/linux.words)</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+> 483523  483523 4992010 /dev/fd/63</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>grep script /usr/share/dict/linux.words | wc</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>    262     262    3601</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>wc &#60;(grep script /usr/share/dict/linux.words)</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>    262     262    3601 /dev/fd/63</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+              </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>	  Bash creates a pipe with two <A
+HREF="io-redirection.html#FDREF"
+>file
+	  descriptors</A
+>, <TT
+CLASS="FILENAME"
+>--fIn</TT
+> and
+	  <TT
+CLASS="FILENAME"
+>fOut--</TT
+>.	The <TT
+CLASS="FILENAME"
+>stdin</TT
+>
+	  of <A
+HREF="internal.html#TRUEREF"
+>true</A
+> connects
+	  to <TT
+CLASS="FILENAME"
+>fOut</TT
+> (dup2(fOut, 0)),
+	  then Bash passes a <TT
+CLASS="FILENAME"
+>/dev/fd/fIn</TT
+>
+	  argument to <B
+CLASS="COMMAND"
+>echo</B
+>. On systems lacking
+	  <TT
+CLASS="FILENAME"
+>/dev/fd/&#60;n&#62;</TT
+> files, Bash may use
+	  temporary files. (Thanks, S.C.)
+          </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Process substitution can compare the output of two
+	       different commands, or even the output of different options
+	       to the same command.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>comm &#60;(ls -l) &#60;(ls -al)</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>total 12
+-rw-rw-r--    1 bozo bozo       78 Mar 10 12:58 File0
+-rw-rw-r--    1 bozo bozo       42 Mar 10 12:58 File2
+-rw-rw-r--    1 bozo bozo      103 Mar 10 12:58 t2.sh
+        total 20
+        drwxrwxrwx    2 bozo bozo     4096 Mar 10 18:10 .
+        drwx------   72 bozo bozo     4096 Mar 10 17:58 ..
+        -rw-rw-r--    1 bozo bozo       78 Mar 10 12:58 File0
+        -rw-rw-r--    1 bozo bozo       42 Mar 10 12:58 File2
+        -rw-rw-r--    1 bozo bozo      103 Mar 10 12:58 t2.sh</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+><A
+NAME="PCC2DIR"
+></A
+></P
+><P
+>	        Process substitution can compare the contents
+		of two directories -- to see which filenames are in one,
+		but not the other.</P
+><P
+>		<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>diff &#60;(ls $first_directory) &#60;(ls $second_directory)</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+              </P
+><P
+>Some other usages and uses of process substitution:</P
+><P
+><A
+NAME="PSFDSTDIN"
+></A
+></P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>read -a list &#60; &#60;( od -Ad -w24 -t u2 /dev/urandom )
+#  Read a list of random numbers from /dev/urandom,
+#+ process with "od"
+#+ and feed into stdin of "read" . . .
+
+#  From "insertion-sort.bash" example script.
+#  Courtesy of JuanJo Ciarlante.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+><A
+NAME="NETCATEXAMPLE"
+></A
+></P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>PORT=6881   # bittorrent
+
+# Scan the port to make sure nothing nefarious is going on.
+netcat -l $PORT | tee&#62;(md5sum -&#62;mydata-orig.md5) |
+gzip | tee&#62;(md5sum - | sed 's/-$/mydata.lz2/'&#62;mydata-gz.md5)&#62;mydata.gz
+
+# Check the decompression:
+  gzip -d&#60;mydata.gz | md5sum -c mydata-orig.md5)
+# The MD5sum of the original checks stdin and detects compression issues.
+
+#  Bill Davidsen contributed this example
+#+ (with light edits by the ABS Guide author).</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>cat &#60;(ls -l)
+# Same as     ls -l | cat
+
+sort -k 9 &#60;(ls -l /bin) &#60;(ls -l /usr/bin) &#60;(ls -l /usr/X11R6/bin)
+# Lists all the files in the 3 main 'bin' directories, and sorts by filename.
+# Note that three (count 'em) distinct commands are fed to 'sort'.
+
+ 
+diff &#60;(command1) &#60;(command2)    # Gives difference in command output.
+
+tar cf &#62;(bzip2 -c &#62; file.tar.bz2) $directory_name
+# Calls "tar cf /dev/fd/?? $directory_name", and "bzip2 -c &#62; file.tar.bz2".
+#
+# Because of the /dev/fd/&#60;n&#62; system feature,
+# the pipe between both commands does not need to be named.
+#
+# This can be emulated.
+#
+bzip2 -c &#60; pipe &#62; file.tar.bz2&#38;
+tar cf pipe $directory_name
+rm pipe
+#        or
+exec 3&#62;&#38;1
+tar cf /dev/fd/4 $directory_name 4&#62;&#38;1 &#62;&#38;3 3&#62;&#38;- | bzip2 -c &#62; file.tar.bz2 3&#62;&#38;-
+exec 3&#62;&#38;-
+
+
+# Thanks, Stéphane Chazelas</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+><A
+NAME="GOODREAD0"
+></A
+>Here is a method of circumventing the
+       problem of an <A
+HREF="gotchas.html#BADREAD0"
+><I
+CLASS="FIRSTTERM"
+>echo</I
+>
+       piped to a <I
+CLASS="FIRSTTERM"
+>while-read loop</I
+></A
+> running
+       in a subshell.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="WRPS"
+></A
+><P
+><B
+>Example 23-1. Code block redirection without forking</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# wr-ps.bash: while-read loop with process substitution.
+
+# This example contributed by Tomas Pospisek.
+# (Heavily edited by the ABS Guide author.)
+
+echo
+
+echo "random input" | while read i
+do
+  global=3D": Not available outside the loop."
+  # ... because it runs in a subshell.
+done
+
+echo "\$global (from outside the subprocess) = $global"
+# $global (from outside the subprocess) =
+
+echo; echo "--"; echo
+
+while read i
+do
+  echo $i
+  global=3D": Available outside the loop."
+  # ... because it does NOT run in a subshell.
+done &#60; &#60;( echo "random input" )
+#    ^ ^
+
+echo "\$global (using process substitution) = $global"
+# Random input
+# $global (using process substitution) = 3D: Available outside the loop.
+
+
+echo; echo "##########"; echo
+
+
+
+# And likewise . . .
+
+declare -a inloop
+index=0
+cat $0 | while read line
+do
+  inloop[$index]="$line"
+  ((index++))
+  # It runs in a subshell, so ...
+done
+echo "OUTPUT = "
+echo ${inloop[*]}           # ... nothing echoes.
+
+
+echo; echo "--"; echo
+
+
+declare -a outloop
+index=0
+while read line
+do
+  outloop[$index]="$line"
+  ((index++))
+  # It does NOT run in a subshell, so ...
+done &#60; &#60;( cat $0 )
+echo "OUTPUT = "
+echo ${outloop[*]}          # ... the entire script echoes.
+
+exit $?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="PSUBPIPING"
+></A
+>This is a similar example.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="PSUBP"
+></A
+><P
+><B
+>Example 23-2. Redirecting the output of <I
+CLASS="FIRSTTERM"
+>process
+	        substitution</I
+> into a loop.</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# psub.bash
+
+# As inspired by Diego Molina (thanks!).
+
+declare -a array0
+while read
+do
+  array0[${#array0[@]}]="$REPLY"
+done &#60; &#60;( sed -e 's/bash/CRASH-BANG!/' $0 | grep bin | awk '{print $1}' )
+#  Sets the default 'read' variable, $REPLY, by process substitution,
+#+ then copies it into an array.
+
+echo "${array0[@]}"
+
+exit $?
+
+# ====================================== #
+
+bash psub.bash
+
+#!/bin/CRASH-BANG! done #!/bin/CRASH-BANG!</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>A reader sent in the following interesting example of process
+        substitution.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># Script fragment taken from SuSE distribution:
+
+# --------------------------------------------------------------#
+while read  des what mask iface; do
+# Some commands ...
+done &#60; &#60;(route -n)  
+#    ^ ^  First &#60; is redirection, second is process substitution.
+
+# To test it, let's make it do something.
+while read  des what mask iface; do
+  echo $des $what $mask $iface
+done &#60; &#60;(route -n)  
+
+# Output:
+# Kernel IP routing table
+# Destination Gateway Genmask Flags Metric Ref Use Iface
+# 127.0.0.0 0.0.0.0 255.0.0.0 U 0 0 0 lo
+# --------------------------------------------------------------#
+
+#  As Stéphane Chazelas points out,
+#+ an easier-to-understand equivalent is:
+route -n |
+  while read des what mask iface; do   # Variables set from output of pipe.
+    echo $des $what $mask $iface
+  done  #  This yields the same output as above.
+        #  However, as Ulrich Gayer points out . . .
+        #+ this simplified equivalent uses a subshell for the while loop,
+        #+ and therefore the variables disappear when the pipe terminates.
+	
+# --------------------------------------------------------------#
+	
+#  However, Filip Moritz comments that there is a subtle difference
+#+ between the above two examples, as the following shows.
+
+(
+route -n | while read x; do ((y++)); done
+echo $y # $y is still unset
+
+while read x; do ((y++)); done &#60; &#60;(route -n)
+echo $y # $y has the number of lines of output of route -n
+)
+
+More generally spoken
+(
+: | x=x
+# seems to start a subshell like
+: | ( x=x )
+# while
+x=x &#60; &#60;(:)
+# does not
+)
+
+# This is useful, when parsing csv and the like.
+# That is, in effect, what the original SuSE code fragment does.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN18244"
+HREF="process-sub.html#AEN18244"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>This has the same effect as a
+		<A
+HREF="extmisc.html#NAMEDPIPEREF"
+>named pipe</A
+> (temp
+		file), and, in fact, named pipes were at one time used
+		in process substitution.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="restricted-sh.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="functions.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Restricted Shells</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part5.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

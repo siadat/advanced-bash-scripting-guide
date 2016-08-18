@@ -1,0 +1,1411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Job Control Commands</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Internal Commands and Builtins"
+HREF="internal.html"><LINK
+REL="PREVIOUS"
+TITLE="Internal Commands and Builtins"
+HREF="internal.html"><LINK
+REL="NEXT"
+TITLE="External Filters, Programs and Commands"
+HREF="external.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="internal.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Internal Commands and Builtins</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="external.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN9644"
+></A
+>15.1. Job Control Commands</H1
+><P
+>Certain of the following job control commands take a
+	  <I
+CLASS="FIRSTTERM"
+>job identifier</I
+> as an argument. See
+	  the <A
+HREF="x9644.html#JOBIDTABLE"
+>table</A
+> at end of the
+	  chapter.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><A
+NAME="JOBSREF"
+></A
+><B
+CLASS="COMMAND"
+>jobs</B
+></DT
+><DD
+><P
+>Lists the jobs running in the background, giving
+	        the <I
+CLASS="FIRSTTERM"
+>job number</I
+>.
+		Not as useful as <A
+HREF="system.html#PPSSREF"
+>ps</A
+>.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>It is all too easy to confuse
+		<I
+CLASS="FIRSTTERM"
+>jobs</I
+> and
+		<I
+CLASS="FIRSTTERM"
+>processes</I
+>.  Certain <A
+HREF="internal.html#BUILTINREF"
+>builtins</A
+>, such as
+		<B
+CLASS="COMMAND"
+>kill</B
+>, <B
+CLASS="COMMAND"
+>disown</B
+>, and
+		<B
+CLASS="COMMAND"
+>wait</B
+> accept either a job number or a
+		process number as an argument. The <A
+HREF="x9644.html#FGREF"
+>fg</A
+>,
+		<A
+HREF="x9644.html#BGREF"
+>bg</A
+> and <B
+CLASS="COMMAND"
+>jobs</B
+>
+		commands accept only a job number.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>sleep 100 &#38;</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>[1] 1384</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash $ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>jobs</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>[1]+  Running                 sleep 100 &#38;</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><P
+><SPAN
+CLASS="QUOTE"
+>"1"</SPAN
+> is the job number (jobs are
+		maintained by the current shell). <SPAN
+CLASS="QUOTE"
+>"1384"</SPAN
+>
+		is the <A
+HREF="internalvariables.html#PPIDREF"
+>PID</A
+> or <I
+CLASS="FIRSTTERM"
+>process ID
+		number</I
+> (processes are maintained by the system). To kill
+		this job/process, either a <B
+CLASS="COMMAND"
+>kill %1</B
+>
+		or a <B
+CLASS="COMMAND"
+>kill 1384</B
+> works.</P
+><P
+><EM
+>Thanks, S.C.</EM
+></P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="DISOWNREF"
+></A
+><B
+CLASS="COMMAND"
+>disown</B
+></DT
+><DD
+><P
+>Remove job(s) from the shell's table of active jobs.</P
+></DD
+><DT
+><A
+NAME="FGREF"
+></A
+><B
+CLASS="COMMAND"
+>fg</B
+>, <A
+NAME="BGREF"
+></A
+><B
+CLASS="COMMAND"
+>bg</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>fg</B
+> command switches a job
+	      running in the background into the foreground.  The
+	      <B
+CLASS="COMMAND"
+>bg</B
+> command restarts a suspended job, and
+	      runs it in the background. If no job number is specified,
+	      then the <B
+CLASS="COMMAND"
+>fg</B
+> or <B
+CLASS="COMMAND"
+>bg</B
+>
+	      command acts upon the currently running job.</P
+></DD
+><DT
+><A
+NAME="WAITREF"
+></A
+><B
+CLASS="COMMAND"
+>wait</B
+></DT
+><DD
+><P
+>Suspend script execution until all jobs running in
+	        background have terminated, or until the job number or
+	        process ID specified as an option terminates. Returns the <A
+HREF="exit-status.html#EXITSTATUSREF"
+>exit status</A
+> of waited-for
+	        command.</P
+><P
+>You may use the <B
+CLASS="COMMAND"
+>wait</B
+> command
+		to prevent a script from exiting before a background
+		job finishes executing (this would create a dreaded
+		<A
+HREF="x9644.html#ZOMBIEREF"
+>orphan process</A
+>).</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX39"
+></A
+><P
+><B
+>Example 15-26. Waiting for a process to finish before proceeding</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+ROOT_UID=0   # Only users with $UID 0 have root privileges.
+E_NOTROOT=65
+E_NOPARAMS=66
+
+if [ "$UID" -ne "$ROOT_UID" ]
+then
+  echo "Must be root to run this script."
+  # "Run along kid, it's past your bedtime."
+  exit $E_NOTROOT
+fi  
+
+if [ -z "$1" ]
+then
+  echo "Usage: `basename $0` find-string"
+  exit $E_NOPARAMS
+fi
+
+
+echo "Updating 'locate' database..."
+echo "This may take a while."
+updatedb /usr &#38;     # Must be run as root.
+
+wait
+# Don't run the rest of the script until 'updatedb' finished.
+# You want the the database updated before looking up the file name.
+
+locate $1
+
+#  Without the 'wait' command, in the worse case scenario,
+#+ the script would exit while 'updatedb' was still running,
+#+ leaving it as an orphan process.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Optionally, <B
+CLASS="COMMAND"
+>wait</B
+> can take a <I
+CLASS="FIRSTTERM"
+>job
+		identifier</I
+> as an argument, for example,
+		<TT
+CLASS="REPLACEABLE"
+><I
+>wait%1</I
+></TT
+> or <TT
+CLASS="REPLACEABLE"
+><I
+>wait
+                $PPID</I
+></TT
+>.
+
+	<A
+NAME="AEN9753"
+HREF="x9644.html#FTN.AEN9753"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+		
+		See the <A
+HREF="x9644.html#JOBIDTABLE"
+>job id table</A
+>.</P
+><P
+><A
+NAME="WAITHANG"
+></A
+></P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Within a script, running a command in the background
+		with an ampersand (&#38;) may cause the script
+		to hang until <B
+CLASS="KEYCAP"
+>ENTER</B
+> is hit. This
+		seems to occur with commands that write to
+		<TT
+CLASS="FILENAME"
+>stdout</TT
+>. It can be a major annoyance.
+		  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# test.sh		  
+
+ls -l &#38;
+echo "Done."</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>./test.sh</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Done.
+ [bozo@localhost test-scripts]$ total 1
+ -rwxr-xr-x    1 bozo     bozo           34 Oct 11 15:09 test.sh
+ _</TT
+>
+               </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	       </P
+><A
+NAME="AEN9768"
+></A
+><BLOCKQUOTE
+CLASS="BLOCKQUOTE"
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;As&nbsp;Walter&nbsp;Brameld&nbsp;IV&nbsp;explains&nbsp;it:<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;As&nbsp;far&nbsp;as&nbsp;I&nbsp;can&nbsp;tell,&nbsp;such&nbsp;scripts&nbsp;don't&nbsp;actually&nbsp;hang.&nbsp;It&nbsp;just<br>
+&nbsp;&nbsp;&nbsp;&nbsp;seems&nbsp;that&nbsp;they&nbsp;do&nbsp;because&nbsp;the&nbsp;background&nbsp;command&nbsp;writes&nbsp;text&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;console&nbsp;after&nbsp;the&nbsp;prompt.&nbsp;The&nbsp;user&nbsp;gets&nbsp;the&nbsp;impression&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;prompt&nbsp;was&nbsp;never&nbsp;displayed.&nbsp;Here's&nbsp;the&nbsp;sequence&nbsp;of&nbsp;events:<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;Script&nbsp;launches&nbsp;background&nbsp;command.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;Script&nbsp;exits.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;3.&nbsp;Shell&nbsp;displays&nbsp;the&nbsp;prompt.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;4.&nbsp;Background&nbsp;command&nbsp;continues&nbsp;running&nbsp;and&nbsp;writing&nbsp;text&nbsp;to&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;5.&nbsp;Background&nbsp;command&nbsp;finishes.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;6.&nbsp;User&nbsp;doesn't&nbsp;see&nbsp;a&nbsp;prompt&nbsp;at&nbsp;the&nbsp;bottom&nbsp;of&nbsp;the&nbsp;output,&nbsp;thinks&nbsp;script<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;hanging.<br>
+	</P
+></BLOCKQUOTE
+><P
+>Placing a <B
+CLASS="COMMAND"
+>wait</B
+> after the background
+                command seems to remedy this.
+		  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# test.sh		  
+
+ls -l &#38;
+echo "Done."
+wait</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>./test.sh</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Done.
+ [bozo@localhost test-scripts]$ total 1
+ -rwxr-xr-x    1 bozo     bozo           34 Oct 11 15:09 test.sh</TT
+>
+               </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	        <A
+HREF="io-redirection.html#IOREDIRREF"
+>Redirecting</A
+> the
+                output of the command to a file or even to
+		<TT
+CLASS="FILENAME"
+>/dev/null</TT
+> also takes care of this
+		problem.
+              </P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="SUSPENDREF"
+></A
+><B
+CLASS="COMMAND"
+>suspend</B
+></DT
+><DD
+><P
+>This has a similar effect to
+		<B
+CLASS="KEYCAP"
+>Control</B
+>-<B
+CLASS="KEYCAP"
+>Z</B
+>, 
+		but it suspends the shell (the shell's parent process should
+		resume it at an appropriate time).</P
+></DD
+><DT
+><A
+NAME="LOGOUTREF"
+></A
+><B
+CLASS="COMMAND"
+>logout</B
+></DT
+><DD
+><P
+>Exit a login shell, optionally specifying an <A
+HREF="exit-status.html#EXITSTATUSREF"
+>exit status</A
+>.</P
+></DD
+><DT
+><A
+NAME="TIMESREF"
+></A
+><B
+CLASS="COMMAND"
+>times</B
+></DT
+><DD
+><P
+>Gives statistics on the system time elapsed when
+	        executing commands, in the following form:
+		<TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="COMPUTEROUTPUT"
+>0m0.020s 0m0.020s</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>This capability is of relatively limited value, since it is not common to
+		profile and benchmark shell scripts.</P
+></DD
+><DT
+><A
+NAME="KILLREF"
+></A
+><B
+CLASS="COMMAND"
+>kill</B
+></DT
+><DD
+><P
+>Forcibly terminate a process by sending it an
+		appropriate <I
+CLASS="FIRSTTERM"
+>terminate</I
+> signal
+		(see <A
+HREF="system.html#KILLPROCESS"
+>Example 17-6</A
+>).</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="SELFDESTRUCT"
+></A
+><P
+><B
+>Example 15-27. A script that kills itself</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# self-destruct.sh
+
+kill $$  # Script kills its own process here.
+         # Recall that "$$" is the script's PID.
+
+echo "This line will not echo."
+# Instead, the shell sends a "Terminated" message to stdout.
+
+exit 0   # Normal exit? No!
+
+#  After this script terminates prematurely,
+#+ what exit status does it return?
+#
+# sh self-destruct.sh
+# echo $?
+# 143
+#
+# 143 = 128 + 15
+#             TERM signal</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="ZOMBIEREF"
+></A
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>kill -l</B
+></TT
+> lists all the
+		<A
+HREF="debugging.html#SIGNALD"
+>signals</A
+> (as does the
+		file <TT
+CLASS="FILENAME"
+>/usr/include/asm/signal.h</TT
+>).
+		A <TT
+CLASS="USERINPUT"
+><B
+>kill -9</B
+></TT
+> is a <I
+CLASS="FIRSTTERM"
+>sure
+		kill</I
+>, which will usually terminate a
+		process that stubbornly refuses to die with a plain
+		<B
+CLASS="COMMAND"
+>kill</B
+>. Sometimes, a <TT
+CLASS="USERINPUT"
+><B
+>kill
+		-15</B
+></TT
+> works. A <I
+CLASS="FIRSTTERM"
+>zombie</I
+> process,
+		that is, a child process that has terminated, but that
+		the <A
+HREF="internal.html#FORKREF"
+>parent process</A
+>
+		has not (yet) killed, cannot be killed by a logged-on
+		user -- you can't kill something that is already dead --
+		but <B
+CLASS="COMMAND"
+>init</B
+> will generally clean it up
+		sooner or later.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="KILLALLREF"
+></A
+><B
+CLASS="COMMAND"
+>killall</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>killall</B
+> command
+	    kills a running process by <I
+CLASS="FIRSTTERM"
+>name</I
+>,
+            rather than by <A
+HREF="special-chars.html#PROCESSIDREF"
+>process ID</A
+>.
+	    If there are multiple instances of a particular command running,
+	    then doing a <I
+CLASS="FIRSTTERM"
+>killall</I
+> on that command will
+	    terminate them <EM
+>all</EM
+>.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>This refers to the <B
+CLASS="COMMAND"
+>killall</B
+>
+	      command in <TT
+CLASS="FILENAME"
+>/usr/bin</TT
+>,
+	      <EM
+>not</EM
+> the <A
+HREF="sysscripts.html#KILLALL2REF"
+>killall script</A
+> in <TT
+CLASS="FILENAME"
+>/etc/rc.d/init.d</TT
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="COMMANDREF"
+></A
+><B
+CLASS="COMMAND"
+>command</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>command</B
+> directive
+	    disables aliases and functions for the command immediately
+	    following it.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>command ls</B
+></TT
+>
+              </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>This is one of three shell directives that
+	      effect script command processing. The others are
+	      <A
+HREF="x9644.html#BLTREF"
+>builtin</A
+> and <A
+HREF="x9644.html#ENABLEREF"
+>enable</A
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="BLTREF"
+></A
+><B
+CLASS="COMMAND"
+>builtin</B
+></DT
+><DD
+><P
+>Invoking <B
+CLASS="COMMAND"
+>builtin
+	      BUILTIN_COMMAND</B
+> runs the command
+	      <TT
+CLASS="REPLACEABLE"
+><I
+>BUILTIN_COMMAND</I
+></TT
+> as a shell <A
+HREF="internal.html#BUILTINREF"
+>builtin</A
+>, temporarily disabling
+	      both functions and external system commands with the
+	      same name.</P
+></DD
+><DT
+><A
+NAME="ENABLEREF"
+></A
+><B
+CLASS="COMMAND"
+>enable</B
+></DT
+><DD
+><P
+>This either enables or disables a shell
+	      builtin command. As an example, <TT
+CLASS="REPLACEABLE"
+><I
+>enable -n
+	      kill</I
+></TT
+> disables the shell builtin <A
+HREF="x9644.html#KILLREF"
+>kill</A
+>, so that when Bash
+	      subsequently encounters <I
+CLASS="FIRSTTERM"
+>kill</I
+>, it invokes
+	      the external command <TT
+CLASS="FILENAME"
+>/bin/kill</TT
+>.</P
+><P
+><A
+NAME="ENABLEREF1"
+></A
+>The <TT
+CLASS="OPTION"
+>-a</TT
+>
+	      option to <I
+CLASS="FIRSTTERM"
+>enable</I
+> lists all the
+	      shell builtins, indicating whether or not they
+	      are enabled. The <TT
+CLASS="OPTION"
+>-f filename</TT
+>
+	      option lets <I
+CLASS="FIRSTTERM"
+>enable</I
+> load a <A
+HREF="internal.html#BUILTINREF"
+>builtin</A
+> as a shared library
+	      (DLL) module from a properly compiled object file.
+	        <A
+NAME="AEN9928"
+HREF="x9644.html#FTN.AEN9928"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>.
+	     </P
+></DD
+><DT
+><A
+NAME="AUTOLOADREF"
+></A
+><B
+CLASS="COMMAND"
+>autoload</B
+></DT
+><DD
+><P
+>This is a port to Bash of the
+	    <I
+CLASS="FIRSTTERM"
+>ksh</I
+> autoloader. With
+	    <B
+CLASS="COMMAND"
+>autoload</B
+> in place, a function with
+	    an <I
+CLASS="FIRSTTERM"
+>autoload</I
+> declaration will load from an
+	    external file at its first invocation.
+	      <A
+NAME="AEN9949"
+HREF="x9644.html#FTN.AEN9949"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>
+	    This saves system resources.</P
+><P
+>Note that <I
+CLASS="FIRSTTERM"
+>autoload</I
+> is not a part of the
+	    core Bash installation. It needs to be loaded in with
+	    <TT
+CLASS="REPLACEABLE"
+><I
+>enable -f</I
+></TT
+> (see above).</P
+></DD
+></DL
+></DIV
+><P
+><A
+NAME="JOBIDTABLE0"
+></A
+></P
+><DIV
+CLASS="TABLE"
+><A
+NAME="JOBIDTABLE"
+></A
+><P
+><B
+>Table 15-1. Job identifiers</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Notation</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Meaning</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>%N</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Job number [N]</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>%S</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Invocation (command-line) of job begins with string <EM
+>S</EM
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>%?S</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Invocation (command-line) of job contains within it string <EM
+>S</EM
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>%%</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><SPAN
+CLASS="QUOTE"
+>"current"</SPAN
+> job (last job stopped in
+	      foreground or started in background)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>%+</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><SPAN
+CLASS="QUOTE"
+>"current"</SPAN
+> job (last job stopped in
+	      foreground or started in background)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>%-</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Last job</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>$!</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Last background process</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN9753"
+HREF="x9644.html#AEN9753"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>This only applies to <I
+CLASS="FIRSTTERM"
+>child
+         processes</I
+>, of course.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN9928"
+HREF="x9644.html#AEN9928"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>The C source for a number of loadable builtins is
+		    typically found in the <TT
+CLASS="FILENAME"
+>/usr/share/doc/bash-?.??/functions</TT
+>
+		    directory.</P
+><P
+>Note that the <TT
+CLASS="OPTION"
+>-f</TT
+> option to
+                    <B
+CLASS="COMMAND"
+>enable</B
+> is not <A
+HREF="portabilityissues.html"
+>portable</A
+> to all
+                    systems.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN9949"
+HREF="x9644.html#AEN9949"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>The same effect as
+	      <B
+CLASS="COMMAND"
+>autoload</B
+> can be achieved with <A
+HREF="declareref.html"
+>typeset -fu</A
+>.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="internal.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="external.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Internal Commands and Builtins</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="internal.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>External Filters, Programs and Commands</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

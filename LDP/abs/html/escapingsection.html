@@ -1,0 +1,1000 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Escaping</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Quoting"
+HREF="quoting.html"><LINK
+REL="PREVIOUS"
+TITLE="Quoting Variables"
+HREF="quotingvar.html"><LINK
+REL="NEXT"
+TITLE="Exit and Exit Status"
+HREF="exit-status.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="quotingvar.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Quoting</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="exit-status.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ESCAPINGSECTION"
+></A
+>5.2. Escaping</H1
+><P
+><A
+NAME="ESCP"
+></A
+><I
+CLASS="FIRSTTERM"
+>Escaping</I
+> is a method
+	of quoting single characters. The <SPAN
+CLASS="TOKEN"
+>escape</SPAN
+>
+	(<SPAN
+CLASS="TOKEN"
+>\</SPAN
+>) preceding a character tells the shell to
+	interpret that character literally.</P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>With certain commands and utilities, such as <A
+HREF="internal.html#ECHOREF"
+>echo</A
+> and <A
+HREF="sedawk.html#SEDREF"
+>sed</A
+>, escaping a character may have the
+	opposite effect - it can toggle on a special meaning for that
+	character.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="SPM"
+></A
+>Special meanings of certain
+	escaped characters</B
+></P
+><DL
+><DT
+>used with <B
+CLASS="COMMAND"
+>echo</B
+> and
+	<B
+CLASS="COMMAND"
+>sed</B
+></DT
+><DD
+><P
+></P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>\n</SPAN
+></DT
+><DD
+><P
+>means newline</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>\r</SPAN
+></DT
+><DD
+><P
+>means return</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>\t</SPAN
+></DT
+><DD
+><P
+>means tab</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>\v</SPAN
+></DT
+><DD
+><P
+> means vertical tab</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>\b</SPAN
+></DT
+><DD
+><P
+>means backspace</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>\a</SPAN
+></DT
+><DD
+><P
+>means <I
+CLASS="FIRSTTERM"
+>alert</I
+> (beep or flash)</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>\0xx</SPAN
+></DT
+><DD
+><P
+><A
+NAME="OCTALREF"
+></A
+>translates to the
+              octal <A
+HREF="special-chars.html#ASCIIDEF"
+>ASCII</A
+>
+              equivalent of <TT
+CLASS="REPLACEABLE"
+><I
+>0nn</I
+></TT
+>, where
+              <TT
+CLASS="REPLACEABLE"
+><I
+>nn</I
+></TT
+> is a string of digits</P
+><DIV
+CLASS="IMPORTANT"
+><P
+></P
+><TABLE
+CLASS="IMPORTANT"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><A
+NAME="STRQ"
+></A
+></P
+><P
+>The <TT
+CLASS="USERINPUT"
+><B
+>$' ... '</B
+></TT
+>
+             <A
+HREF="quoting.html#QUOTINGREF"
+>quoted</A
+> string-expansion
+              construct is a mechanism that uses escaped octal or hex values
+	      to assign ASCII characters to variables, e.g.,
+	      <B
+CLASS="COMMAND"
+>quote=$'\042'</B
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="ESCAPED"
+></A
+><P
+><B
+>Example 5-2. Escaped Characters</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# escaped.sh: escaped characters
+
+#############################################################
+### First, let's show some basic escaped-character usage. ###
+#############################################################
+
+# Escaping a newline.
+# ------------------
+
+echo ""
+
+echo "This will print
+as two lines."
+# This will print
+# as two lines.
+
+echo "This will print \
+as one line."
+# This will print as one line.
+
+echo; echo
+
+echo "============="
+
+
+echo "\v\v\v\v"      # Prints \v\v\v\v literally.
+# Use the -e option with 'echo' to print escaped characters.
+echo "============="
+echo "VERTICAL TABS"
+echo -e "\v\v\v\v"   # Prints 4 vertical tabs.
+echo "=============="
+
+echo "QUOTATION MARK"
+echo -e "\042"       # Prints " (quote, octal ASCII character 42).
+echo "=============="
+
+
+
+# The $'\X' construct makes the -e option unnecessary.
+
+echo; echo "NEWLINE and (maybe) BEEP"
+echo $'\n'           # Newline.
+echo $'\a'           # Alert (beep).
+                     # May only flash, not beep, depending on terminal.
+
+# We have seen $'\nnn" string expansion, and now . . .
+
+# =================================================================== #
+# Version 2 of Bash introduced the $'\nnn' string expansion construct.
+# =================================================================== #
+
+echo "Introducing the \$\' ... \' string-expansion construct . . . "
+echo ". . . featuring more quotation marks."
+
+echo $'\t \042 \t'   # Quote (") framed by tabs.
+# Note that  '\nnn' is an octal value.
+
+# It also works with hexadecimal values, in an $'\xhhh' construct.
+echo $'\t \x22 \t'  # Quote (") framed by tabs.
+# Thank you, Greg Keraunen, for pointing this out.
+# Earlier Bash versions allowed '\x022'.
+
+echo
+
+
+# Assigning ASCII characters to a variable.
+# ----------------------------------------
+quote=$'\042'        # " assigned to a variable.
+echo "$quote Quoted string $quote and this lies outside the quotes."
+
+echo
+
+# Concatenating ASCII chars in a variable.
+triple_underline=$'\137\137\137'  # 137 is octal ASCII code for '_'.
+echo "$triple_underline UNDERLINE $triple_underline"
+
+echo
+
+ABC=$'\101\102\103\010'           # 101, 102, 103 are octal A, B, C.
+echo $ABC
+
+echo
+
+escape=$'\033'                    # 033 is octal for escape.
+echo "\"escape\" echoes as $escape"
+#                                   no visible output.
+
+echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>A more elaborate example:</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="BASHEK"
+></A
+><P
+><B
+>Example 5-3. Detecting key-presses</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# Author: Sigurd Solaas, 20 Apr 2011
+# Used in ABS Guide with permission.
+# Requires version 4.2+ of Bash.
+
+key="no value yet"
+while true; do
+  clear
+  echo "Bash Extra Keys Demo. Keys to try:"
+  echo
+  echo "* Insert, Delete, Home, End, Page_Up and Page_Down"
+  echo "* The four arrow keys"
+  echo "* Tab, enter, escape, and space key"
+  echo "* The letter and number keys, etc."
+  echo
+  echo "    d = show date/time"
+  echo "    q = quit"
+  echo "================================"
+  echo
+
+ # Convert the separate home-key to home-key_num_7:
+ if [ "$key" = $'\x1b\x4f\x48' ]; then
+  key=$'\x1b\x5b\x31\x7e'
+  #   Quoted string-expansion construct. 
+ fi
+
+ # Convert the separate end-key to end-key_num_1.
+ if [ "$key" = $'\x1b\x4f\x46' ]; then
+  key=$'\x1b\x5b\x34\x7e'
+ fi
+
+ case "$key" in
+  $'\x1b\x5b\x32\x7e')  # Insert
+   echo Insert Key
+  ;;
+  $'\x1b\x5b\x33\x7e')  # Delete
+   echo Delete Key
+  ;;
+  $'\x1b\x5b\x31\x7e')  # Home_key_num_7
+   echo Home Key
+  ;;
+  $'\x1b\x5b\x34\x7e')  # End_key_num_1
+   echo End Key
+  ;;
+  $'\x1b\x5b\x35\x7e')  # Page_Up
+   echo Page_Up
+  ;;
+  $'\x1b\x5b\x36\x7e')  # Page_Down
+   echo Page_Down
+  ;;
+  $'\x1b\x5b\x41')  # Up_arrow
+   echo Up arrow
+  ;;
+  $'\x1b\x5b\x42')  # Down_arrow
+   echo Down arrow
+  ;;
+  $'\x1b\x5b\x43')  # Right_arrow
+   echo Right arrow
+  ;;
+  $'\x1b\x5b\x44')  # Left_arrow
+   echo Left arrow
+  ;;
+  $'\x09')  # Tab
+   echo Tab Key
+  ;;
+  $'\x0a')  # Enter
+   echo Enter Key
+  ;;
+  $'\x1b')  # Escape
+   echo Escape Key
+  ;;
+  $'\x20')  # Space
+   echo Space Key
+  ;;
+  d)
+   date
+  ;;
+  q)
+  echo Time to quit...
+  echo
+  exit 0
+  ;;
+  *)
+   echo You pressed: \'"$key"\'
+  ;;
+ esac
+
+ echo
+ echo "================================"
+
+ unset K1 K2 K3
+ read -s -N1 -p "Press a key: "
+ K1="$REPLY"
+ read -s -N2 -t 0.001
+ K2="$REPLY"
+ read -s -N1 -t 0.001
+ K3="$REPLY"
+ key="$K1$K2$K3"
+
+done
+
+exit $?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>See also <A
+HREF="bashver2.html#EX77"
+>Example 37-1</A
+>.</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>\"</SPAN
+></DT
+><DD
+><P
+> gives the quote its literal meaning</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>echo "Hello"                     # Hello
+echo "\"Hello\" ... he said."    # "Hello" ... he said.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>\$</SPAN
+></DT
+><DD
+><P
+>gives the dollar sign its literal meaning
+	      (variable name following <SPAN
+CLASS="TOKEN"
+>\$</SPAN
+> will not be
+	      referenced)</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>echo "\$variable01"           # $variable01
+echo "The book cost \$7.98."  # The book cost $7.98.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>\\</SPAN
+></DT
+><DD
+><P
+>gives the backslash its literal meaning</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>echo "\\"  # Results in \
+
+# Whereas . . .
+
+echo "\"   # Invokes secondary prompt from the command-line.
+           # In a script, gives an error message.
+
+# However . . .
+
+echo '\'   # Results in \</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+></DL
+></DIV
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The behavior of <SPAN
+CLASS="TOKEN"
+>\</SPAN
+> depends on whether
+	it is escaped, <A
+HREF="varsubn.html#SNGLQUO"
+>strong-quoted</A
+>,
+	<A
+HREF="varsubn.html#DBLQUO"
+>weak-quoted</A
+>, or appearing within
+	<A
+HREF="commandsub.html#COMMANDSUBREF"
+>command substitution</A
+> or a
+	<A
+HREF="here-docs.html#HEREDOCREF"
+>here document</A
+>.
+
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>                      #  Simple escaping and quoting
+echo \z               #  z
+echo \\z              # \z
+echo '\z'             # \z
+echo '\\z'            # \\z
+echo "\z"             # \z
+echo "\\z"            # \z
+
+                      #  Command substitution
+echo `echo \z`        #  z
+echo `echo \\z`       #  z
+echo `echo \\\z`      # \z
+echo `echo \\\\z`     # \z
+echo `echo \\\\\\z`   # \z
+echo `echo \\\\\\\z`  # \\z
+echo `echo "\z"`      # \z
+echo `echo "\\z"`     # \z
+
+                      # Here document
+cat &#60;&#60;EOF              
+\z                      
+EOF                   # \z
+
+cat &#60;&#60;EOF              
+\\z                     
+EOF                   # \z
+
+# These examples supplied by Stéphane Chazelas.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>Elements of a string assigned to a variable may be escaped, but
+        the escape character alone may not be assigned to a variable.
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>variable=\
+echo "$variable"
+# Will not work - gives an error message:
+# test.sh: : command not found
+# A "naked" escape cannot safely be assigned to a variable.
+#
+#  What actually happens here is that the "\" escapes the newline and
+#+ the effect is        variable=echo "$variable"
+#+                      invalid variable assignment
+
+variable=\
+23skidoo
+echo "$variable"        #  23skidoo
+                        #  This works, since the second line
+                        #+ is a valid variable assignment.
+
+variable=\ 
+#        \^    escape followed by space
+echo "$variable"        # space
+
+variable=\\
+echo "$variable"        # \
+
+variable=\\\
+echo "$variable"
+# Will not work - gives an error message:
+# test.sh: \: command not found
+#
+#  First escape escapes second one, but the third one is left "naked",
+#+ with same result as first instance, above.
+
+variable=\\\\
+echo "$variable"        # \\
+                        # Second and fourth escapes escaped.
+                        # This is o.k.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Escaping a space can prevent word splitting in a command's argument list.
+        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>file_list="/bin/cat /bin/gzip /bin/more /usr/bin/less /usr/bin/emacs-20.7"
+# List of files as argument(s) to a command.
+
+# Add two files to the list, and list all.
+ls -l /usr/X11R6/bin/xsetroot /sbin/dump $file_list
+
+echo "-------------------------------------------------------------------------"
+
+# What happens if we escape a couple of spaces?
+ls -l /usr/X11R6/bin/xsetroot\ /sbin/dump\ $file_list
+# Error: the first three files concatenated into a single argument to 'ls -l'
+#        because the two escaped spaces prevent argument (word) splitting.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+><A
+NAME="ESCNEWLINE"
+></A
+></P
+><P
+>The <SPAN
+CLASS="TOKEN"
+>escape</SPAN
+> also provides a means of writing a
+	multi-line command. Normally, each separate line constitutes
+	a different command, but an <SPAN
+CLASS="TOKEN"
+>escape</SPAN
+> at the end
+	of a line <EM
+>escapes the newline character</EM
+>,
+	and the command sequence continues on to the next line.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>(cd /source/directory &#38;&#38; tar cf - . ) | \
+(cd /dest/directory &#38;&#38; tar xpvf -)
+# Repeating Alan Cox's directory tree copy command,
+# but split into two lines for increased legibility.
+
+# As an alternative:
+tar cf - -C /source/directory . |
+tar xpvf - -C /dest/directory
+# See note below.
+# (Thanks, Stéphane Chazelas.)</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+        
+	<DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>If a script line ends with a <SPAN
+CLASS="TOKEN"
+>|</SPAN
+>, a pipe
+	  character, then a <SPAN
+CLASS="TOKEN"
+>\</SPAN
+>, an escape, is not strictly
+	  necessary. It is, however, good programming practice to always
+	  escape the end of a line of code that continues to the
+	  following line.</P
+></TD
+></TR
+></TABLE
+></DIV
+></P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>echo "foo
+bar" 
+#foo
+#bar
+
+echo
+
+echo 'foo
+bar'    # No difference yet.
+#foo
+#bar
+
+echo
+
+echo foo\
+bar     # Newline escaped.
+#foobar
+
+echo
+
+echo "foo\
+bar"     # Same here, as \ still interpreted as escape within weak quotes.
+#foobar
+
+echo
+
+echo 'foo\
+bar'     # Escape character \ taken literally because of strong quoting.
+#foo\
+#bar
+
+# Examples suggested by Stéphane Chazelas.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="quotingvar.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="exit-status.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Quoting Variables</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="quoting.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Exit and Exit Status</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

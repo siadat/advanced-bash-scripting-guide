@@ -1,0 +1,866 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Subshells</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Topics"
+HREF="part5.html"><LINK
+REL="PREVIOUS"
+TITLE="Applications"
+HREF="redirapps.html"><LINK
+REL="NEXT"
+TITLE="Restricted Shells"
+HREF="restricted-sh.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="redirapps.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="restricted-sh.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="SUBSHELLS"
+></A
+>Chapter 21. Subshells</H1
+><P
+><A
+NAME="SUBSHELLSREF"
+></A
+></P
+><P
+>Running a shell script launches a new process, a
+        <I
+CLASS="FIRSTTERM"
+>subshell</I
+>.</P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><A
+NAME="AEN18083"
+></A
+><P
+></P
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>Definition:</B
+></TT
+>
+          A <I
+CLASS="FIRSTTERM"
+>subshell</I
+> is a
+          <A
+HREF="othertypesv.html#CHILDREF2"
+>child process</A
+> launched by a
+          shell (or <I
+CLASS="FIRSTTERM"
+>shell script</I
+>).</P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>A subshell is a separate instance of the command processor
+        -- the <I
+CLASS="FIRSTTERM"
+>shell</I
+> that gives you the prompt at
+        the console or in an <I
+CLASS="FIRSTTERM"
+>xterm</I
+> window. Just
+        as your commands are interpreted at the command-line prompt,
+        similarly does a script <A
+HREF="timedate.html#BATCHPROCREF"
+>batch-process</A
+> a list of
+        commands. Each shell script running is, in effect, a subprocess
+        (<I
+CLASS="FIRSTTERM"
+>child process</I
+>) of the <A
+HREF="internal.html#FORKREF"
+>parent</A
+> shell.</P
+><P
+>A shell script can itself launch subprocesses. These
+	<I
+CLASS="FIRSTTERM"
+>subshells</I
+> let the script do
+	parallel processing, in effect executing multiple subtasks
+	simultaneously.</P
+><P
+>      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# subshell-test.sh
+
+(
+# Inside parentheses, and therefore a subshell . . .
+while [ 1 ]   # Endless loop.
+do
+  echo "Subshell running . . ."
+done
+)
+
+#  Script will run forever,
+#+ or at least until terminated by a Ctl-C.
+
+exit $?  # End of script (but will never get here).
+
+
+
+Now, run the script:
+sh subshell-test.sh
+
+And, while the script is running, from a different xterm:
+ps -ef | grep subshell-test.sh
+
+UID       PID   PPID  C STIME TTY      TIME     CMD
+500       2698  2502  0 14:26 pts/4    00:00:00 sh subshell-test.sh
+500       2699  2698 21 14:26 pts/4    00:00:24 sh subshell-test.sh
+
+          ^^^^
+
+Analysis:
+PID 2698, the script, launched PID 2699, the subshell.
+
+Note: The "UID ..." line would be filtered out by the "grep" command,
+but is shown here for illustrative purposes.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>In general, an <A
+HREF="external.html#EXTERNALREF"
+>external
+	command</A
+> in a script <A
+HREF="internal.html#FORKREF"
+>forks
+	off</A
+> a subprocess,
+           <A
+NAME="AEN18102"
+HREF="subshells.html#FTN.AEN18102"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+        whereas a Bash <A
+HREF="internal.html#BUILTINREF"
+>builtin</A
+>
+        does not. For this reason, builtins execute more quickly
+        and use fewer system resources than their external command
+        equivalents.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="SUBSHELLPARENS1"
+></A
+>Command List within
+	Parentheses</B
+></P
+><DL
+><DT
+>( command1; command2; command3; ... )</DT
+><DD
+><P
+>A command list embedded between
+	  <TT
+CLASS="REPLACEABLE"
+><I
+>parentheses</I
+></TT
+> runs as a
+	  subshell.</P
+></DD
+></DL
+></DIV
+><P
+><A
+NAME="PARVIS"
+></A
+>Variables in a subshell are
+        <EM
+>not</EM
+> visible outside the block of code
+        in the subshell. They are not accessible to the <A
+HREF="internal.html#FORKREF"
+>parent process</A
+>, to the shell
+        that launched the subshell. These are, in effect,
+        variables <A
+HREF="localvar.html#LOCALREF"
+>local</A
+> to the
+	<I
+CLASS="FIRSTTERM"
+>child process</I
+>.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="SUBSHELL"
+></A
+><P
+><B
+>Example 21-1. Variable scope in a subshell</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# subshell.sh
+
+echo
+
+echo "We are outside the subshell."
+echo "Subshell level OUTSIDE subshell = $BASH_SUBSHELL"
+# Bash, version 3, adds the new         $BASH_SUBSHELL variable.
+echo; echo
+
+outer_variable=Outer
+global_variable=
+#  Define global variable for "storage" of
+#+ value of subshell variable.
+
+(
+echo "We are inside the subshell."
+echo "Subshell level INSIDE subshell = $BASH_SUBSHELL"
+inner_variable=Inner
+
+echo "From inside subshell, \"inner_variable\" = $inner_variable"
+echo "From inside subshell, \"outer\" = $outer_variable"
+
+global_variable="$inner_variable"   #  Will this allow "exporting"
+                                    #+ a subshell variable?
+)
+
+echo; echo
+echo "We are outside the subshell."
+echo "Subshell level OUTSIDE subshell = $BASH_SUBSHELL"
+echo
+
+if [ -z "$inner_variable" ]
+then
+  echo "inner_variable undefined in main body of shell"
+else
+  echo "inner_variable defined in main body of shell"
+fi
+
+echo "From main body of shell, \"inner_variable\" = $inner_variable"
+#  $inner_variable will show as blank (uninitialized)
+#+ because variables defined in a subshell are "local variables".
+#  Is there a remedy for this?
+echo "global_variable = "$global_variable""  # Why doesn't this work?
+
+echo
+
+# =======================================================================
+
+# Additionally ...
+
+echo "-----------------"; echo
+
+var=41                                                 # Global variable.
+
+( let "var+=1"; echo "\$var INSIDE subshell = $var" )  # 42
+
+echo "\$var OUTSIDE subshell = $var"                   # 41
+#  Variable operations inside a subshell, even to a GLOBAL variable
+#+ do not affect the value of the variable outside the subshell!
+
+
+exit 0
+
+#  Question:
+#  --------
+#  Once having exited a subshell,
+#+ is there any way to reenter that very same subshell
+#+ to modify or access the subshell variables?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>See also <A
+HREF="internalvariables.html#BASHPIDREF"
+>$BASHPID</A
+> and
+        <A
+HREF="gotchas.html#SUBPIT"
+>Example 34-2</A
+>.</P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><A
+NAME="AEN18127"
+></A
+><P
+></P
+><P
+><A
+NAME="SCOPEREF"
+></A
+></P
+><P
+><TT
+CLASS="USERINPUT"
+><B
+>Definition:</B
+></TT
+> The
+	    <I
+CLASS="FIRSTTERM"
+>scope</I
+> of a variable is the
+	    context in which it has meaning, in which it has a
+	    <I
+CLASS="FIRSTTERM"
+>value</I
+> that can be referenced. For
+	    example, the scope of a <A
+HREF="localvar.html#LOCALREF1"
+>local
+	    variable</A
+> lies only within the function,
+	    block of code, or subshell within which it is defined,
+	    while the scope of a <I
+CLASS="FIRSTTERM"
+>global</I
+> variable
+	    is the entire script in which it appears.</P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+><A
+NAME="SUBSHNLEVREF"
+></A
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>While the <A
+HREF="internalvariables.html#BASHSUBSHELLREF"
+>$BASH_SUBSHELL</A
+>
+	      internal variable indicates the nesting level of a
+	      subshell, the <A
+HREF="internalvariables.html#SHLVLREF"
+>$SHLVL</A
+>
+	      variable <EM
+>shows no change</EM
+> within
+	      a subshell.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>echo " \$BASH_SUBSHELL outside subshell       = $BASH_SUBSHELL"           # 0
+  ( echo " \$BASH_SUBSHELL inside subshell        = $BASH_SUBSHELL" )     # 1
+  ( ( echo " \$BASH_SUBSHELL inside nested subshell = $BASH_SUBSHELL" ) ) # 2
+# ^ ^                           *** nested ***                        ^ ^
+
+echo
+
+echo " \$SHLVL outside subshell = $SHLVL"       # 3
+( echo " \$SHLVL inside subshell  = $SHLVL" )   # 3 (No change!)</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+            </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Directory changes made in a subshell do not carry over to the
+        parent shell.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="ALLPROFS"
+></A
+><P
+><B
+>Example 21-2. List User Profiles</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# allprofs.sh: Print all user profiles.
+
+# This script written by Heiner Steven, and modified by the document author.
+
+FILE=.bashrc  #  File containing user profile,
+              #+ was ".profile" in original script.
+
+for home in `awk -F: '{print $6}' /etc/passwd`
+do
+  [ -d "$home" ] || continue    # If no home directory, go to next.
+  [ -r "$home" ] || continue    # If not readable, go to next.
+  (cd $home; [ -e $FILE ] &#38;&#38; less $FILE)
+done
+
+#  When script terminates, there is no need to 'cd' back to original directory,
+#+ because 'cd $home' takes place in a subshell.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>A subshell may be used to set up a <SPAN
+CLASS="QUOTE"
+>"dedicated
+	      environment"</SPAN
+> for a command group.
+	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>COMMAND1
+COMMAND2
+COMMAND3
+(
+  IFS=:
+  PATH=/bin
+  unset TERMINFO
+  set -C
+  shift 5
+  COMMAND4
+  COMMAND5
+  exit 3 # Only exits the subshell!
+)
+# The parent shell has not been affected, and the environment is preserved.
+COMMAND6
+COMMAND7</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+
+    As seen here, the <A
+HREF="internal.html#EXITREF"
+>exit</A
+>
+    command only terminates the subshell in which it is running,
+    <EM
+>not</EM
+> the parent shell or script.</P
+><P
+>One application of such a <SPAN
+CLASS="QUOTE"
+>"dedicated environment"</SPAN
+>
+        is testing whether a variable is defined.
+              <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>if (set -u; : $variable) 2&#62; /dev/null
+then
+  echo "Variable is set."
+fi     #  Variable has been set in current script,
+       #+ or is an an internal Bash variable,
+       #+ or is present in environment (has been exported).
+
+# Could also be written [[ ${variable-x} != x || ${variable-y} != y ]]
+# or                    [[ ${variable-x} != x$variable ]]
+# or                    [[ ${variable+x} = x ]]
+# or                    [[ ${variable-x} != x ]]</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>Another application is checking for a lock file:
+	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>if (set -C; : &#62; lock_file) 2&#62; /dev/null
+then
+  :   # lock_file didn't exist: no user running the script
+else
+  echo "Another user is already running that script."
+exit 65
+fi
+
+#  Code snippet by Stéphane Chazelas,
+#+ with modifications by Paulo Marcel Coelho Aragao.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>+</P
+><P
+>Processes may execute in parallel within different
+        subshells. This permits breaking a complex task into subcomponents
+        processed concurrently.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="PARALLEL-PROCESSES"
+></A
+><P
+><B
+>Example 21-3. Running parallel processes in subshells</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>	(cat list1 list2 list3 | sort | uniq &#62; list123) &#38;
+	(cat list4 list5 list6 | sort | uniq &#62; list456) &#38;
+	# Merges and sorts both sets of lists simultaneously.
+	# Running in background ensures parallel execution.
+	#
+	# Same effect as
+	#   cat list1 list2 list3 | sort | uniq &#62; list123 &#38;
+	#   cat list4 list5 list6 | sort | uniq &#62; list456 &#38;
+	
+	wait   # Don't execute the next command until subshells finish.
+	
+	diff list123 list456</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Redirecting I/O to a subshell uses the <SPAN
+CLASS="QUOTE"
+>"|"</SPAN
+> pipe
+	  operator, as in <TT
+CLASS="USERINPUT"
+><B
+>ls -al | (command)</B
+></TT
+>.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>A code block between <A
+HREF="special-chars.html#CODEBLOCKREF"
+>curly brackets</A
+> does
+	      <EM
+>not</EM
+> launch a subshell.</P
+><P
+>{ command1; command2; command3; . . . commandN; }</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>var1=23
+echo "$var1"   # 23
+
+{ var1=76; }
+echo "$var1"   # 76</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN18102"
+HREF="subshells.html#AEN18102"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>An external command invoked with an <A
+HREF="internal.html#EXECREF"
+>exec</A
+> does <EM
+>not</EM
+>
+             (usually) fork off a subprocess / subshell.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="redirapps.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="restricted-sh.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Applications</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part5.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Restricted Shells</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

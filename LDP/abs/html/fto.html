@@ -1,0 +1,951 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>File test operators</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Tests"
+HREF="tests.html"><LINK
+REL="PREVIOUS"
+TITLE="Test Constructs"
+HREF="testconstructs.html"><LINK
+REL="NEXT"
+TITLE="Other Comparison Operators"
+HREF="comparison-ops.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="testconstructs.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 7. Tests</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="comparison-ops.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FTO"
+></A
+>7.2. File test operators</H1
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="RTIF"
+></A
+>Returns true if...</B
+></P
+><DL
+><DT
+><SPAN
+CLASS="TOKEN"
+>-e</SPAN
+></DT
+><DD
+><P
+>file exists</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-a</SPAN
+></DT
+><DD
+><P
+>file exists</P
+><P
+>This is identical in effect to <SPAN
+CLASS="TOKEN"
+>-e</SPAN
+>.
+	      It has been <SPAN
+CLASS="QUOTE"
+>"deprecated,"</SPAN
+>
+
+	        <A
+NAME="AEN3289"
+HREF="fto.html#FTN.AEN3289"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+	      
+	      and its use is
+	      discouraged.</P
+></DD
+><DT
+><A
+NAME="REGULARFILE"
+></A
+><SPAN
+CLASS="TOKEN"
+>-f</SPAN
+></DT
+><DD
+><P
+>file is a <TT
+CLASS="REPLACEABLE"
+><I
+>regular</I
+></TT
+>
+	      file (not a directory or <A
+HREF="devref1.html#DEVFILEREF"
+>device
+	      file</A
+>)</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-s</SPAN
+></DT
+><DD
+><P
+>file is not zero size</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-d</SPAN
+></DT
+><DD
+><P
+>file is a directory</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-b</SPAN
+></DT
+><DD
+><P
+>file is a <A
+HREF="devref1.html#BLOCKDEVREF"
+>block
+	    device</A
+></P
+><P
+><A
+NAME="BLOCKDEVTEST"
+></A
+></P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-c</SPAN
+></DT
+><DD
+><P
+><A
+NAME="CHARDEVTEST"
+></A
+>file is a <A
+HREF="devref1.html#CHARDEVREF"
+>character device</A
+></P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>device0="/dev/sda2"    # /   (root directory)
+if [ -b "$device0" ]
+then
+  echo "$device0 is a block device."
+fi
+
+# /dev/sda2 is a block device.
+
+
+
+device1="/dev/ttyS1"   # PCMCIA modem card.
+if [ -c "$device1" ]
+then
+  echo "$device1 is a character device."
+fi
+
+# /dev/ttyS1 is a character device.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-p</SPAN
+></DT
+><DD
+><P
+>file is a <A
+HREF="special-chars.html#PIPEREF"
+>pipe</A
+></P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>function show_input_type()
+{
+   [ -p /dev/fd/0 ] &#38;&#38; echo PIPE || echo STDIN
+}
+
+show_input_type "Input"                           # STDIN
+echo "Input" | show_input_type                    # PIPE
+
+# This example courtesy of Carl Anderson.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-h</SPAN
+></DT
+><DD
+><P
+>file is a <A
+HREF="basic.html#SYMLINKREF"
+>symbolic
+	      link</A
+></P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-L</SPAN
+></DT
+><DD
+><P
+>file is a symbolic link</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-S</SPAN
+></DT
+><DD
+><P
+>file is a <A
+HREF="devref1.html#SOCKETREF"
+>socket</A
+></P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-t</SPAN
+></DT
+><DD
+><P
+><A
+NAME="TERMTEST"
+></A
+>file (<A
+HREF="io-redirection.html#FDREF"
+>descriptor</A
+>) is
+	      associated with a terminal device</P
+><P
+>This test option <A
+HREF="http://tldp.org/LDP/abs/html/intandnonint.html#II2TEST"
+> may be used
+	      to check</A
+> whether the <TT
+CLASS="FILENAME"
+>stdin</TT
+>
+	      <TT
+CLASS="USERINPUT"
+><B
+>[ -t 0 ]</B
+></TT
+> or
+	      <TT
+CLASS="FILENAME"
+>stdout</TT
+> <TT
+CLASS="USERINPUT"
+><B
+>[ -t 1 ]</B
+></TT
+>
+	      in a given script is a terminal.</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-r</SPAN
+></DT
+><DD
+><P
+>file has read permission (<EM
+>for the
+	      user running the test</EM
+>)</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-w</SPAN
+></DT
+><DD
+><P
+>file has write permission (for the user running
+	      the test)</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-x</SPAN
+></DT
+><DD
+><P
+>file has execute permission (for the user running
+	    the test)</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-g</SPAN
+></DT
+><DD
+><P
+>set-group-id (sgid) flag set on file or directory</P
+><P
+>If a directory has the <TT
+CLASS="REPLACEABLE"
+><I
+>sgid</I
+></TT
+>
+	      flag set, then a file created within that directory belongs
+	      to the group that owns the directory, not necessarily to
+	      the group of the user who created the file. This may be
+	      useful for a directory shared by a workgroup.</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-u</SPAN
+></DT
+><DD
+><P
+><A
+NAME="SUIDREF"
+></A
+></P
+><P
+>set-user-id (suid) flag set on file</P
+><P
+>A binary owned by <I
+CLASS="FIRSTTERM"
+>root</I
+>
+	      with <TT
+CLASS="REPLACEABLE"
+><I
+>set-user-id</I
+></TT
+> flag set
+	      runs with <I
+CLASS="FIRSTTERM"
+>root</I
+> privileges, even
+	      when an ordinary user invokes it.
+	      
+		<A
+NAME="AEN3400"
+HREF="fto.html#FTN.AEN3400"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>
+
+	      This is useful for executables (such as
+	      <B
+CLASS="COMMAND"
+>pppd</B
+> and <B
+CLASS="COMMAND"
+>cdrecord</B
+>)
+	      that need to access system hardware. Lacking the
+	      <I
+CLASS="FIRSTTERM"
+>suid</I
+> flag, these binaries could not
+	      be invoked by a <I
+CLASS="FIRSTTERM"
+>non-root</I
+> user.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>	      <TT
+CLASS="COMPUTEROUTPUT"
+>-rwsr-xr-t    1 root       178236 Oct  2  2000 /usr/sbin/pppd</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><P
+>A file with the <TT
+CLASS="REPLACEABLE"
+><I
+>suid</I
+></TT
+>
+		flag set shows an <I
+CLASS="FIRSTTERM"
+>s</I
+> in its
+		permissions.</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-k</SPAN
+></DT
+><DD
+><P
+><TT
+CLASS="REPLACEABLE"
+><I
+>sticky bit</I
+></TT
+> set</P
+><P
+>Commonly known as the <I
+CLASS="FIRSTTERM"
+>sticky bit,</I
+>
+	      the <I
+CLASS="FIRSTTERM"
+>save-text-mode</I
+> flag is a special
+	      type of file permission. If a file has this flag set,
+	      that file will be kept in cache memory, for quicker access.
+	        <A
+NAME="AEN3423"
+HREF="fto.html#FTN.AEN3423"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>
+	      If set on a directory, it restricts write permission.
+	      Setting the sticky bit adds a <I
+CLASS="FIRSTTERM"
+>t</I
+>
+	      to the permissions on the file or directory listing.
+	      This restricts altering or deleting specific files 
+	      in that directory to the owner of those files.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>	      <TT
+CLASS="COMPUTEROUTPUT"
+>drwxrwxrwt    7 root         1024 May 19 21:26 tmp/</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><P
+>If a user does not own a directory that has the sticky
+		bit set, but has write permission in that directory, she
+		can only delete those files that she owns in it. This
+		keeps users from inadvertently overwriting or deleting
+		each other's files in a publicly accessible directory,
+		such as <TT
+CLASS="FILENAME"
+>/tmp</TT
+>.
+		(The <I
+CLASS="FIRSTTERM"
+>owner</I
+> of the directory or
+		<I
+CLASS="FIRSTTERM"
+>root</I
+> can, of course, delete or
+		rename files there.)</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-O</SPAN
+></DT
+><DD
+><P
+>you are owner of file</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-G</SPAN
+></DT
+><DD
+><P
+>group-id of file same as yours</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>-N</SPAN
+></DT
+><DD
+><P
+>file modified since it was last read</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>f1 -nt f2</SPAN
+></DT
+><DD
+><P
+>file <TT
+CLASS="REPLACEABLE"
+><I
+>f1</I
+></TT
+> is newer than
+		<TT
+CLASS="REPLACEABLE"
+><I
+>f2</I
+></TT
+></P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>f1 -ot f2</SPAN
+></DT
+><DD
+><P
+>file <TT
+CLASS="REPLACEABLE"
+><I
+>f1</I
+></TT
+> is older than
+		<TT
+CLASS="REPLACEABLE"
+><I
+>f2</I
+></TT
+></P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>f1 -ef f2</SPAN
+></DT
+><DD
+><P
+>files <TT
+CLASS="REPLACEABLE"
+><I
+>f1</I
+></TT
+> and
+		<TT
+CLASS="REPLACEABLE"
+><I
+>f2</I
+></TT
+> are hard links to the same
+		file</P
+></DD
+><DT
+><SPAN
+CLASS="TOKEN"
+>!</SPAN
+></DT
+><DD
+><P
+><SPAN
+CLASS="QUOTE"
+>"not"</SPAN
+> -- reverses the sense of the
+	    tests above (returns true if condition absent).</P
+></DD
+></DL
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="BROKENLINK"
+></A
+><P
+><B
+>Example 7-4. Testing for broken links</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# broken-link.sh
+# Written by Lee bigelow &#60;ligelowbee@yahoo.com&#62;
+# Used in ABS Guide with permission.
+
+#  A pure shell script to find dead symlinks and output them quoted
+#+ so they can be fed to xargs and dealt with :)
+#+ eg. sh broken-link.sh /somedir /someotherdir|xargs rm
+#
+#  This, however, is a better method:
+#
+#  find "somedir" -type l -print0|\
+#  xargs -r0 file|\
+#  grep "broken symbolic"|
+#  sed -e 's/^\|: *broken symbolic.*$/"/g'
+#
+#+ but that wouldn't be pure Bash, now would it.
+#  Caution: beware the /proc file system and any circular links!
+################################################################
+
+
+#  If no args are passed to the script set directories-to-search 
+#+ to current directory.  Otherwise set the directories-to-search 
+#+ to the args passed.
+######################
+
+[ $# -eq 0 ] &#38;&#38; directorys=`pwd` || directorys=$@
+
+
+#  Setup the function linkchk to check the directory it is passed 
+#+ for files that are links and don't exist, then print them quoted.
+#  If one of the elements in the directory is a subdirectory then 
+#+ send that subdirectory to the linkcheck function.
+##########
+
+linkchk () {
+    for element in $1/*; do
+      [ -h "$element" -a ! -e "$element" ] &#38;&#38; echo \"$element\"
+      [ -d "$element" ] &#38;&#38; linkchk $element
+    # Of course, '-h' tests for symbolic link, '-d' for directory.
+    done
+}
+
+#  Send each arg that was passed to the script to the linkchk() function
+#+ if it is a valid directoy.  If not, then print the error message
+#+ and usage info.
+##################
+for directory in $directorys; do
+    if [ -d $directory ]
+	then linkchk $directory
+	else 
+	    echo "$directory is not a directory"
+	    echo "Usage: $0 dir1 dir2 ..."
+    fi
+done
+
+exit $?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+HREF="zeros.html#COOKIES"
+>Example 31-1</A
+>, <A
+HREF="loops1.html#BINGREP"
+>Example 11-8</A
+>,
+	  <A
+HREF="loops1.html#FILEINFO"
+>Example 11-3</A
+>, <A
+HREF="zeros.html#RAMDISK"
+>Example 31-3</A
+>, and <A
+HREF="contributed-scripts.html#MAILFORMAT"
+>Example A-1</A
+> also illustrate uses of the file test
+	  operators.</P
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN3289"
+HREF="fto.html#AEN3289"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>		Per the 1913 edition of <EM
+>Webster's
+		Dictionary</EM
+>:
+		<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>Deprecate
+...
+
+To pray against, as an evil;
+to seek to avert by prayer;
+to desire the removal of;
+to seek deliverance from;
+to express deep regret for;
+to disapprove of strongly.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	        </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN3400"
+HREF="fto.html#AEN3400"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Be aware that <I
+CLASS="FIRSTTERM"
+>suid</I
+>
+		  binaries may open security holes. The
+		  <I
+CLASS="FIRSTTERM"
+>suid</I
+> flag has no effect on
+		  shell scripts.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN3423"
+HREF="fto.html#AEN3423"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>On Linux systems, the sticky
+		  bit is no longer used for files, only on
+		  directories.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="testconstructs.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="comparison-ops.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Test Constructs</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="tests.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Other Comparison Operators</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

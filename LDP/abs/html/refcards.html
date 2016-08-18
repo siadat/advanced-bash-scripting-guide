@@ -1,0 +1,2877 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Reference Cards</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Contributed Scripts"
+HREF="contributed-scripts.html"><LINK
+REL="NEXT"
+TITLE="A Sed and Awk Micro-Primer"
+HREF="sedawk.html"></HEAD
+><BODY
+CLASS="APPENDIX"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="contributed-scripts.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="sedawk.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="APPENDIX"
+><H1
+><A
+NAME="REFCARDS"
+></A
+>Appendix B. Reference Cards</H1
+><P
+>The following reference cards provide a useful
+	<EM
+>summary</EM
+> of certain scripting concepts.
+	The foregoing text treats these matters in more depth, as well as
+	giving usage examples.</P
+><P
+><A
+NAME="SPECSHVARTAB"
+></A
+></P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AEN22402"
+></A
+><P
+><B
+>Table B-1. Special Shell Variables</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Variable</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Meaning</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>$0</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Filename of script</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>$1</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Positional parameter #1</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>$2 - $9</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Positional parameters #2 - #9</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${10}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Positional parameter #10</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>$#</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Number of positional parameters</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>"$*"</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>All the positional parameters (as a single word) *</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>"$@"</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>All the positional parameters (as separate strings)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${#*}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Number of positional parameters</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${#@}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Number of positional parameters</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>$?</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Return value</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>$$</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Process ID (PID) of script</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>$-</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Flags passed to script (using
+	        <I
+CLASS="FIRSTTERM"
+>set</I
+>)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>$_</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Last argument of previous command</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>$!</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Process ID (PID) of last job run in background</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+><B
+CLASS="COMMAND"
+>*</B
+> <EM
+>Must be quoted</EM
+>,
+        otherwise it defaults to
+        <TT
+CLASS="VARNAME"
+>$@</TT
+>.</P
+><P
+><A
+NAME="BINCOMPTAB"
+></A
+></P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AEN22473"
+></A
+><P
+><B
+>Table B-2. TEST Operators: Binary Comparison</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Operator</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Meaning</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>-----</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Operator</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Meaning</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="comparison-ops.html#ICOMPARISON1"
+>Arithmetic
+	        Comparison</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="comparison-ops.html#SCOMPARISON1"
+>String
+	        Comparison</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-eq</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Equal to</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>=</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Equal to</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>==</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Equal to</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-ne</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Not equal to</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>!=</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Not equal to</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-lt</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Less than</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>\&#60;</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Less than (<A
+HREF="special-chars.html#ASCIIDEF"
+>ASCII</A
+>) *</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-le</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Less than or equal to</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-gt</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Greater than</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>\&#62;</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Greater than (ASCII) *</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-ge</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Greater than or equal to</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-z</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>String is empty</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-n</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>String is not empty</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Arithmetic Comparison</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="testconstructs.html#DBLPRX"
+>within double
+	        parentheses</A
+> (( ... ))</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>&#62;</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Greater than</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>&#62;=</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Greater than or equal to</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>&#60;</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Less than</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>&#60;=</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Less than or equal to</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+><B
+CLASS="COMMAND"
+>*</B
+> <EM
+>If within a
+        double-bracket</EM
+> <SPAN
+CLASS="TOKEN"
+>[[ ... ]]</SPAN
+> <EM
+>test construct,
+        then no escape</EM
+> <SPAN
+CLASS="TOKEN"
+>\</SPAN
+> <EM
+>is
+        needed.</EM
+></P
+><P
+><A
+NAME="FILESTAB"
+></A
+></P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AEN22593"
+></A
+><P
+><B
+>Table B-3. TEST Operators: Files</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Operator</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Tests Whether</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>-----</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Operator</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Tests Whether</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-e</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File exists</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-s</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File is not zero size</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-f</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File is a <I
+CLASS="FIRSTTERM"
+>regular</I
+> file</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-d</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File is a <I
+CLASS="FIRSTTERM"
+>directory</I
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-r</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File has <I
+CLASS="FIRSTTERM"
+>read</I
+>
+	         permission</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-h</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File is a <A
+HREF="basic.html#SYMLINKREF"
+>symbolic link</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-w</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File has <I
+CLASS="FIRSTTERM"
+>write</I
+>
+	         permission</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-L</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File is a <I
+CLASS="FIRSTTERM"
+>symbolic link</I
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-x</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File has <I
+CLASS="FIRSTTERM"
+>execute</I
+>
+	        permission</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-b</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File is a <A
+HREF="devref1.html#BLOCKDEVREF"
+>block
+	      device</A
+></TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-c</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File is a <A
+HREF="devref1.html#CHARDEVREF"
+>character
+	      device</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-g</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="FIRSTTERM"
+>sgid</I
+> flag set</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-p</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File is a <A
+HREF="special-chars.html#PIPEREF"
+>pipe</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-u</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="FIRSTTERM"
+>suid</I
+> flag set</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-S</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File is a <A
+HREF="devref1.html#SOCKETREF"
+>socket</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-k</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><SPAN
+CLASS="QUOTE"
+>"sticky bit"</SPAN
+> set</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-t</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File is associated with a
+	        <I
+CLASS="FIRSTTERM"
+>terminal</I
+></TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-N</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File modified since it was last read</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>F1 -nt F2</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File F1 is <EM
+>newer</EM
+> than F2 *</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-O</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>You own the file</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>F1 -ot F2</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>File F1 is <EM
+>older</EM
+> than F2 *</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>-G</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="FIRSTTERM"
+>Group id</I
+> of file same as
+	        yours</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>F1 -ef F2</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Files F1 and F2 are <I
+CLASS="FIRSTTERM"
+>hard links</I
+>
+	        to the same file *</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>!</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>NOT (inverts sense of above tests)</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+><TD
+>&nbsp;</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+><B
+CLASS="COMMAND"
+>*</B
+> <I
+CLASS="FIRSTTERM"
+>Binary</I
+> operator
+        (requires two operands).</P
+><P
+><A
+NAME="PARSUBTAB"
+></A
+></P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AEN22728"
+></A
+><P
+><B
+>Table B-4. Parameter Substitution and Expansion</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Expression</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Meaning</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${var}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Value of <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> (same as
+	        <TT
+CLASS="PARAMETER"
+><I
+>$var</I
+></TT
+>)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${var-$DEFAULT}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>If <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> not set, <A
+HREF="internal.html#EVALREF"
+>evaluate</A
+> expression
+	        as <TT
+CLASS="PARAMETER"
+><I
+>$DEFAULT</I
+></TT
+> *</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${var:-$DEFAULT}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>If <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> not set or is empty,
+              <I
+CLASS="FIRSTTERM"
+>evaluate</I
+> expression as
+                <TT
+CLASS="PARAMETER"
+><I
+>$DEFAULT</I
+></TT
+>
+		*</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${var=$DEFAULT}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>If <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> not set, evaluate expression
+	        as <TT
+CLASS="PARAMETER"
+><I
+>$DEFAULT</I
+></TT
+> *</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${var:=$DEFAULT}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>If <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> not set or is empty, evaluate expression
+	        as <TT
+CLASS="PARAMETER"
+><I
+>$DEFAULT</I
+></TT
+> *</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${var+$OTHER}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>If <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> set, evaluate expression as
+	        <TT
+CLASS="PARAMETER"
+><I
+>$OTHER</I
+></TT
+>, otherwise as null string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${var:+$OTHER}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>If <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> set, evaluate expression as
+	        <TT
+CLASS="PARAMETER"
+><I
+>$OTHER</I
+></TT
+>, otherwise as null string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${var?$ERR_MSG}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>If <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> not set, print
+		      <TT
+CLASS="PARAMETER"
+><I
+>$ERR_MSG</I
+></TT
+> and abort script
+		      with an exit status of <SPAN
+CLASS="ERRORCODE"
+>1</SPAN
+>.*</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${var:?$ERR_MSG}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>If <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> not set, print
+		      <TT
+CLASS="PARAMETER"
+><I
+>$ERR_MSG</I
+></TT
+> and abort script
+		      with an exit status of <SPAN
+CLASS="ERRORCODE"
+>1</SPAN
+>.*</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${!varprefix*}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Matches all previously declared variables beginning with
+	        <TT
+CLASS="PARAMETER"
+><I
+>varprefix</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${!varprefix@}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Matches all previously declared variables beginning with
+	        <TT
+CLASS="PARAMETER"
+><I
+>varprefix</I
+></TT
+></TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+><B
+CLASS="COMMAND"
+>*</B
+> If <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+>
+        <EM
+>is</EM
+> set, evaluate the expression as
+	<TT
+CLASS="PARAMETER"
+><I
+>$var</I
+></TT
+> with no side-effects.</P
+><P
+><B
+CLASS="COMMAND"
+># Note</B
+> that some of the above behavior
+	of operators has changed from earlier versions of Bash.</P
+><P
+><A
+NAME="STRINGOPSTAB"
+></A
+></P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AEN22828"
+></A
+><P
+><B
+>Table B-5. String Operations</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Expression</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Meaning</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${#string}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Length of <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${string:position}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Extract substring from <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+>
+		at <TT
+CLASS="PARAMETER"
+><I
+>$position</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${string:position:length}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Extract <TT
+CLASS="PARAMETER"
+><I
+>$length</I
+></TT
+>
+		characters substring from <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+>
+		at <TT
+CLASS="PARAMETER"
+><I
+>$position</I
+></TT
+> [zero-indexed,
+		first character is at position 0]</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${string#substring}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Strip shortest match of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+> from front of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${string##substring}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Strip longest match of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+> from front of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${string%substring}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Strip shortest match of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+> from back of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${string%%substring}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Strip longest match of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+> from back of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${string/substring/replacement}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Replace first match of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+> with
+	      <TT
+CLASS="PARAMETER"
+><I
+>$replacement</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${string//substring/replacement}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Replace <EM
+>all</EM
+> matches of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+> with
+	      <TT
+CLASS="PARAMETER"
+><I
+>$replacement</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${string/#substring/replacement}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>If <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+>
+	      matches <EM
+>front</EM
+> end of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+>, substitute
+	      <TT
+CLASS="PARAMETER"
+><I
+>$replacement</I
+></TT
+> for
+	      <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${string/%substring/replacement}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>If <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+>
+	      matches <EM
+>back</EM
+> end of
+	      <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+>, substitute
+	      <TT
+CLASS="PARAMETER"
+><I
+>$replacement</I
+></TT
+> for
+	      <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>expr match "$string" '$substring'</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Length of matching <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+>*
+	        at beginning of <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>expr "$string" : '$substring'</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Length of matching <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+>*
+	        at beginning of <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>expr index "$string" $substring</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Numerical position in <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+>
+		of first character in <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+>*
+		that matches [0 if no match, first character counts as
+		position 1]</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>expr substr $string $position
+	        $length</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Extract <TT
+CLASS="PARAMETER"
+><I
+>$length</I
+></TT
+> characters
+	        from <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+> starting at
+	        <TT
+CLASS="PARAMETER"
+><I
+>$position</I
+></TT
+> [0 if no match, first
+		character counts as position 1]</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>expr match "$string"
+	        '\($substring\)'</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Extract <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+>*, searching
+	        from beginning of <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>expr "$string" :
+	        '\($substring\)'</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Extract <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+>* , searching
+	        from beginning of <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>expr match "$string"
+	        '.*\($substring\)'</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Extract <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+>*, searching
+	        from end of <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>expr "$string" :
+	        '.*\($substring\)'</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Extract <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+>*, searching
+	        from end of <TT
+CLASS="PARAMETER"
+><I
+>$string</I
+></TT
+></TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+><B
+CLASS="COMMAND"
+>*</B
+> Where <TT
+CLASS="PARAMETER"
+><I
+>$substring</I
+></TT
+> is a
+        <A
+HREF="regexp.html#REGEXREF"
+>Regular Expression</A
+>.</P
+><P
+><A
+NAME="MISCTAB"
+></A
+></P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AEN22979"
+></A
+><P
+><B
+>Table B-6. Miscellaneous Constructs</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Expression</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Interpretation</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="http://tldp.org/LDP/abs/html/x17129.html#BRACKETSREF"
+>Brackets</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>if [ CONDITION ]</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="special-chars.html#LEFTBRACKET"
+>Test construct</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>if [[ CONDITION ]]</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="testconstructs.html#DBLBRACKETS"
+>Extended test construct</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>Array[1]=element1</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="arrays.html#ARRAYREF"
+>Array initialization</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+> [a-z]</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="http://tldp.org/LDP/abs/html/x17129.html#BRACKETSREF"
+>Range of
+	      characters</A
+> within a <A
+HREF="regexp.html#REGEXREF"
+>Regular
+	      Expression</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Curly Brackets</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${variable}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="parameter-substitution.html#PARAMSUBREF"
+>Parameter substitution</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>${!variable}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="ivr.html#IVRREF"
+>Indirect variable reference</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>{ command1; command2; . . . commandN; }</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="special-chars.html#CODEBLOCKREF"
+>Block of code</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>{string1,string2,string3,...}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="special-chars.html#BRACEEXPREF"
+>Brace expansion</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>{a..z}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="http://tldp.org/LDP/abs/html/bashver3.html#BRACEEXPREF3"
+>Extended brace expansion</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>{}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Text replacement, after <A
+HREF="moreadv.html#CURLYBRACKETSREF"
+>find</A
+> and <A
+HREF="moreadv.html#XARGSCURLYREF"
+>xargs</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="special-chars.html#PARENSREF"
+>Parentheses</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>( command1; command2 )</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Command group executed within a <A
+HREF="subshells.html#SUBSHELLSREF"
+>subshell</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>Array=(element1 element2 element3)</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="arrays.html#ARRAYINIT0"
+>Array initialization</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>result=$(COMMAND)</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="commandsub.html#CSPARENS"
+>Command substitution</A
+>,
+	      new style</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>&#62;(COMMAND)</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="process-sub.html#PROCESSSUBREF"
+>Process substitution</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>&#60;(COMMAND)</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Process substitution</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="dblparens.html"
+>Double Parentheses</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>(( var = 78 ))</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="dblparens.html#DBLPARENSREF"
+>Integer arithmetic</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>var=$(( 20 + 5 ))</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Integer arithmetic, with variable assignment</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>(( var++ ))</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="FIRSTTERM"
+>C-style</I
+> <A
+HREF="dblparens.html#PLUSPLUSREF"
+> variable increment</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>(( var-- ))</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="FIRSTTERM"
+>C-style</I
+> <A
+HREF="dblparens.html#PLUSPLUSREF"
+> variable decrement</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>(( var0 = var1&#60;98?9:21 ))</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="FIRSTTERM"
+>C-style</I
+> <A
+HREF="special-chars.html#CSTRINARY"
+> ternary</A
+> operation</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="quoting.html#QUOTINGREF"
+>Quoting</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>"$variable"</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="varsubn.html#DBLQUO"
+>"Weak" quoting</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>'string'</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="varsubn.html#SNGLQUO"
+>'Strong' quoting</A
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="commandsub.html#BACKQUOTESREF"
+>Back Quotes</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>result=`COMMAND`</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="commandsub.html#COMMANDSUBREF"
+>Command
+	        substitution</A
+>, classic style</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="contributed-scripts.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="sedawk.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Contributed Scripts</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>A Sed and Awk Micro-Primer</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

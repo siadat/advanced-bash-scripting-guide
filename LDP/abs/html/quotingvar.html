@@ -1,0 +1,749 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Quoting Variables</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Quoting"
+HREF="quoting.html"><LINK
+REL="PREVIOUS"
+TITLE="Quoting"
+HREF="quoting.html"><LINK
+REL="NEXT"
+TITLE="Escaping"
+HREF="escapingsection.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="quoting.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Quoting</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="escapingsection.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="QUOTINGVAR"
+></A
+>5.1. Quoting Variables</H1
+><P
+>When referencing a variable, it is generally advisable to
+	enclose its name in double quotes.
+	This prevents reinterpretation of all special characters within
+	the quoted string -- except <SPAN
+CLASS="TOKEN"
+>$</SPAN
+>, <SPAN
+CLASS="TOKEN"
+>`</SPAN
+>
+	(backquote), and <SPAN
+CLASS="TOKEN"
+>\</SPAN
+> (escape).
+
+	    <A
+NAME="AEN2630"
+HREF="quotingvar.html#FTN.AEN2630"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+	
+	Keeping <SPAN
+CLASS="TOKEN"
+>$</SPAN
+> as a special character within
+	double quotes permits referencing a quoted variable
+	(<TT
+CLASS="REPLACEABLE"
+><I
+>"$variable"</I
+></TT
+>), that is, replacing the
+	variable with its value (see <A
+HREF="varsubn.html#EX9"
+>Example 4-1</A
+>, above).</P
+><P
+><A
+NAME="WSQUO"
+></A
+></P
+><P
+>Use double quotes to prevent word splitting.
+
+	      <A
+NAME="AEN2688"
+HREF="quotingvar.html#FTN.AEN2688"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>
+
+	An argument enclosed in double quotes presents
+	itself as a single word, even if it contains <A
+HREF="special-chars.html#WHITESPACEREF"
+>whitespace</A
+> separators.</P
+><P
+><A
+NAME="VARSPLITTING"
+></A
+></P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>List="one two three"
+
+for a in $List     # Splits the variable in parts at whitespace.
+do
+  echo "$a"
+done
+# one
+# two
+# three
+
+echo "---"
+
+for a in "$List"   # Preserves whitespace in a single variable.
+do #     ^     ^
+  echo "$a"
+done
+# one two three</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>A more elaborate example:</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>variable1="a variable containing five words"
+COMMAND This is $variable1    # Executes COMMAND with 7 arguments:
+# "This" "is" "a" "variable" "containing" "five" "words"
+
+COMMAND "This is $variable1"  # Executes COMMAND with 1 argument:
+# "This is a variable containing five words"
+
+
+variable2=""    # Empty.
+
+COMMAND $variable2 $variable2 $variable2
+                # Executes COMMAND with no arguments. 
+COMMAND "$variable2" "$variable2" "$variable2"
+                # Executes COMMAND with 3 empty arguments. 
+COMMAND "$variable2 $variable2 $variable2"
+                # Executes COMMAND with 1 argument (2 spaces). 
+
+# Thanks, Stéphane Chazelas.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Enclosing the arguments to an <B
+CLASS="COMMAND"
+>echo</B
+>
+	statement in double quotes is necessary only when word splitting
+	or preservation of <A
+HREF="special-chars.html#WHITESPACEREF"
+>whitespace</A
+>
+	is an issue.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="WEIRDVARS"
+></A
+><P
+><B
+>Example 5-1. Echoing Weird Variables</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# weirdvars.sh: Echoing weird variables.
+
+echo
+
+var="'(]\\{}\$\""
+echo $var        # '(]\{}$"
+echo "$var"      # '(]\{}$"     Doesn't make a difference.
+
+echo
+
+IFS='\'
+echo $var        # '(] {}$"     \ converted to space. Why?
+echo "$var"      # '(]\{}$"
+
+# Examples above supplied by Stephane Chazelas.
+
+echo
+
+var2="\\\\\""
+echo $var2       #   "
+echo "$var2"     # \\"
+echo
+# But ... var2="\\\\"" is illegal. Why?
+var3='\\\\'
+echo "$var3"     # \\\\
+# Strong quoting works, though.
+
+
+# ************************************************************ #
+# As the first example above shows, nesting quotes is permitted.
+
+echo "$(echo '"')"           # "
+#    ^           ^
+
+
+# At times this comes in useful.
+
+var1="Two bits"
+echo "\$var1 = "$var1""      # $var1 = Two bits
+#    ^                ^
+
+# Or, as Chris Hiestand points out ...
+
+if [[ "$(du "$My_File1")" -gt "$(du "$My_File2")" ]]
+#     ^     ^         ^ ^     ^     ^         ^ ^
+then
+  ...
+fi
+# ************************************************************ #</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Single quotes (<SPAN
+CLASS="TOKEN"
+>' '</SPAN
+>) operate similarly to double
+	quotes, but do not permit referencing variables, since
+	the special meaning of <SPAN
+CLASS="TOKEN"
+>$</SPAN
+> is turned off.
+	Within single quotes, <EM
+>every</EM
+> special
+	character except <SPAN
+CLASS="TOKEN"
+>'</SPAN
+> gets interpreted literally.
+	Consider single quotes (<SPAN
+CLASS="QUOTE"
+>"full quoting"</SPAN
+>) to be a
+	stricter method of quoting than double quotes (<SPAN
+CLASS="QUOTE"
+>"partial
+	quoting"</SPAN
+>).</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Since even the escape character (<SPAN
+CLASS="TOKEN"
+>\</SPAN
+>)
+	gets a literal interpretation within single quotes, trying to
+	enclose a single quote within single quotes will not yield the
+	expected result.
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>echo "Why can't I write 's between single quotes"
+
+echo
+
+# The roundabout method.
+echo 'Why can'\''t I write '"'"'s between single quotes'
+#    |-------|  |----------|   |-----------------------|
+# Three single-quoted strings, with escaped and quoted single quotes between.
+
+# This example courtesy of Stéphane Chazelas.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN2630"
+HREF="quotingvar.html#AEN2630"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+><A
+NAME="QUOTINGBSL"
+></A
+></P
+><P
+>Encapsulating <SPAN
+CLASS="QUOTE"
+>"!"</SPAN
+> within double
+	      quotes gives an error when used <EM
+>from the command
+	      line</EM
+>. This is interpreted as a <A
+HREF="histcommands.html"
+>history command</A
+>. Within a script,
+	      though, this problem does not occur, since the Bash history
+	      mechanism is disabled then.</P
+><P
+>Of more concern is the <EM
+>apparently</EM
+>
+		    inconsistent behavior of <TT
+CLASS="REPLACEABLE"
+><I
+>\</I
+></TT
+>
+		    within double quotes, and especially following an
+	      <B
+CLASS="COMMAND"
+>echo -e</B
+> command.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo hello\!</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>hello!</TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo "hello\!"</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>hello\!</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo \</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>&#62;</TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo "\"</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>&#62;</TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo \a</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>a</TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo "\a"</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>\a</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo x\ty</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>xty</TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo "x\ty"</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>x\ty</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo -e x\ty</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>xty</TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo -e "x\ty"</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>x       y</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><P
+>Double quotes following an <I
+CLASS="FIRSTTERM"
+>echo</I
+>
+                <EM
+>sometimes</EM
+> escape
+                <TT
+CLASS="REPLACEABLE"
+><I
+>\</I
+></TT
+>. Moreover, the
+                <TT
+CLASS="OPTION"
+>-e</TT
+> option to <I
+CLASS="FIRSTTERM"
+>echo</I
+>
+                causes the <SPAN
+CLASS="QUOTE"
+>"\t"</SPAN
+> to be interpreted as a
+                <I
+CLASS="FIRSTTERM"
+>tab</I
+>.</P
+><P
+>(Thank you, Wayne Pollock, for pointing this out, and Geoff
+	      Lee and Daniel Barclay for explaining it.) </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN2688"
+HREF="quotingvar.html#AEN2688"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+><A
+NAME="WSPLITREF"
+></A
+><SPAN
+CLASS="QUOTE"
+>"Word
+	      splitting,"</SPAN
+> in this context, means dividing
+	      a character string into separate and discrete
+	      arguments.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="quoting.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="escapingsection.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Quoting</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="quoting.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Escaping</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

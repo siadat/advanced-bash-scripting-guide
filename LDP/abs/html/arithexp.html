@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Arithmetic Expansion</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Beyond the Basics"
+HREF="part3.html"><LINK
+REL="PREVIOUS"
+TITLE="Command Substitution"
+HREF="commandsub.html"><LINK
+REL="NEXT"
+TITLE="Recess Time"
+HREF="recess-time.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="commandsub.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="recess-time.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="ARITHEXP"
+></A
+>Chapter 13. Arithmetic Expansion</H1
+><P
+><A
+NAME="ARITHEXPREF"
+></A
+>Arithmetic expansion provides a
+	powerful tool for performing (integer) arithmetic
+	operations in scripts. Translating a string into a
+	numerical expression is relatively straightforward using
+	<I
+CLASS="FIRSTTERM"
+>backticks</I
+>, <I
+CLASS="FIRSTTERM"
+>double
+	parentheses</I
+>, or <I
+CLASS="FIRSTTERM"
+>let</I
+>.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="ARITHEXPVAR1"
+></A
+>Variations</B
+></P
+><DL
+><DT
+>Arithmetic expansion with <A
+HREF="commandsub.html#BACKQUOTESREF"
+>backticks</A
+> (often used in
+	  conjunction with <A
+HREF="moreadv.html#EXPRREF"
+>expr</A
+>)</DT
+><DD
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>z=`expr $z + 3`          # The 'expr' command performs the expansion.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+>Arithmetic expansion with <A
+HREF="dblparens.html"
+>double
+	  parentheses</A
+>, and using <A
+HREF="internal.html#LETREF"
+>let</A
+></DT
+><DD
+><P
+>The use of <I
+CLASS="FIRSTTERM"
+>backticks</I
+>
+	      (<I
+CLASS="FIRSTTERM"
+>backquotes</I
+>) in arithmetic
+	      expansion has been superseded by <I
+CLASS="FIRSTTERM"
+>double
+	      parentheses</I
+> --
+	      <TT
+CLASS="USERINPUT"
+><B
+>((...))</B
+></TT
+> and
+	      <TT
+CLASS="USERINPUT"
+><B
+>$((...))</B
+></TT
+> -- and also by the very
+	      convenient <A
+HREF="internal.html#LETREF"
+>let</A
+> construction.</P
+><P
+>	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>z=$(($z+3))
+z=$((z+3))                                  #  Also correct.
+                                            #  Within double parentheses,
+                                            #+ parameter dereferencing
+                                            #+ is optional.
+
+# $((EXPRESSION)) is arithmetic expansion.  #  Not to be confused with
+                                            #+ command substitution.
+
+
+
+# You may also use operations within double parentheses without assignment.
+
+  n=0
+  echo "n = $n"                             # n = 0
+
+  (( n += 1 ))                              # Increment.
+# (( $n += 1 )) is incorrect!
+  echo "n = $n"                             # n = 1
+
+
+let z=z+3
+let "z += 3"  #  Quotes permit the use of spaces in variable assignment.
+              #  The 'let' operator actually performs arithmetic evaluation,
+              #+ rather than expansion.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>Examples of arithmetic expansion in scripts:
+       <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+><A
+HREF="moreadv.html#EX45"
+>Example 16-9</A
+></P
+></LI
+><LI
+><P
+><A
+HREF="loops1.html#EX25"
+>Example 11-15</A
+></P
+></LI
+><LI
+><P
+><A
+HREF="arrays.html#EX66"
+>Example 27-1</A
+></P
+></LI
+><LI
+><P
+><A
+HREF="arrays.html#BUBBLE"
+>Example 27-11</A
+></P
+></LI
+><LI
+><P
+><A
+HREF="contributed-scripts.html#TREE"
+>Example A-16</A
+></P
+></LI
+></OL
+>
+     </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="commandsub.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="recess-time.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Command Substitution</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part3.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Recess Time</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

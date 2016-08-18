@@ -1,0 +1,426 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Quoting</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Basics"
+HREF="part2.html"><LINK
+REL="PREVIOUS"
+TITLE="Special Variable Types"
+HREF="othertypesv.html"><LINK
+REL="NEXT"
+TITLE="Quoting Variables"
+HREF="quotingvar.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="othertypesv.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="quotingvar.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="QUOTING"
+></A
+>Chapter 5. Quoting</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+>5.1. <A
+HREF="quotingvar.html"
+>Quoting Variables</A
+></DT
+><DT
+>5.2. <A
+HREF="escapingsection.html"
+>Escaping</A
+></DT
+></DL
+></DIV
+><P
+><A
+NAME="QUOTINGREF"
+></A
+></P
+><P
+>Quoting means just that, bracketing a string in quotes. This
+	has the effect of protecting <A
+HREF="special-chars.html#SCHARLIST1"
+>special
+	characters</A
+> in the string from reinterpretation
+	or expansion by the shell or shell script. (A character
+	is <SPAN
+CLASS="QUOTE"
+>"special"</SPAN
+> if it has an interpretation
+	other than its literal meaning. For example, the <A
+HREF="special-chars.html#ASTERISKREF"
+>asterisk *</A
+> represents
+	a <I
+CLASS="FIRSTTERM"
+>wild card</I
+> character in 
+	<A
+HREF="http://tldp.org/LDP/abs/html/globbingref.html"
+>globbing</A
+> and <A
+HREF="regexp.html#REGEXREF"
+>Regular Expressions</A
+>).</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ls -l [Vv]*</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>-rw-rw-r--    1 bozo  bozo       324 Apr  2 15:05 VIEWDATA.BAT
+ -rw-rw-r--    1 bozo  bozo       507 May  4 14:25 vartrace.sh
+ -rw-rw-r--    1 bozo  bozo       539 Apr 14 17:11 viewdata.sh</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ls -l '[Vv]*'</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>ls: [Vv]*: No such file or directory</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>	      
+	      </P
+><P
+><A
+NAME="QUOTINGDEF"
+></A
+></P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><A
+NAME="AEN2596"
+></A
+><P
+></P
+><P
+>In everyday speech or writing, when we
+      <SPAN
+CLASS="QUOTE"
+>"quote"</SPAN
+> a phrase, we set it apart and give it special
+      meaning. In a Bash script, when we <I
+CLASS="FIRSTTERM"
+>quote</I
+> a
+      string, we set it apart and protect its <I
+CLASS="FIRSTTERM"
+>literal</I
+>
+      meaning.</P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>Certain programs and utilities reinterpret or expand
+	special characters in a quoted string. An important use of
+	quoting is protecting a command-line parameter from the shell,
+	but still letting the calling program expand it.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>grep '[Ff]irst' *.txt</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>file1.txt:This is the first line of file1.txt.
+ file2.txt:This is the First line of file2.txt.</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><P
+>Note that the unquoted <TT
+CLASS="USERINPUT"
+><B
+>grep [Ff]irst *.txt</B
+></TT
+>
+	  works under the Bash shell.
+	    <A
+NAME="AEN2609"
+HREF="quoting.html#FTN.AEN2609"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+	  </P
+><P
+>Quoting can also suppress <A
+HREF="internal.html#ECHOREF"
+>echo's</A
+>
+        <SPAN
+CLASS="QUOTE"
+>"appetite"</SPAN
+> for newlines.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo $(ls -l)</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>total 8 -rw-rw-r-- 1 bo bo 13 Aug 21 12:57 t.sh -rw-rw-r-- 1 bo bo 78 Aug 21 12:57 u.sh</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo "$(ls -l)"</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>total 8
+ -rw-rw-r--  1 bo bo  13 Aug 21 12:57 t.sh
+ -rw-rw-r--  1 bo bo  78 Aug 21 12:57 u.sh</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN2609"
+HREF="quoting.html#AEN2609"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Unless there is a file named
+	    <TT
+CLASS="FILENAME"
+>first</TT
+> in the current working directory. Yet
+	    another reason to <I
+CLASS="FIRSTTERM"
+>quote</I
+>. (Thank you, Harald
+	    Koenig, for pointing this out.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="othertypesv.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="quotingvar.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Special Variable Types</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part2.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Quoting Variables</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

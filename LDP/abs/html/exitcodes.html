@@ -1,0 +1,621 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Exit Codes With Special Meanings</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Parsing and Managing Pathnames"
+HREF="pathmanagement.html"><LINK
+REL="NEXT"
+TITLE="A Detailed Introduction to I/O and I/O Redirection"
+HREF="ioredirintro.html"></HEAD
+><BODY
+CLASS="APPENDIX"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="pathmanagement.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ioredirintro.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="APPENDIX"
+><H1
+><A
+NAME="EXITCODES"
+></A
+>Appendix E. Exit Codes With Special Meanings</H1
+><P
+><A
+NAME="EXITCODESREF"
+></A
+></P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AEN23549"
+></A
+><P
+><B
+>Table E-1. <I
+CLASS="FIRSTTERM"
+>Reserved</I
+> Exit Codes</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Exit Code Number</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Meaning</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Example</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Comments</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>1</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Catchall for general errors</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>let "var1 = 1/0"</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Miscellaneous errors, such as <SPAN
+CLASS="QUOTE"
+>"divide by
+	        zero"</SPAN
+> and other impermissible operations</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>2</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Misuse of shell builtins (according to Bash documentation)</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>empty_function() {}</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><A
+HREF="debugging.html#MISSINGKEYWORD"
+>Missing keyword</A
+>
+              or command, or permission problem (and <A
+HREF="filearchiv.html#DIFFERR2"
+><I
+CLASS="FIRSTTERM"
+>diff</I
+> return code
+	      on a failed binary file comparison</A
+>).</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>126</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Command invoked cannot execute</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>/dev/null</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Permission problem or command is not an executable</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>127</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><SPAN
+CLASS="QUOTE"
+>"command not found"</SPAN
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>illegal_command</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Possible problem with <TT
+CLASS="VARNAME"
+>$PATH</TT
+> or a typo</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>128</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Invalid argument to <A
+HREF="exit-status.html#EXITCOMMANDREF"
+>exit</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>exit 3.14159</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><B
+CLASS="COMMAND"
+>exit</B
+> takes only integer args in the
+		range <SPAN
+CLASS="RETURNVALUE"
+>0 - 255</SPAN
+> (see
+		first footnote)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>128+n</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Fatal error signal <SPAN
+CLASS="QUOTE"
+>"n"</SPAN
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="FIRSTTERM"
+>kill -9</I
+> <TT
+CLASS="VARNAME"
+>$PPID</TT
+> of script</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="USERINPUT"
+><B
+>$?</B
+></TT
+> returns
+	      <SPAN
+CLASS="ERRORCODE"
+>137</SPAN
+> (128 + 9)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>130</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Script terminated by Control-C</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><EM
+>Ctl-C</EM
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Control-C is fatal error signal
+	      <SPAN
+CLASS="ERRORCODE"
+>2</SPAN
+>, (130 = 128 + 2, see above)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="OPTION"
+>255*</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Exit status out of range</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>exit <SPAN
+CLASS="RETURNVALUE"
+>-1</SPAN
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><B
+CLASS="COMMAND"
+>exit</B
+> takes only integer args in the
+	        range <SPAN
+CLASS="ERRORCODE"
+>0 - 255</SPAN
+></TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+>According to the above table, exit codes <SPAN
+CLASS="ERRORCODE"
+>1 - 2,
+        126 - 165, and 255</SPAN
+>
+
+	<A
+NAME="AEN23629"
+HREF="exitcodes.html#FTN.AEN23629"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+
+	have special meanings, and should therefore be avoided for
+	user-specified exit parameters. Ending a script with <I
+CLASS="FIRSTTERM"
+>exit
+	127</I
+> would certainly cause confusion when troubleshooting
+	(is the error code a <SPAN
+CLASS="QUOTE"
+>"command not found"</SPAN
+> or a
+	user-defined one?). However, many scripts use an <I
+CLASS="FIRSTTERM"
+>exit
+	1</I
+> as a general bailout-upon-error. Since exit code
+	<SPAN
+CLASS="ERRORCODE"
+>1</SPAN
+> signifies so many possible errors,
+	it is not particularly useful in debugging.</P
+><P
+><A
+NAME="SYSEXITSREF"
+></A
+></P
+><P
+>There has been an attempt to systematize exit status numbers
+	(see <TT
+CLASS="FILENAME"
+>/usr/include/sysexits.h</TT
+>),
+	but this is intended for C and C++ programmers. A similar
+	standard for scripting might be appropriate. The author of
+	this document proposes restricting user-defined exit codes to
+	the range <SPAN
+CLASS="RETURNVALUE"
+>64 - 113</SPAN
+> (in addition to
+	<SPAN
+CLASS="RETURNVALUE"
+>0</SPAN
+>, for success), to conform with
+	the C/C++ standard. This would allot 50 valid codes, and make
+	troubleshooting scripts more straightforward.
+	  <A
+NAME="AEN23647"
+HREF="exitcodes.html#FTN.AEN23647"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>
+	All user-defined exit codes in the accompanying examples to
+	this document conform to this standard, except where overriding
+	circumstances exist, as in <A
+HREF="internalvariables.html#TMDIN"
+>Example 9-2</A
+>.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Issuing a <A
+HREF="internalvariables.html#XSTATVARREF"
+>$?</A
+> from
+	the command-line after a shell script exits gives
+	results consistent with the table above only from the
+	Bash or <I
+CLASS="FIRSTTERM"
+>sh</I
+> prompt. Running the
+	<I
+CLASS="FIRSTTERM"
+>C-shell</I
+> or <I
+CLASS="FIRSTTERM"
+>tcsh</I
+>
+	may give different values in some cases.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN23629"
+HREF="exitcodes.html#AEN23629"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+><A
+NAME="EXCOOR"
+></A
+>Out of range exit values
+	  can result in unexpected exit codes. An exit value
+	  greater than <SPAN
+CLASS="ERRORCODE"
+>255</SPAN
+> returns an
+	  exit code <A
+HREF="ops.html#MODULOREF"
+>modulo</A
+>
+	  <SPAN
+CLASS="ERRORCODE"
+>256</SPAN
+>. For example, <I
+CLASS="FIRSTTERM"
+>exit
+	  3809</I
+> gives an exit code of <SPAN
+CLASS="ERRORCODE"
+>225</SPAN
+>
+	  (3809 % 256 = 225).</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN23647"
+HREF="exitcodes.html#AEN23647"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>An update of <TT
+CLASS="FILENAME"
+>/usr/include/sysexits.h</TT
+>
+	  allocates previously unused exit codes from <SPAN
+CLASS="RETURNVALUE"
+>64
+	  - 78</SPAN
+>.  It may be anticipated that the range of
+	  unallotted exit codes will be further restricted in the future.
+	  The author of this document will <EM
+>not</EM
+> do
+	  fixups on the scripting examples to conform to the changing
+	  standard. This should not cause any problems, since there
+	  is no overlap or conflict in usage of exit codes between
+	  compiled C/C++ binaries and shell scripts.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="pathmanagement.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ioredirintro.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Parsing and Managing Pathnames</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>A Detailed Introduction to I/O and I/O Redirection</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

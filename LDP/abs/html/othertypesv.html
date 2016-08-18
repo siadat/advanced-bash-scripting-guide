@@ -1,0 +1,1134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Special Variable Types</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Introduction to Variables and Parameters"
+HREF="variables.html"><LINK
+REL="PREVIOUS"
+TITLE="Bash Variables Are Untyped"
+HREF="untyped.html"><LINK
+REL="NEXT"
+TITLE="Quoting"
+HREF="quoting.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="untyped.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Introduction to Variables and Parameters</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="quoting.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="OTHERTYPESV"
+></A
+>4.4. Special Variable Types</H1
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="REPLACEABLE"
+><I
+>Local variables</I
+></TT
+></DT
+><DD
+><P
+>Variables <A
+HREF="subshells.html#SCOPEREF"
+>visible</A
+> only within a <A
+HREF="special-chars.html#CODEBLOCKREF"
+>code block</A
+> or function (see
+	    also <A
+HREF="localvar.html#LOCALREF"
+>local variables</A
+> in
+	    <A
+HREF="functions.html#FUNCTIONREF"
+>functions</A
+>)</P
+></DD
+><DT
+><A
+NAME="ENVREF"
+></A
+><TT
+CLASS="REPLACEABLE"
+><I
+>Environmental variables</I
+></TT
+></DT
+><DD
+><P
+>Variables that affect the behavior of the shell and
+	      user interface</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>In a more general context, each <A
+HREF="special-chars.html#PROCESSREF"
+>process</A
+> has an
+		<SPAN
+CLASS="QUOTE"
+>"environment"</SPAN
+>, that is, a group of
+		variables that the process may reference. In this sense,
+		the shell behaves like any other process.</P
+><P
+>Every time a shell starts, it creates shell variables that
+		correspond to its own environmental variables. Updating
+		or adding new environmental variables causes the
+		shell to update its environment, and all the shell's
+		<I
+CLASS="FIRSTTERM"
+>child processes</I
+> (the commands it
+		executes) inherit this environment.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The space allotted to the environment is limited.
+	        Creating too many environmental variables or ones that use up
+		excessive space may cause problems.</P
+><P
+>	          <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>eval "`seq 10000 | sed -e 's/.*/export var&#38;=ZZZZZZZZZZZZZZ/'`"</B
+></TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>du</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bash: /usr/bin/du: Argument list too long</TT
+>
+	          </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><P
+>Note: this <SPAN
+CLASS="QUOTE"
+>"error"</SPAN
+> has been fixed, as of
+	        kernel version 2.6.23.</P
+><P
+>(Thank you, Stéphane Chazelas for the clarification,
+	        and for providing the above example.)</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>If a script sets environmental variables, they need to be
+	      <SPAN
+CLASS="QUOTE"
+>"exported,"</SPAN
+> that is, reported to the
+	      <I
+CLASS="FIRSTTERM"
+>environment</I
+> local to
+	      the script. This is the function of the <A
+HREF="internal.html#EXPORTREF"
+>export</A
+> command.</P
+><A
+NAME="CHILDREF"
+></A
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>A script can <B
+CLASS="COMMAND"
+>export</B
+> variables only
+	      to child <A
+HREF="special-chars.html#PROCESSREF"
+>processes</A
+>,
+	      that is, only to commands or processes which that
+	      particular script initiates. A script invoked from
+	      the command-line <TT
+CLASS="REPLACEABLE"
+><I
+>cannot</I
+></TT
+>
+	      export variables back to the command-line environment.
+	      <EM
+><A
+HREF="internal.html#FORKREF"
+>Child processes</A
+>
+	      cannot export variables back to the parent processes that
+	      spawned them.</EM
+></P
+><P
+><A
+NAME="CHILDREF2"
+></A
+><TT
+CLASS="USERINPUT"
+><B
+>Definition:</B
+></TT
+>
+	      A <I
+CLASS="FIRSTTERM"
+>child process</I
+> is a
+	      subprocess launched by another process, its <A
+HREF="internal.html#PARENTREF"
+>parent</A
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="POSPARAMREF1"
+></A
+><TT
+CLASS="REPLACEABLE"
+><I
+>Positional parameters</I
+></TT
+></DT
+><DD
+><P
+>Arguments passed to the script from the command
+	      line
+		<A
+NAME="AEN2450"
+HREF="othertypesv.html#FTN.AEN2450"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+	      : <TT
+CLASS="VARNAME"
+>$0</TT
+>, <TT
+CLASS="VARNAME"
+>$1</TT
+>,
+	      <TT
+CLASS="VARNAME"
+>$2</TT
+>, <TT
+CLASS="VARNAME"
+>$3</TT
+> . . .</P
+><P
+><A
+NAME="SCRNAMEPARAM"
+></A
+><TT
+CLASS="VARNAME"
+>$0</TT
+> is
+	       the name of the script itself,
+	      <TT
+CLASS="VARNAME"
+>$1</TT
+> is the first argument,
+	      <TT
+CLASS="VARNAME"
+>$2</TT
+> the second, <TT
+CLASS="VARNAME"
+>$3</TT
+>
+	      the third, and so forth.
+
+	      <A
+NAME="AEN2464"
+HREF="othertypesv.html#FTN.AEN2464"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>
+
+	      <A
+NAME="BRACKETNOTATION"
+></A
+>
+	      After <TT
+CLASS="VARNAME"
+>$9</TT
+>, the arguments must be enclosed
+	      in brackets, for example, <TT
+CLASS="VARNAME"
+>${10}</TT
+>,
+	      <TT
+CLASS="VARNAME"
+>${11}</TT
+>, <TT
+CLASS="VARNAME"
+>${12}</TT
+>.</P
+><P
+>The special variables <A
+HREF="internalvariables.html#APPREF"
+>$* and $@</A
+>
+	      denote <EM
+>all</EM
+> the positional parameters.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX17"
+></A
+><P
+><B
+>Example 4-5. Positional Parameters</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# Call this script with at least 10 parameters, for example
+# ./scriptname 1 2 3 4 5 6 7 8 9 10
+MINPARAMS=10
+
+echo
+
+echo "The name of this script is \"$0\"."
+# Adds ./ for current directory
+echo "The name of this script is \"`basename $0`\"."
+# Strips out path name info (see 'basename')
+
+echo
+
+if [ -n "$1" ]              # Tested variable is quoted.
+then
+ echo "Parameter #1 is $1"  # Need quotes to escape #
+fi 
+
+if [ -n "$2" ]
+then
+ echo "Parameter #2 is $2"
+fi 
+
+if [ -n "$3" ]
+then
+ echo "Parameter #3 is $3"
+fi 
+
+# ...
+
+
+if [ -n "${10}" ]  # Parameters &#62; $9 must be enclosed in {brackets}.
+then
+ echo "Parameter #10 is ${10}"
+fi 
+
+echo "-----------------------------------"
+echo "All the command-line parameters are: "$*""
+
+if [ $# -lt "$MINPARAMS" ]
+then
+  echo
+  echo "This script needs at least $MINPARAMS command-line arguments!"
+fi  
+
+echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><I
+CLASS="FIRSTTERM"
+>Bracket notation</I
+> for positional
+	      parameters leads to a fairly simple way of referencing
+	      the <EM
+>last</EM
+> argument passed to a
+	      script on the command-line. This also requires <A
+HREF="bashver2.html#VARREFNEW"
+>indirect referencing</A
+>.</P
+><P
+><A
+NAME="LASTARGREF"
+></A
+></P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>args=$#           # Number of args passed.
+lastarg=${!args}
+# Note: This is an *indirect reference* to $args ...
+
+
+# Or:       lastarg=${!#}             (Thanks, Chris Monson.)
+# This is an *indirect reference* to the $# variable.
+# Note that lastarg=${!$#} doesn't work.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>Some scripts can perform different operations,
+	      depending on which name they are invoked with. For this
+	      to work, the script needs to check <TT
+CLASS="VARNAME"
+>$0</TT
+>,
+	      the name it was invoked by.
+
+	      <A
+NAME="AEN2501"
+HREF="othertypesv.html#FTN.AEN2501"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>
+	      
+	      There must also exist symbolic links to all the alternate
+	      names of the script. See <A
+HREF="basic.html#HELLOL"
+>Example 16-2</A
+>.</P
+><P
+><A
+NAME="NULLVAR"
+></A
+></P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>If a script expects a command-line parameter
+	      but is invoked without one, this may cause a <I
+CLASS="FIRSTTERM"
+>null
+	      variable assignment</I
+>, generally an undesirable
+	      result. One way to prevent this is to append an extra
+	      character to both sides of the assignment statement using
+	      the expected positional parameter.  </P
+></TD
+></TR
+></TABLE
+></DIV
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>variable1_=$1_  # Rather than variable1=$1
+# This will prevent an error, even if positional parameter is absent.
+
+critical_argument01=$variable1_
+
+# The extra character can be stripped off later, like so.
+variable1=${variable1_/_/}
+# Side effects only if $variable1_ begins with an underscore.
+# This uses one of the parameter substitution templates discussed later.
+# (Leaving out the replacement pattern results in a deletion.)
+
+#  A more straightforward way of dealing with this is
+#+ to simply test whether expected positional parameters have been passed.
+if [ -z $1 ]
+then
+  exit $E_MISSING_POS_PARAM
+fi
+
+
+#  However, as Fabian Kreutz points out,
+#+ the above method may have unexpected side-effects.
+#  A better method is parameter substitution:
+#         ${1:-$DefaultVal}
+#  See the "Parameter Substition" section
+#+ in the "Variables Revisited" chapter.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>---</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX18"
+></A
+><P
+><B
+>Example 4-6. <I
+CLASS="FIRSTTERM"
+>wh</I
+>, <I
+CLASS="FIRSTTERM"
+>                whois</I
+> domain name lookup</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# ex18.sh
+
+# Does a 'whois domain-name' lookup on any of 3 alternate servers:
+#                    ripe.net, cw.net, radb.net
+
+# Place this script -- renamed 'wh' -- in /usr/local/bin
+
+# Requires symbolic links:
+# ln -s /usr/local/bin/wh /usr/local/bin/wh-ripe
+# ln -s /usr/local/bin/wh /usr/local/bin/wh-apnic
+# ln -s /usr/local/bin/wh /usr/local/bin/wh-tucows
+
+E_NOARGS=75
+
+
+if [ -z "$1" ]
+then
+  echo "Usage: `basename $0` [domain-name]"
+  exit $E_NOARGS
+fi
+
+# Check script name and call proper server.
+case `basename $0` in    # Or:    case ${0##*/} in
+    "wh"       ) whois $1@whois.tucows.com;;
+    "wh-ripe"  ) whois $1@whois.ripe.net;;
+    "wh-apnic" ) whois $1@whois.apnic.net;;
+    "wh-cw"    ) whois $1@whois.cw.net;;
+    *          ) echo "Usage: `basename $0` [domain-name]";;
+esac 
+
+exit $?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>---</P
+><P
+><A
+NAME="SHIFTREF"
+></A
+></P
+><P
+>	      
+	      
+	      The <B
+CLASS="COMMAND"
+>shift</B
+> command reassigns the positional
+	      parameters, in effect shifting them to the left one notch.</P
+><P
+><TT
+CLASS="VARNAME"
+>$1</TT
+> &#60;--- <TT
+CLASS="VARNAME"
+>$2</TT
+>, <TT
+CLASS="VARNAME"
+>$2</TT
+> &#60;--- <TT
+CLASS="VARNAME"
+>$3</TT
+>, <TT
+CLASS="VARNAME"
+>$3</TT
+> &#60;--- <TT
+CLASS="VARNAME"
+>$4</TT
+>, etc.</P
+><P
+>The old <TT
+CLASS="VARNAME"
+>$1</TT
+> disappears, but
+	      <EM
+><TT
+CLASS="VARNAME"
+>$0</TT
+> (the script name)
+	      does not change</EM
+>. If you use a large number of
+	      positional parameters to a script, <B
+CLASS="COMMAND"
+>shift</B
+>
+	      lets you access those past <TT
+CLASS="LITERAL"
+>10</TT
+>, although
+	      <A
+HREF="othertypesv.html#BRACKETNOTATION"
+>{bracket} notation</A
+>
+	      also permits this.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX19"
+></A
+><P
+><B
+>Example 4-7. Using <I
+CLASS="FIRSTTERM"
+>shift</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# shft.sh: Using 'shift' to step through all the positional parameters.
+
+#  Name this script something like shft.sh,
+#+ and invoke it with some parameters.
+#+ For example:
+#             sh shft.sh a b c def 83 barndoor
+
+until [ -z "$1" ]  # Until all parameters used up . . .
+do
+  echo -n "$1 "
+  shift
+done
+
+echo               # Extra linefeed.
+
+# But, what happens to the "used-up" parameters?
+echo "$2"
+#  Nothing echoes!
+#  When $2 shifts into $1 (and there is no $3 to shift into $2)
+#+ then $2 remains empty.
+#  So, it is not a parameter *copy*, but a *move*.
+
+exit
+
+#  See also the echo-params.sh script for a "shiftless"
+#+ alternative method of stepping through the positional params.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>The <B
+CLASS="COMMAND"
+>shift</B
+> command can take a numerical
+	    parameter indicating how many positions to shift.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# shift-past.sh
+
+shift 3    # Shift 3 positions.
+#  n=3; shift $n
+#  Has the same effect.
+
+echo "$1"
+
+exit 0
+
+# ======================== #
+
+
+$ sh shift-past.sh 1 2 3 4 5
+4
+
+#  However, as Eleni Fragkiadaki, points out,
+#+ attempting a 'shift' past the number of
+#+ positional parameters ($#) returns an exit status of 1,
+#+ and the positional parameters themselves do not change.
+#  This means possibly getting stuck in an endless loop. . . .
+#  For example:
+#      until [ -z "$1" ]
+#      do
+#         echo -n "$1 "
+#         shift 20    #  If less than 20 pos params,
+#      done           #+ then loop never ends!
+#
+# When in doubt, add a sanity check. . . .
+#           shift 20 || break
+#                    ^^^^^^^^</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <B
+CLASS="COMMAND"
+>shift</B
+> command works in a similar
+	    fashion on parameters passed to a <A
+HREF="functions.html#FUNCTIONREF"
+>function</A
+>.  See <A
+HREF="assortedtips.html#MULTIPLICATION"
+>Example 36-18</A
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN2450"
+HREF="othertypesv.html#AEN2450"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Note that <A
+HREF="complexfunct.html#PASSEDARGS"
+><I
+CLASS="FIRSTTERM"
+>functions</I
+>
+		also take positional parameters</A
+>.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN2464"
+HREF="othertypesv.html#AEN2464"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+><A
+NAME="ARG0"
+></A
+>The process calling the
+		script sets the <TT
+CLASS="VARNAME"
+>$0</TT
+> parameter. By
+		convention, this parameter is the name of the script. See
+		the <A
+HREF="basic.html#MANREF"
+>manpage</A
+> (manual page)
+		for <B
+CLASS="COMMAND"
+>execv</B
+>.</P
+><P
+>From the <I
+CLASS="FIRSTTERM"
+>command-line</I
+>, however,
+	        <TT
+CLASS="VARNAME"
+>$0</TT
+> is the name of the shell.
+	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo $0</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bash</TT
+>
+
+<TT
+CLASS="PROMPT"
+>tcsh% </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo $0</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>tcsh</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN2501"
+HREF="othertypesv.html#AEN2501"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>If the the script is <A
+HREF="internal.html#SOURCEREF"
+>sourced</A
+> or <A
+HREF="basic.html#SYMLINKREF"
+>symlinked</A
+>, then
+                 this will not work. It is safer to check <A
+HREF="debugging.html#BASHSOURCEREF"
+>$BASH_Source</A
+>.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="untyped.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="quoting.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Bash Variables Are Untyped</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="variables.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Quoting</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

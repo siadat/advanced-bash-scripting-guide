@@ -1,0 +1,8410 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>System and Administrative Commands</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Commands"
+HREF="part4.html"><LINK
+REL="PREVIOUS"
+TITLE="Miscellaneous Commands"
+HREF="extmisc.html"><LINK
+REL="NEXT"
+TITLE="Analyzing a System Script"
+HREF="sysscripts.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="extmisc.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="sysscripts.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="SYSTEM"
+></A
+>Chapter 17. System and Administrative Commands</H1
+><P
+>The startup and shutdown scripts in 
+	<TT
+CLASS="FILENAME"
+>/etc/rc.d</TT
+> illustrate the uses
+	(and usefulness) of many of these comands. These are usually
+	invoked by <I
+CLASS="FIRSTTERM"
+>root</I
+> and used for system
+	maintenance or emergency filesystem repairs. Use with caution, as
+	some of these commands may damage your system if misused.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="USERSGROUPS1"
+></A
+>Users and Groups</B
+></P
+><DL
+><DT
+><A
+NAME="USERSREF"
+></A
+><B
+CLASS="COMMAND"
+>users</B
+></DT
+><DD
+><P
+>Show all logged on users. This is the approximate
+	      equivalent of <B
+CLASS="COMMAND"
+>who -q</B
+>.</P
+></DD
+><DT
+><A
+NAME="GROUPSCMDREF"
+></A
+><B
+CLASS="COMMAND"
+>groups</B
+></DT
+><DD
+><P
+>Lists the current user and the groups she belongs to.
+	       This corresponds to the <A
+HREF="internalvariables.html#GROUPSREF"
+>$GROUPS</A
+> internal variable,
+	       but gives the group names, rather than the numbers.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>groups</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bozita cdrom cdwriter audio xgrp</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo $GROUPS</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>501</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="CHOWNREF"
+></A
+><B
+CLASS="COMMAND"
+>chown</B
+>, <A
+NAME="CHGRPREF"
+></A
+><B
+CLASS="COMMAND"
+>chgrp</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>chown</B
+> command changes the
+	      ownership of a file or files. This command is a useful
+	      method that <I
+CLASS="FIRSTTERM"
+>root</I
+> can use to
+	      shift file ownership from one user to another. An ordinary
+	      user may not change the ownership of files, not even her
+	      own files.
+	         <A
+NAME="AEN14695"
+HREF="system.html#FTN.AEN14695"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+	      </P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>root# </TT
+><TT
+CLASS="USERINPUT"
+><B
+>chown bozo *.txt</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+></TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>The <B
+CLASS="COMMAND"
+>chgrp</B
+> command changes the
+	      <TT
+CLASS="REPLACEABLE"
+><I
+>group</I
+></TT
+> ownership of a file or
+	      files. You must be owner of the file(s) as well as a member
+	      of the destination group (or <I
+CLASS="FIRSTTERM"
+>root</I
+>)
+	      to use this operation.
+	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>chgrp --recursive dunderheads *.data
+#  The "dunderheads" group will now own all the "*.data" files
+#+ all the way down the $PWD directory tree (that's what "recursive" means).</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><A
+NAME="USERADDREF"
+></A
+><B
+CLASS="COMMAND"
+>useradd</B
+>, <B
+CLASS="COMMAND"
+>userdel</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>useradd</B
+> administrative command
+	      adds a user account to the system and creates a home
+	      directory for that particular user, if so specified. The
+	      corresponding <B
+CLASS="COMMAND"
+>userdel</B
+> command removes
+	      a user account from the system
+		 <A
+NAME="AEN14727"
+HREF="system.html#FTN.AEN14727"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>
+	      and deletes associated files.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <B
+CLASS="COMMAND"
+>adduser</B
+> command is a synonym
+	      for <B
+CLASS="COMMAND"
+>useradd</B
+> and is usually a symbolic link to
+	      it.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="USERMODREF"
+></A
+><B
+CLASS="COMMAND"
+>usermod</B
+></DT
+><DD
+><P
+>Modify a user account. Changes may be made to the password,
+	      group membership, expiration date, and other attributes of
+	      a given user's account. With this command, a user's password
+	      may be locked, which has the effect of disabling the
+	      account.</P
+></DD
+><DT
+><A
+NAME="GROUPMODREF"
+></A
+><B
+CLASS="COMMAND"
+>groupmod</B
+></DT
+><DD
+><P
+>Modify a given group. The group name and/or ID number may be
+	      changed using this command.</P
+></DD
+><DT
+><A
+NAME="IDREF"
+></A
+><B
+CLASS="COMMAND"
+>id</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>id</B
+> command lists the real and
+	      effective user IDs and the group IDs of the user
+	      associated with the current process. This is the
+	      counterpart to the <A
+HREF="internalvariables.html#UIDREF"
+>$UID</A
+>,
+	      <A
+HREF="internalvariables.html#EUIDREF"
+>$EUID</A
+>, and <A
+HREF="internalvariables.html#GROUPSREF"
+>$GROUPS</A
+> internal Bash
+	      variables.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>id</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>uid=501(bozo) gid=501(bozo) groups=501(bozo),22(cdrom),80(cdwriter),81(audio)</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo $UID</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>501</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <B
+CLASS="COMMAND"
+>id</B
+> command shows the
+	      <EM
+>effective</EM
+> IDs only when they differ
+	      from the <EM
+>real</EM
+> ones.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Also see <A
+HREF="internalvariables.html#AMIROOT"
+>Example 9-5</A
+>.</P
+></DD
+><DT
+><A
+NAME="LIDREF"
+></A
+><B
+CLASS="COMMAND"
+>lid</B
+></DT
+><DD
+><P
+>The <I
+CLASS="FIRSTTERM"
+>lid</I
+> (list ID) command
+	      shows the group(s) that a given user belongs to, or alternately,
+	      the users belonging to a given group. May be invoked only by
+	      root.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>root# </TT
+><TT
+CLASS="USERINPUT"
+><B
+>lid bozo</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+> bozo(gid=500)</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>root# </TT
+><TT
+CLASS="USERINPUT"
+><B
+>lid daemon</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+> bin(gid=1)
+  daemon(gid=2)
+  adm(gid=4)
+  lp(gid=7)</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="WHOREF"
+></A
+><B
+CLASS="COMMAND"
+>who</B
+></DT
+><DD
+><P
+>Show all users logged on to the system.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>who</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bozo  tty1     Apr 27 17:45
+ bozo  pts/0    Apr 27 17:46
+ bozo  pts/1    Apr 27 17:47
+ bozo  pts/2    Apr 27 17:49</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>The <TT
+CLASS="OPTION"
+>-m</TT
+> gives detailed information about
+	      only the current user. Passing any two arguments to
+	      <B
+CLASS="COMMAND"
+>who</B
+> is the equivalent of <B
+CLASS="COMMAND"
+>who
+	      -m</B
+>, as in <B
+CLASS="COMMAND"
+>who am i</B
+> or <B
+CLASS="COMMAND"
+>who
+	      The Man</B
+>.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>who -m</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>localhost.localdomain!bozo  pts/2    Apr 27 17:49</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+><A
+NAME="WHOAMIREF"
+></A
+><B
+CLASS="COMMAND"
+>whoami</B
+> is similar to <B
+CLASS="COMMAND"
+>who
+	      -m</B
+>, but only lists the user name.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>whoami</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bozo</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="WREF"
+></A
+><B
+CLASS="COMMAND"
+>w</B
+></DT
+><DD
+><P
+>Show all logged on users and the processes belonging to them. This is
+	      an extended version of <B
+CLASS="COMMAND"
+>who</B
+>. The output of <B
+CLASS="COMMAND"
+>w</B
+>
+	      may be piped to <A
+HREF="textproc.html#GREPREF"
+>grep</A
+> to find
+	      a specific user and/or process.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>w | grep startx</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bozo  tty1     -                 4:22pm  6:41   4.47s  0.45s  startx</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="LOGNAMEREF"
+></A
+><B
+CLASS="COMMAND"
+>logname</B
+></DT
+><DD
+><P
+>Show current user's login name (as found in
+	      <TT
+CLASS="FILENAME"
+>/var/run/utmp</TT
+>). This is a
+	      near-equivalent to <A
+HREF="system.html#WHOAMIREF"
+>whoami</A
+>,
+	      above.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>logname</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bozo</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>whoami</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bozo</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>However . . .</P
+><P
+>	    <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>su</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Password: ......</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash# </TT
+><TT
+CLASS="USERINPUT"
+><B
+>whoami</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>root</TT
+>
+<TT
+CLASS="PROMPT"
+>bash# </TT
+><TT
+CLASS="USERINPUT"
+><B
+>logname</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bozo</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>	    
+	    </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>While <B
+CLASS="COMMAND"
+>logname</B
+> prints the name
+	      of the logged in user, <B
+CLASS="COMMAND"
+>whoami</B
+> gives the
+	      name of the user attached to the current process. As we have
+	      just seen, sometimes these are not the same.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="SUREF"
+></A
+><B
+CLASS="COMMAND"
+>su</B
+></DT
+><DD
+><P
+>Runs a program or script as a
+	      <B
+CLASS="COMMAND"
+>s</B
+>ubstitute <B
+CLASS="COMMAND"
+>u</B
+>ser.
+	      <B
+CLASS="COMMAND"
+>su rjones</B
+> starts a shell as user
+	      <EM
+>rjones</EM
+>. A naked <B
+CLASS="COMMAND"
+>su</B
+>
+	      defaults to <I
+CLASS="FIRSTTERM"
+>root</I
+>.  See <A
+HREF="contributed-scripts.html#FIFO"
+>Example A-14</A
+>.</P
+></DD
+><DT
+><A
+NAME="SUDOREF"
+></A
+><B
+CLASS="COMMAND"
+>sudo</B
+></DT
+><DD
+><P
+>Runs a command as <I
+CLASS="FIRSTTERM"
+>root</I
+> (or
+	      another user). This may be used in a script, thus permitting
+	      a <I
+CLASS="FIRSTTERM"
+>regular user</I
+> to run the script.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# Some commands.
+sudo cp /root/secretfile /home/bozo/secret
+# Some more commands.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>The file <TT
+CLASS="FILENAME"
+>/etc/sudoers</TT
+> holds
+	      the names of users permitted to invoke
+	      <B
+CLASS="COMMAND"
+>sudo</B
+>.</P
+></DD
+><DT
+><A
+NAME="PASSWDREF"
+></A
+><B
+CLASS="COMMAND"
+>passwd</B
+></DT
+><DD
+><P
+>Sets, changes, or manages a user's password.</P
+><P
+>The <B
+CLASS="COMMAND"
+>passwd</B
+> command can be used in
+	      a script, but probably <EM
+>should not</EM
+> be.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="SETNEWPW"
+></A
+><P
+><B
+>Example 17-1. Setting a new password</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+#  setnew-password.sh: For demonstration purposes only.
+#                      Not a good idea to actually run this script.
+#  This script must be run as root.
+
+ROOT_UID=0         # Root has $UID 0.
+E_WRONG_USER=65    # Not root?
+
+E_NOSUCHUSER=70
+SUCCESS=0
+
+
+if [ "$UID" -ne "$ROOT_UID" ]
+then
+  echo; echo "Only root can run this script."; echo
+  exit $E_WRONG_USER
+else
+  echo
+  echo "You should know better than to run this script, root."
+  echo "Even root users get the blues... "
+  echo
+fi  
+
+
+username=bozo
+NEWPASSWORD=security_violation
+
+# Check if bozo lives here.
+grep -q "$username" /etc/passwd
+if [ $? -ne $SUCCESS ]
+then
+  echo "User $username does not exist."
+  echo "No password changed."
+  exit $E_NOSUCHUSER
+fi  
+
+echo "$NEWPASSWORD" | passwd --stdin "$username"
+#  The '--stdin' option to 'passwd' permits
+#+ getting a new password from stdin (or a pipe).
+
+echo; echo "User $username's password changed!"
+
+# Using the 'passwd' command in a script is dangerous.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>The <B
+CLASS="COMMAND"
+>passwd</B
+> command's <TT
+CLASS="OPTION"
+>-l</TT
+>,
+	      <TT
+CLASS="OPTION"
+>-u</TT
+>, and <TT
+CLASS="OPTION"
+>-d</TT
+> options permit
+	      locking, unlocking, and deleting a user's password. Only
+	      <I
+CLASS="FIRSTTERM"
+>root</I
+> may use these options.</P
+></DD
+><DT
+><A
+NAME="ACREF"
+></A
+><B
+CLASS="COMMAND"
+>ac</B
+></DT
+><DD
+><P
+>Show users' logged in time, as read from
+	      <TT
+CLASS="FILENAME"
+>/var/log/wtmp</TT
+>. This is one of the GNU
+	      accounting utilities.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ac</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>        total       68.08</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="LASTREF"
+></A
+><B
+CLASS="COMMAND"
+>last</B
+></DT
+><DD
+><P
+>List <EM
+>last</EM
+> logged in users, as read from
+	      <TT
+CLASS="FILENAME"
+>/var/log/wtmp</TT
+>. This command can also
+	      show remote logins.</P
+><P
+>For example, to show the last few times the system
+	      rebooted:</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>last reboot</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>reboot   system boot  2.6.9-1.667      Fri Feb  4 18:18          (00:02)    
+ reboot   system boot  2.6.9-1.667      Fri Feb  4 15:20          (01:27)    
+ reboot   system boot  2.6.9-1.667      Fri Feb  4 12:56          (00:49)    
+ reboot   system boot  2.6.9-1.667      Thu Feb  3 21:08          (02:17)    
+ . . .
+
+ wtmp begins Tue Feb  1 12:50:09 2005</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="NEWGRPREF"
+></A
+><B
+CLASS="COMMAND"
+>newgrp</B
+></DT
+><DD
+><P
+>Change user's <I
+CLASS="FIRSTTERM"
+>group ID</I
+> without
+	      logging out. This permits access to the new group's
+	      files. Since users may be members of multiple groups
+	      simultaneously, this command finds only limited use.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Kurt Glaesemann points out that the
+	      <I
+CLASS="FIRSTTERM"
+>newgrp</I
+> command could prove helpful
+	      in setting the default group permissions for files a user
+	      writes. However, the <A
+HREF="system.html#CHGRPREF"
+>chgrp</A
+>
+	      command might be more convenient for this purpose.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="TERMINALSSYS1"
+></A
+>Terminals</B
+></P
+><DL
+><DT
+><A
+NAME="TTYREF"
+></A
+><B
+CLASS="COMMAND"
+>tty</B
+></DT
+><DD
+><P
+>Echoes the name (filename) of the current user's terminal.
+	      Note that each separate <I
+CLASS="FIRSTTERM"
+>xterm</I
+>
+	      window counts as a different terminal.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>tty</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>/dev/pts/1</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="STTYREF"
+></A
+><B
+CLASS="COMMAND"
+>stty</B
+></DT
+><DD
+><P
+>Shows and/or changes terminal settings. This complex
+	      command, used in a script, can control terminal behavior
+	      and the way output displays. See the info page, and study
+	      it carefully.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="ERASE"
+></A
+><P
+><B
+>Example 17-2. Setting an <I
+CLASS="FIRSTTERM"
+>erase</I
+> character</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# erase.sh: Using "stty" to set an erase character when reading input.
+
+echo -n "What is your name? "
+read name                      #  Try to backspace
+                               #+ to erase characters of input.
+                               #  Problems?
+echo "Your name is $name."
+
+stty erase '#'                 #  Set "hashmark" (#) as erase character.
+echo -n "What is your name? "
+read name                      #  Use # to erase last character typed.
+echo "Your name is $name."
+
+exit 0
+
+# Even after the script exits, the new key value remains set.
+# Exercise: How would you reset the erase character to the default value?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="SECRETPW"
+></A
+><P
+><B
+>Example 17-3. <I
+CLASS="FIRSTTERM"
+>secret password</I
+>:
+	      Turning off terminal echoing </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# secret-pw.sh: secret password
+
+echo
+echo -n "Enter password "
+read passwd
+echo "password is $passwd"
+echo -n "If someone had been looking over your shoulder, "
+echo "your password would have been compromised."
+
+echo &#38;&#38; echo  # Two line-feeds in an "and list."
+
+
+stty -echo    # Turns off screen echo.
+#   May also be done with
+#   read -sp passwd
+#   A big Thank You to Leigh James for pointing this out.
+
+echo -n "Enter password again "
+read passwd
+echo
+echo "password is $passwd"
+echo
+
+stty echo     # Restores screen echo.
+
+exit 0
+
+# Do an 'info stty' for more on this useful-but-tricky command.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>A creative use of <B
+CLASS="COMMAND"
+>stty</B
+> is detecting a
+	      user keypress (without hitting
+	      <B
+CLASS="KEYCAP"
+>ENTER</B
+>).</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="KEYPRESS"
+></A
+><P
+><B
+>Example 17-4. Keypress detection</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# keypress.sh: Detect a user keypress ("hot keys").
+
+echo
+
+old_tty_settings=$(stty -g)   # Save old settings (why?).
+stty -icanon
+Keypress=$(head -c1)          # or $(dd bs=1 count=1 2&#62; /dev/null)
+                              # on non-GNU systems
+
+echo
+echo "Key pressed was \""$Keypress"\"."
+echo
+
+stty "$old_tty_settings"      # Restore old settings.
+
+# Thanks, Stephane Chazelas.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Also see <A
+HREF="internalvariables.html#TIMEOUT"
+>Example 9-3</A
+> and <A
+HREF="contributed-scripts.html#STOPWATCH"
+>Example A-43</A
+>.</P
+><P
+><A
+NAME="TERMINALSREF"
+></A
+></P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><A
+NAME="AEN15053"
+></A
+><P
+><B
+>terminals and modes</B
+></P
+><P
+>Normally, a terminal works in the
+	      <I
+CLASS="FIRSTTERM"
+>canonical</I
+> mode.  When a user hits a
+	      key, the resulting character does not immediately go to
+	      the program actually running in this terminal.  A buffer
+	      local to the terminal stores keystrokes. When the user
+	      hits the <B
+CLASS="KEYCAP"
+>ENTER</B
+> key, this sends all the
+	      stored keystrokes to the program running.  There is even
+	      a basic line editor inside the terminal.</P
+><P
+>	        <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>stty -a</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>speed 9600 baud; rows 36; columns 96; line = 0;
+ intr = ^C; quit = ^\; erase = ^H; kill = ^U; eof = ^D; eol = &#60;undef&#62;; eol2 = &#60;undef&#62;;
+ start = ^Q; stop = ^S; susp = ^Z; rprnt = ^R; werase = ^W; lnext = ^V; flush = ^O;
+ ...
+ isig icanon iexten echo echoe echok -echonl -noflsh -xcase -tostop -echoprt</TT
+>
+                </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>Using canonical mode, it is possible to redefine the
+              special keys for the local terminal line editor.
+
+	        <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>cat &#62; filexxx</B
+></TT
+>
+<TT
+CLASS="USERINPUT"
+><B
+>wha&#60;ctl-W&#62;I&#60;ctl-H&#62;foo bar&#60;ctl-U&#62;hello world&#60;ENTER&#62;</B
+></TT
+>
+<TT
+CLASS="USERINPUT"
+><B
+>&#60;ctl-D&#62;</B
+></TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>cat filexxx</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>hello world</TT
+>		
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>wc -c &#60; filexxx</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>12</TT
+>		
+                </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+
+              The process controlling the terminal receives only 12
+              characters (11 alphabetic ones, plus a newline), although
+              the user hit 26 keys.
+            </P
+><P
+>In non-canonical (<SPAN
+CLASS="QUOTE"
+>"raw"</SPAN
+>) mode, every
+              key hit (including special editing keys such as
+              <B
+CLASS="KEYCAP"
+>ctl-H</B
+>) sends a character immediately to
+              the controlling process.</P
+><P
+>The Bash prompt disables both <TT
+CLASS="OPTION"
+>icanon</TT
+>
+              and <TT
+CLASS="OPTION"
+>echo</TT
+>, since it replaces the basic
+              terminal line editor with its own more elaborate one. For
+              example, when you hit <B
+CLASS="KEYCAP"
+>ctl-A</B
+> at the Bash
+              prompt, there's no <B
+CLASS="KEYCAP"
+>^A</B
+> echoed by the
+              terminal, but Bash gets a <B
+CLASS="KEYCAP"
+>\1</B
+> character,
+              interprets it, and moves the cursor to the begining of
+              the line.</P
+><P
+><EM
+>Stéphane Chazelas</EM
+></P
+></DIV
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="SETTERMREF"
+></A
+><B
+CLASS="COMMAND"
+>setterm</B
+></DT
+><DD
+><P
+>Set certain terminal attributes. This command writes
+	      to its terminal's <TT
+CLASS="FILENAME"
+>stdout</TT
+> a string that
+	      changes the behavior of that terminal.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>setterm -cursor off</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>bash$</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>The <B
+CLASS="COMMAND"
+>setterm</B
+> command can be used within a
+	      script to change the appearance of text written to
+	      <TT
+CLASS="FILENAME"
+>stdout</TT
+>, although there are certainly
+	      <A
+HREF="colorizing.html#COLORIZINGREF"
+>better tools</A
+> available
+	      for this purpose.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>setterm -bold on
+echo bold hello
+
+setterm -bold off
+echo normal hello</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><A
+NAME="TSETREF"
+></A
+><B
+CLASS="COMMAND"
+>tset</B
+></DT
+><DD
+><P
+>Show or initialize terminal settings. 
+	      This is a less capable version of
+	      <B
+CLASS="COMMAND"
+>stty</B
+>.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>tset -r</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Terminal type is xterm-xfree86.
+ Kill is control-U (^U).
+ Interrupt is control-C (^C).</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="SETSERIALREF"
+></A
+><B
+CLASS="COMMAND"
+>setserial</B
+></DT
+><DD
+><P
+>Set or display serial port parameters. This command must be
+	      run by <I
+CLASS="FIRSTTERM"
+>root</I
+> and is usually found in a
+	      system setup script.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># From /etc/pcmcia/serial script:
+
+IRQ=`setserial /dev/$DEVICE | sed -e 's/.*IRQ: //'`
+setserial /dev/$DEVICE irq 0 ; setserial /dev/$DEVICE irq $IRQ</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><A
+NAME="GETTYREF"
+></A
+><B
+CLASS="COMMAND"
+>getty</B
+>, <A
+NAME="AGETTYREF"
+></A
+><B
+CLASS="COMMAND"
+>agetty</B
+></DT
+><DD
+><P
+>The initialization process for a terminal uses
+	      <B
+CLASS="COMMAND"
+>getty</B
+> or <B
+CLASS="COMMAND"
+>agetty</B
+>
+	      to set it up for login by a user. These commands are not
+	      used within user shell scripts. Their scripting counterpart
+	      is <B
+CLASS="COMMAND"
+>stty</B
+>.</P
+></DD
+><DT
+><A
+NAME="MESGREF"
+></A
+><B
+CLASS="COMMAND"
+>mesg</B
+></DT
+><DD
+><P
+>Enables or disables write access to the current user's
+	      terminal.  Disabling access would prevent another user
+	      on the network to <A
+HREF="communications.html#WRITEREF"
+>write</A
+>
+	      to the terminal.</P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/tip.gif"
+HSPACE="5"
+ALT="Tip"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>It can be quite annoying to have a message
+	      about ordering pizza suddenly appear in the middle of
+	      the text file you are editing. On a multi-user network,
+	      you might therefore wish to disable write access to your
+	      terminal when you need to avoid interruptions.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="WALLREF"
+></A
+><B
+CLASS="COMMAND"
+>wall</B
+></DT
+><DD
+><P
+>This is an acronym for <SPAN
+CLASS="QUOTE"
+>"<A
+HREF="communications.html#WRITEREF"
+>write</A
+> all,"</SPAN
+> i.e., sending
+	      a message to all users at every terminal logged into the
+	      network. It is primarily a system administrator's tool,
+	      useful, for example, when warning everyone that the
+	      system will shortly go down due to a problem (see <A
+HREF="here-docs.html#EX70"
+>Example 19-1</A
+>).</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>wall System going down for maintenance in 5 minutes!</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Broadcast message from bozo (pts/1) Sun Jul  8 13:53:27 2001...
+
+ System going down for maintenance in 5 minutes!</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>If write access to a particular terminal has been
+	      disabled with <B
+CLASS="COMMAND"
+>mesg</B
+>, then
+	      <B
+CLASS="COMMAND"
+>wall</B
+> cannot send a message to
+	      that terminal.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="STATISTICSSYS1"
+></A
+>Information and Statistics</B
+></P
+><DL
+><DT
+><A
+NAME="UNAMEREF"
+></A
+><B
+CLASS="COMMAND"
+>uname</B
+></DT
+><DD
+><P
+>Output system specifications (OS, kernel version,
+	      etc.) to <TT
+CLASS="FILENAME"
+>stdout</TT
+>.  Invoked with the
+	      <TT
+CLASS="OPTION"
+>-a</TT
+> option, gives verbose system info
+	      (see <A
+HREF="moreadv.html#EX41"
+>Example 16-5</A
+>). The <TT
+CLASS="OPTION"
+>-s</TT
+>
+	      option shows only the OS type.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>uname</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Linux</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>uname -s</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Linux</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>uname -a</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Linux iron.bozo 2.6.15-1.2054_FC5 #1 Tue Mar 14 15:48:33 EST 2006
+ i686 i686 i386 GNU/Linux</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="ARCHREF"
+></A
+><B
+CLASS="COMMAND"
+>arch</B
+></DT
+><DD
+><P
+>Show system architecture.
+	      Equivalent to <B
+CLASS="COMMAND"
+>uname -m</B
+>. See <A
+HREF="testbranch.html#CASECMD"
+>Example 11-27</A
+>.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>arch</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>i686</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>uname -m</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>i686</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="LASTCOMMREF"
+></A
+><B
+CLASS="COMMAND"
+>lastcomm</B
+></DT
+><DD
+><P
+>Gives information about previous commands, as stored
+	      in the <TT
+CLASS="FILENAME"
+>/var/account/pacct</TT
+> file. Command
+	      name and user name can be specified by options. This is
+	      one of the GNU accounting utilities.</P
+></DD
+><DT
+><A
+NAME="LASTLOGREF"
+></A
+><B
+CLASS="COMMAND"
+>lastlog</B
+></DT
+><DD
+><P
+>List the last login time of all system users. This
+	      references the <TT
+CLASS="FILENAME"
+>/var/log/lastlog</TT
+>
+	      file.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>lastlog</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>root          tty1                      Fri Dec  7 18:43:21 -0700 2001
+ bin                                     **Never logged in**
+ daemon                                  **Never logged in**
+ ...
+ bozo          tty1                      Sat Dec  8 21:14:29 -0700 2001</TT
+>
+
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>lastlog | grep root</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>root          tty1                      Fri Dec  7 18:43:21 -0700 2001</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>This command will fail if the user invoking
+		it does not have read permission for the
+		<TT
+CLASS="FILENAME"
+>/var/log/lastlog</TT
+> file.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="LSOFREF"
+></A
+><B
+CLASS="COMMAND"
+>lsof</B
+></DT
+><DD
+><P
+>List open files. This command outputs a detailed
+	      table of all currently open files and gives information
+	      about their owner, size, the processes associated with
+	      them, and more. Of course, <B
+CLASS="COMMAND"
+>lsof</B
+> may
+	      be piped to <A
+HREF="textproc.html#GREPREF"
+>grep</A
+> and/or
+	      <A
+HREF="awk.html#AWKREF"
+>awk</A
+> to parse and analyze
+	      its results.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>lsof</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>COMMAND    PID    USER   FD   TYPE     DEVICE    SIZE     NODE NAME
+ init         1    root  mem    REG        3,5   30748    30303 /sbin/init
+ init         1    root  mem    REG        3,5   73120     8069 /lib/ld-2.1.3.so
+ init         1    root  mem    REG        3,5  931668     8075 /lib/libc-2.1.3.so
+ cardmgr    213    root  mem    REG        3,5   36956    30357 /sbin/cardmgr
+ ...</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>The <B
+CLASS="COMMAND"
+>lsof</B
+> command is a useful,
+	      if complex administrative tool. If you are unable to
+	      dismount a filesystem and get an error message that it is
+	      still in use, then running <I
+CLASS="FIRSTTERM"
+>lsof</I
+> helps
+	      determine which files are still open on that filesystem. The
+	      <TT
+CLASS="OPTION"
+>-i</TT
+> option lists open network socket files,
+	      and this can help trace intrusion or hack attempts.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>lsof -an -i tcp</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>COMMAND  PID USER  FD  TYPE DEVICE SIZE NODE NAME
+ firefox 2330 bozo  32u IPv4   9956       TCP 66.0.118.137:57596-&#62;67.112.7.104:http ...
+ firefox 2330 bozo  38u IPv4  10535       TCP 66.0.118.137:57708-&#62;216.79.48.24:http ...</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>See <A
+HREF="networkprogramming.html#IPADDRESSES"
+>Example 30-2</A
+> for an effective use
+              of <B
+CLASS="COMMAND"
+>lsof</B
+>.</P
+></DD
+><DT
+><A
+NAME="STRACEREF"
+></A
+><B
+CLASS="COMMAND"
+>strace</B
+></DT
+><DD
+><P
+><B
+CLASS="COMMAND"
+>S</B
+>ystem <B
+CLASS="COMMAND"
+>trace</B
+>:
+	      diagnostic and debugging tool for tracing <I
+CLASS="FIRSTTERM"
+>system
+	      calls</I
+> and signals. This command and
+	      <B
+CLASS="COMMAND"
+>ltrace</B
+>, following, are useful for
+	      diagnosing why a given program or package fails to
+	      run . . . perhaps due to missing libraries or related
+	      causes.</P
+><P
+>	    <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>strace df</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>execve("/bin/df", ["df"], [/* 45 vars */]) = 0
+ uname({sys="Linux", node="bozo.localdomain", ...}) = 0
+ brk(0)                                  = 0x804f5e4
+
+ ...</TT
+>
+	    </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>This is the Linux equivalent of
+	      the Solaris <B
+CLASS="COMMAND"
+>truss</B
+> command.</P
+></DD
+><DT
+><A
+NAME="LTRACEREF"
+></A
+><B
+CLASS="COMMAND"
+>ltrace</B
+></DT
+><DD
+><P
+><B
+CLASS="COMMAND"
+>L</B
+>ibrary <B
+CLASS="COMMAND"
+>trace</B
+>:
+	      diagnostic and debugging tool that traces <I
+CLASS="FIRSTTERM"
+>library calls</I
+>
+	      invoked by a given command.</P
+><P
+>	    <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ltrace df</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>__libc_start_main(0x804a910, 1, 0xbfb589a4, 0x804fb70, 0x804fb68 &#60;unfinished ...&#62;:
+ setlocale(6, "")                                 = "en_US.UTF-8"
+bindtextdomain("coreutils", "/usr/share/locale") = "/usr/share/locale"
+textdomain("coreutils")                          = "coreutils"
+__cxa_atexit(0x804b650, 0, 0, 0x8052bf0, 0xbfb58908) = 0
+getenv("DF_BLOCK_SIZE")                          = NULL
+
+ ...</TT
+>
+	    </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="NCREF"
+></A
+><B
+CLASS="COMMAND"
+>nc</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>nc</B
+> (<I
+CLASS="FIRSTTERM"
+>netcat</I
+>)
+	      utility is a complete toolkit for connecting to and
+	      listening to TCP and UDP ports. It is useful as a diagnostic
+	      and testing tool and as a component in simple script-based HTTP
+	      clients and servers.</P
+><P
+>	    <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>nc localhost.localdomain 25</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>220 localhost.localdomain ESMTP Sendmail 8.13.1/8.13.1;
+ Thu, 31 Mar 2005 15:41:35 -0700</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>A real-life <A
+HREF="process-sub.html#NETCATEXAMPLE"
+>usage
+	      example</A
+>.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="ISCAN"
+></A
+><P
+><B
+>Example 17-5. Checking a remote server for
+              <I
+CLASS="FIRSTTERM"
+>identd</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#! /bin/sh
+## Duplicate DaveG's ident-scan thingie using netcat. Oooh, he'll be p*ssed.
+## Args: target port [port port port ...]
+## Hose stdout _and_ stderr together.
+##
+##  Advantages: runs slower than ident-scan, giving remote inetd less cause
+##+ for alarm, and only hits the few known daemon ports you specify.
+##  Disadvantages: requires numeric-only port args, the output sleazitude,
+##+ and won't work for r-services when coming from high source ports.
+# Script author: Hobbit &#60;hobbit@avian.org&#62;
+# Used in ABS Guide with permission.
+
+# ---------------------------------------------------
+E_BADARGS=65       # Need at least two args.
+TWO_WINKS=2        # How long to sleep.
+THREE_WINKS=3
+IDPORT=113         # Authentication "tap ident" port.
+RAND1=999
+RAND2=31337
+TIMEOUT0=9
+TIMEOUT1=8
+TIMEOUT2=4
+# ---------------------------------------------------
+
+case "${2}" in
+  "" ) echo "Need HOST and at least one PORT." ; exit $E_BADARGS ;;
+esac
+
+# Ping 'em once and see if they *are* running identd.
+nc -z -w $TIMEOUT0 "$1" $IDPORT || \
+{ echo "Oops, $1 isn't running identd." ; exit 0 ; }
+#  -z scans for listening daemons.
+#     -w $TIMEOUT = How long to try to connect.
+
+# Generate a randomish base port.
+RP=`expr $$ % $RAND1 + $RAND2`
+
+TRG="$1"
+shift
+
+while test "$1" ; do
+  nc -v -w $TIMEOUT1 -p ${RP} "$TRG" ${1} &#60; /dev/null &#62; /dev/null &#38;
+  PROC=$!
+  sleep $THREE_WINKS
+  echo "${1},${RP}" | nc -w $TIMEOUT2 -r "$TRG" $IDPORT 2&#62;&#38;1
+  sleep $TWO_WINKS
+
+# Does this look like a lamer script or what . . . ?
+# ABS Guide author comments: "Ain't really all that bad . . .
+#+                            kinda clever, actually."
+
+  kill -HUP $PROC
+  RP=`expr ${RP} + 1`
+  shift
+done
+
+exit $?
+
+#  Notes:
+#  -----
+
+#  Try commenting out line 30 and running this script
+#+ with "localhost.localdomain 25" as arguments.
+
+#  For more of Hobbit's 'nc' example scripts,
+#+ look in the documentation:
+#+ the /usr/share/doc/nc-X.XX/scripts directory.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>	      And, of course, there's Dr. Andrew Tridgell's notorious
+	      one-line script in the BitKeeper Affair:
+	        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>echo clone | nc thunk.org 5000 &#62; e2fsprogs.dat</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="FREEREF"
+></A
+><B
+CLASS="COMMAND"
+>free</B
+></DT
+><DD
+><P
+>Shows memory and cache usage in tabular form. The
+	      output of this command lends itself to parsing, using
+	      <A
+HREF="textproc.html#GREPREF"
+>grep</A
+>, <A
+HREF="awk.html#AWKREF"
+>awk</A
+> or <B
+CLASS="COMMAND"
+>Perl</B
+>. The
+	      <B
+CLASS="COMMAND"
+>procinfo</B
+> command shows all the
+	      information that <B
+CLASS="COMMAND"
+>free</B
+> does, and much
+	      more.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><B
+CLASS="COMMAND"
+>free</B
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>                total       used       free     shared    buffers     cached
+   Mem:         30504      28624       1880      15820       1608       16376
+   -/+ buffers/cache:      10640      19864
+   Swap:        68540       3128      65412</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>To show unused RAM memory:</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><B
+CLASS="COMMAND"
+>free | grep Mem | awk '{ print $4 }'</B
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>1880</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="PROCINFOREF"
+></A
+><B
+CLASS="COMMAND"
+>procinfo</B
+></DT
+><DD
+><P
+>Extract and list information and statistics from the
+	      <A
+HREF="devproc.html#DEVPROCREF"
+><TT
+CLASS="FILENAME"
+>/proc</TT
+>
+	      pseudo-filesystem</A
+>. This gives a very extensive and
+	      detailed listing.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>procinfo | grep Bootup</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Bootup: Wed Mar 21 15:15:50 2001    Load average: 0.04 0.21 0.34 3/47 6829</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="LSDEVREF"
+></A
+><B
+CLASS="COMMAND"
+>lsdev</B
+></DT
+><DD
+><P
+>List devices, that is, show installed hardware.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>lsdev</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Device            DMA   IRQ  I/O Ports
+ ------------------------------------------------
+ cascade             4     2 
+ dma                          0080-008f
+ dma1                         0000-001f
+ dma2                         00c0-00df
+ fpu                          00f0-00ff
+ ide0                     14  01f0-01f7 03f6-03f6
+ ...</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+></DD
+><DT
+><A
+NAME="DUREF"
+></A
+><B
+CLASS="COMMAND"
+>du</B
+></DT
+><DD
+><P
+>Show (disk) file usage, recursively. Defaults to current
+	      working directory, unless otherwise specified.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><B
+CLASS="COMMAND"
+>du -ach</B
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>1.0k    ./wi.sh
+ 1.0k    ./tst.sh
+ 1.0k    ./random.file
+ 6.0k    .
+ 6.0k    total</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="DFREF"
+></A
+><B
+CLASS="COMMAND"
+>df</B
+></DT
+><DD
+><P
+>Shows filesystem usage in tabular form.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><B
+CLASS="COMMAND"
+>df</B
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Filesystem           1k-blocks      Used Available Use% Mounted on
+ /dev/hda5               273262     92607    166547  36% /
+ /dev/hda8               222525    123951     87085  59% /home
+ /dev/hda7              1408796   1075744    261488  80% /usr</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="DMESGREF"
+></A
+><B
+CLASS="COMMAND"
+>dmesg</B
+></DT
+><DD
+><P
+>Lists all system bootup messages to
+	      <TT
+CLASS="FILENAME"
+>stdout</TT
+>. Handy for debugging and
+	      ascertaining which device drivers were installed
+	      and which system interrupts in use. The output
+	      of <B
+CLASS="COMMAND"
+>dmesg</B
+> may, of course, be
+	      parsed with <A
+HREF="textproc.html#GREPREF"
+>grep</A
+>,
+	      <A
+HREF="sedawk.html#SEDREF"
+>sed</A
+>, or <A
+HREF="awk.html#AWKREF"
+>awk</A
+> from within a script.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>dmesg | grep hda</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Kernel command line: ro root=/dev/hda2
+ hda: IBM-DLGA-23080, ATA DISK drive
+ hda: 6015744 sectors (3080 MB) w/96KiB Cache, CHS=746/128/63
+ hda: hda1 hda2 hda3 &#60; hda5 hda6 hda7 &#62; hda4</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="STATREF"
+></A
+><B
+CLASS="COMMAND"
+>stat</B
+></DT
+><DD
+><P
+>Gives detailed and verbose <EM
+>stat</EM
+>istics 
+	      on a given file (even a directory or device file) or set
+	      of files.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>stat test.cru</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>  File: "test.cru"
+   Size: 49970        Allocated Blocks: 100          Filetype: Regular File
+   Mode: (0664/-rw-rw-r--)         Uid: (  501/ bozo)  Gid: (  501/ bozo)
+ Device:  3,8   Inode: 18185     Links: 1    
+ Access: Sat Jun  2 16:40:24 2001
+ Modify: Sat Jun  2 16:40:24 2001
+ Change: Sat Jun  2 16:40:24 2001</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>If the target file does not exist, <B
+CLASS="COMMAND"
+>stat</B
+>
+	      returns an error message.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>stat nonexistent-file</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>nonexistent-file: No such file or directory</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>In a script, you can use <B
+CLASS="COMMAND"
+>stat</B
+> to extract
+	      information about files (and filesystems) and set variables
+	      accordingly.</P
+><P
+>	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# fileinfo2.sh
+
+# Per suggestion of Joël Bourquard and . . .
+# http://www.linuxquestions.org/questions/showthread.php?t=410766
+
+
+FILENAME=testfile.txt
+file_name=$(stat -c%n "$FILENAME")   # Same as "$FILENAME" of course.
+file_owner=$(stat -c%U "$FILENAME")
+file_size=$(stat -c%s "$FILENAME")
+#  Certainly easier than using "ls -l $FILENAME"
+#+ and then parsing with sed.
+file_inode=$(stat -c%i "$FILENAME")
+file_type=$(stat -c%F "$FILENAME")
+file_access_rights=$(stat -c%A "$FILENAME")
+
+echo "File name:          $file_name"
+echo "File owner:         $file_owner"
+echo "File size:          $file_size"
+echo "File inode:         $file_inode"
+echo "File type:          $file_type"
+echo "File access rights: $file_access_rights"
+
+exit 0
+
+sh fileinfo2.sh
+
+File name:          testfile.txt
+File owner:         bozo
+File size:          418
+File inode:         1730378
+File type:          regular file
+File access rights: -rw-rw-r--</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="VMSTATREF"
+></A
+><B
+CLASS="COMMAND"
+>vmstat</B
+></DT
+><DD
+><P
+>Display virtual memory statistics.</P
+><P
+>	    <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>vmstat</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>   procs                      memory    swap          io system         cpu
+ r  b  w   swpd   free   buff  cache  si  so    bi    bo   in    cs  us  sy id
+ 0  0  0      0  11040   2636  38952   0   0    33     7  271    88   8   3 89</TT
+>
+	    </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="UPTIMEREF"
+></A
+><B
+CLASS="COMMAND"
+>uptime</B
+></DT
+><DD
+><P
+>Shows how long the system has been running, along with
+	      associated statistics.</P
+><P
+>	    <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>uptime</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>10:28pm  up  1:57,  3 users,  load average: 0.17, 0.34, 0.27</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>A <I
+CLASS="FIRSTTERM"
+>load average</I
+> of 1 or less
+	      indicates that the system handles processes immediately. A load
+	      average greater than 1 means that processes are being queued. When
+	      the load average gets above 3 (on a single-core processor),
+	      then system performance is significantly degraded.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="HNAMEREF"
+></A
+><B
+CLASS="COMMAND"
+>hostname</B
+></DT
+><DD
+><P
+>Lists the system's host name. This command sets the host
+	      name in an <TT
+CLASS="FILENAME"
+>/etc/rc.d</TT
+>
+	      setup script (<TT
+CLASS="FILENAME"
+>/etc/rc.d/rc.sysinit</TT
+>
+	      or similar).  It is equivalent to <B
+CLASS="COMMAND"
+>uname
+	      -n</B
+>,  and a counterpart to the <A
+HREF="internalvariables.html#HOSTNAMEREF"
+>$HOSTNAME</A
+> internal
+	      variable.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>hostname</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>localhost.localdomain</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo $HOSTNAME</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>localhost.localdomain</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>Similar to the <B
+CLASS="COMMAND"
+>hostname</B
+> command are the
+	      <B
+CLASS="COMMAND"
+>domainname</B
+>,
+	      <B
+CLASS="COMMAND"
+>dnsdomainname</B
+>,
+	      <B
+CLASS="COMMAND"
+>nisdomainname</B
+>, and
+	      <B
+CLASS="COMMAND"
+>ypdomainname</B
+> commands. Use these to
+	      display or set the system DNS or NIS/YP domain name. Various
+	      options to <B
+CLASS="COMMAND"
+>hostname</B
+> also perform these
+	      functions.</P
+></DD
+><DT
+><A
+NAME="HOSTIDREF"
+></A
+><B
+CLASS="COMMAND"
+>hostid</B
+></DT
+><DD
+><P
+>Echo a 32-bit hexadecimal numerical identifier for the
+	      host machine.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>hostid</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>7f0100</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>This command allegedly fetches a <SPAN
+CLASS="QUOTE"
+>"unique"</SPAN
+>
+	      serial number for a particular system. Certain
+	      product registration procedures use this number
+	      to brand a particular user license. Unfortunately,
+	      <B
+CLASS="COMMAND"
+>hostid</B
+> only returns the machine
+	      network address in hexadecimal, with pairs of bytes
+	      transposed.</P
+><P
+>The network address of a typical non-networked Linux
+	      machine, is found in <TT
+CLASS="FILENAME"
+>/etc/hosts</TT
+>.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>cat /etc/hosts</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>127.0.0.1               localhost.localdomain localhost</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>As it happens, transposing the bytes of
+	      <TT
+CLASS="USERINPUT"
+><B
+>127.0.0.1</B
+></TT
+>, we get
+	      <TT
+CLASS="USERINPUT"
+><B
+>0.127.1.0</B
+></TT
+>, which translates in
+	      hex to <TT
+CLASS="USERINPUT"
+><B
+>007f0100</B
+></TT
+>, the exact equivalent
+	      of what <B
+CLASS="COMMAND"
+>hostid</B
+> returns, above. There
+	      exist only a few million other Linux machines with this
+	      identical <I
+CLASS="FIRSTTERM"
+>hostid</I
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="SARREF"
+></A
+><B
+CLASS="COMMAND"
+>sar</B
+></DT
+><DD
+><P
+>Invoking <B
+CLASS="COMMAND"
+>sar</B
+> (System Activity Reporter)
+	      gives a very detailed rundown on system statistics. The
+	      Santa Cruz Operation (<SPAN
+CLASS="QUOTE"
+>"Old"</SPAN
+> SCO) released
+	      <B
+CLASS="COMMAND"
+>sar</B
+> as Open Source in June, 1999.</P
+><P
+>This command is not part of the base Linux distribution,
+	      but may be obtained as part of the<A
+HREF="http://perso.wanadoo.fr/sebastien.godard/"
+TARGET="_top"
+>	      sysstat utilities</A
+> package, written by <A
+HREF="mailto:sebastien.godard@wanadoo.fr"
+TARGET="_top"
+>Sebastien
+	      Godard</A
+>.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>sar</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Linux 2.4.9 (brooks.seringas.fr) 	09/26/03
+
+10:30:00          CPU     %user     %nice   %system   %iowait     %idle
+10:40:00          all      2.21     10.90     65.48      0.00     21.41
+10:50:00          all      3.36      0.00     72.36      0.00     24.28
+11:00:00          all      1.12      0.00     80.77      0.00     18.11
+Average:          all      2.23      3.63     72.87      0.00     21.27
+
+14:32:30          LINUX RESTART
+
+15:00:00          CPU     %user     %nice   %system   %iowait     %idle
+15:10:00          all      8.59      2.40     17.47      0.00     71.54
+15:20:00          all      4.07      1.00     11.95      0.00     82.98
+15:30:00          all      0.79      2.94      7.56      0.00     88.71
+Average:          all      6.33      1.70     14.71      0.00     77.26</TT
+>
+           </PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="READELFREF"
+></A
+><B
+CLASS="COMMAND"
+>readelf</B
+></DT
+><DD
+><P
+>Show information and statistics about a designated
+	      <I
+CLASS="FIRSTTERM"
+>elf</I
+> binary. This is part of the
+	      <I
+CLASS="FIRSTTERM"
+>binutils</I
+> package.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>readelf -h /bin/bash</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>ELF Header:
+   Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+   Class:                             ELF32
+   Data:                              2's complement, little endian
+   Version:                           1 (current)
+   OS/ABI:                            UNIX - System V
+   ABI Version:                       0
+   Type:                              EXEC (Executable file)
+   . . .</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="SIZEREF"
+></A
+><B
+CLASS="COMMAND"
+>size</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>size [/path/to/binary]</B
+> command
+	      gives the segment sizes of a binary executable or archive file.
+	      This is mainly of use to programmers.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>size /bin/bash</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>   text    data     bss     dec     hex filename
+  495971   22496   17392  535859   82d33 /bin/bash</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="SYSLOG1"
+></A
+>System Logs</B
+></P
+><DL
+><DT
+><A
+NAME="LOGGERREF"
+></A
+><B
+CLASS="COMMAND"
+>logger</B
+></DT
+><DD
+><P
+>Appends a user-generated message to the system log
+	      (<TT
+CLASS="FILENAME"
+>/var/log/messages</TT
+>). You do not have
+	      to be <I
+CLASS="FIRSTTERM"
+>root</I
+> to invoke
+	      <B
+CLASS="COMMAND"
+>logger</B
+>.</P
+><P
+>	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>logger Experiencing instability in network connection at 23:10, 05/21.
+# Now, do a 'tail /var/log/messages'.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>By embedding a <B
+CLASS="COMMAND"
+>logger</B
+> command in a script,
+	      it is possible to write debugging information to
+	      <TT
+CLASS="FILENAME"
+>/var/log/messages</TT
+>.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>logger -t $0 -i Logging at line "$LINENO".
+# The "-t" option specifies the tag for the logger entry.
+# The "-i" option records the process ID.
+
+# tail /var/log/message
+# ...
+# Jul  7 20:48:58 localhost ./test.sh[1712]: Logging at line 3.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+            </P
+></DD
+><DT
+><A
+NAME="LOGROTATEREF"
+></A
+><B
+CLASS="COMMAND"
+>logrotate</B
+></DT
+><DD
+><P
+>This utility manages the system log files, rotating,
+	      compressing, deleting, and/or e-mailing them, as appropriate.
+	      This keeps the <TT
+CLASS="FILENAME"
+>/var/log</TT
+>
+	      from getting cluttered with old log files.
+	      Usually <A
+HREF="system.html#CRONREF"
+>cron</A
+> runs
+	      <B
+CLASS="COMMAND"
+>logrotate</B
+> on a daily basis.</P
+><P
+>Adding an appropriate entry to
+	       <TT
+CLASS="FILENAME"
+>/etc/logrotate.conf</TT
+> makes it possible
+	       to manage personal log files, as well as system-wide
+	       ones.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Stefano Falsetto has created <A
+HREF="http://www.gnu.org/software/rottlog/"
+TARGET="_top"
+>rottlog</A
+>,
+	     which he considers to be an improved version of
+	     <B
+CLASS="COMMAND"
+>logrotate</B
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="JOBCONTROLSYS1"
+></A
+>Job Control</B
+></P
+><DL
+><DT
+><A
+NAME="PPSSREF"
+></A
+><B
+CLASS="COMMAND"
+>ps</B
+></DT
+><DD
+><P
+><TT
+CLASS="REPLACEABLE"
+><I
+>P</I
+></TT
+>rocess
+	      <TT
+CLASS="REPLACEABLE"
+><I
+>S</I
+></TT
+>tatistics: lists currently
+	      executing processes by owner and PID (process ID). This
+	      is usually invoked with <TT
+CLASS="OPTION"
+>ax</TT
+> or
+	      <TT
+CLASS="OPTION"
+>aux</TT
+> options,
+	      and may be piped to <A
+HREF="textproc.html#GREPREF"
+>grep</A
+>
+	      or <A
+HREF="sedawk.html#SEDREF"
+>sed</A
+> to search for a
+	      specific process (see <A
+HREF="internal.html#EX44"
+>Example 15-14</A
+> and <A
+HREF="procref1.html#PIDID"
+>Example 29-3</A
+>).</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+> ps ax | grep sendmail</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>295 ?	   S	  0:00 sendmail: accepting connections on port 25</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>To display system processes in graphical <SPAN
+CLASS="QUOTE"
+>"tree"</SPAN
+>
+	      format: <B
+CLASS="COMMAND"
+>ps afjx</B
+> or
+	      <B
+CLASS="COMMAND"
+>ps ax --forest</B
+>.</P
+></DD
+><DT
+><A
+NAME="PGREPREF"
+></A
+><B
+CLASS="COMMAND"
+>pgrep</B
+>, <A
+NAME="PKILLREF"
+></A
+><B
+CLASS="COMMAND"
+>pkill</B
+></DT
+><DD
+><P
+>Combining the <B
+CLASS="COMMAND"
+>ps</B
+> command
+	      with <A
+HREF="textproc.html#GREPREF"
+>grep</A
+> or
+	      <A
+HREF="x9644.html#KILLREF"
+>kill</A
+>.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ps a | grep mingetty</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>2212 tty2     Ss+    0:00 /sbin/mingetty tty2
+ 2213 tty3     Ss+    0:00 /sbin/mingetty tty3
+ 2214 tty4     Ss+    0:00 /sbin/mingetty tty4
+ 2215 tty5     Ss+    0:00 /sbin/mingetty tty5
+ 2216 tty6     Ss+    0:00 /sbin/mingetty tty6
+ 4849 pts/2    S+     0:00 grep mingetty</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>pgrep mingetty</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>2212 mingetty
+ 2213 mingetty
+ 2214 mingetty
+ 2215 mingetty
+ 2216 mingetty</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>Compare the action of <B
+CLASS="COMMAND"
+>pkill</B
+> with <A
+HREF="x9644.html#KILLALLREF"
+>killall</A
+>.</P
+></DD
+><DT
+><A
+NAME="PSTREEREF"
+></A
+><B
+CLASS="COMMAND"
+>pstree</B
+></DT
+><DD
+><P
+>Lists currently executing processes in
+	      <SPAN
+CLASS="QUOTE"
+>"tree"</SPAN
+> format. The <TT
+CLASS="OPTION"
+>-p</TT
+> option
+	      shows the PIDs, as well as the process names.</P
+></DD
+><DT
+><A
+NAME="TOPREF"
+></A
+><B
+CLASS="COMMAND"
+>top</B
+></DT
+><DD
+><P
+>Continuously updated display of most cpu-intensive
+	      processes. The <TT
+CLASS="OPTION"
+>-b</TT
+> option displays in text
+	      mode, so that the output may be parsed or accessed from
+	      a script.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>top -b</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>  8:30pm  up 3 min,  3 users,  load average: 0.49, 0.32, 0.13
+ 45 processes: 44 sleeping, 1 running, 0 zombie, 0 stopped
+ CPU states: 13.6% user,  7.3% system,  0.0% nice, 78.9% idle
+ Mem:    78396K av,   65468K used,   12928K free,       0K shrd,    2352K buff
+ Swap:  157208K av,       0K used,  157208K free                   37244K cached
+
+   PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME COMMAND
+   848 bozo      17   0   996  996   800 R     5.6  1.2   0:00 top
+     1 root       8   0   512  512   444 S     0.0  0.6   0:04 init
+     2 root       9   0     0    0     0 SW    0.0  0.0   0:00 keventd
+   ...</TT
+>  
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="NICEREF"
+></A
+><B
+CLASS="COMMAND"
+>nice</B
+></DT
+><DD
+><P
+><A
+NAME="NICE2REF"
+></A
+></P
+><P
+>Run a background job with an altered
+	      priority. Priorities run from 19 (lowest) to -20
+	      (highest). Only <I
+CLASS="FIRSTTERM"
+>root</I
+> may set the
+	      negative (higher) priorities. Related commands are
+	      <B
+CLASS="COMMAND"
+>renice</B
+> and <B
+CLASS="COMMAND"
+>snice</B
+>,
+	      which change the priority of a running process or
+	      processes, and <B
+CLASS="COMMAND"
+>skill</B
+>, which sends a
+	      <A
+HREF="x9644.html#KILLREF"
+>kill</A
+> signal to a process
+	      or processes.</P
+></DD
+><DT
+><A
+NAME="NOHUPREF"
+></A
+><B
+CLASS="COMMAND"
+>nohup</B
+></DT
+><DD
+><P
+>Keeps a command running even after user logs off.
+	      The command will run as a foreground process unless followed
+	      by <SPAN
+CLASS="TOKEN"
+>&#38;</SPAN
+>.  If you use <B
+CLASS="COMMAND"
+>nohup</B
+>
+	      within a script, consider coupling it with a <A
+HREF="x9644.html#WAITREF"
+>wait</A
+> to avoid creating an
+	      <I
+CLASS="FIRSTTERM"
+>orphan</I
+> or
+	      <A
+HREF="x9644.html#ZOMBIEREF"
+>zombie</A
+> process.</P
+></DD
+><DT
+><A
+NAME="PIDOFREF"
+></A
+><B
+CLASS="COMMAND"
+>pidof</B
+></DT
+><DD
+><P
+>Identifies <I
+CLASS="FIRSTTERM"
+>process ID (PID)</I
+> of a
+	    running job. Since job control commands, such as <A
+HREF="x9644.html#KILLREF"
+>kill</A
+> and <A
+HREF="system.html#NICE2REF"
+>renice</A
+> act on the
+	    <I
+CLASS="FIRSTTERM"
+>PID</I
+> of a process (not its
+	    name), it is sometimes necessary to identify that
+	    <I
+CLASS="FIRSTTERM"
+>PID</I
+>. The <B
+CLASS="COMMAND"
+>pidof</B
+>
+	    command is the approximate counterpart to the <A
+HREF="internalvariables.html#PPIDREF"
+>$PPID</A
+> internal variable.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>pidof xclock</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>880</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="KILLPROCESS"
+></A
+><P
+><B
+>Example 17-6. <I
+CLASS="FIRSTTERM"
+>pidof</I
+> helps kill a process</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# kill-process.sh
+
+NOPROCESS=2
+
+process=xxxyyyzzz  # Use nonexistent process.
+# For demo purposes only...
+# ... don't want to actually kill any actual process with this script.
+#
+# If, for example, you wanted to use this script to logoff the Internet,
+#     process=pppd
+
+t=`pidof $process`       # Find pid (process id) of $process.
+# The pid is needed by 'kill' (can't 'kill' by program name).
+
+if [ -z "$t" ]           # If process not present, 'pidof' returns null.
+then
+  echo "Process $process was not running."
+  echo "Nothing killed."
+  exit $NOPROCESS
+fi  
+
+kill $t                  # May need 'kill -9' for stubborn process.
+
+# Need a check here to see if process allowed itself to be killed.
+# Perhaps another " t=`pidof $process` " or ...
+
+
+# This entire script could be replaced by
+#        kill $(pidof -x process_name)
+# or
+#        killall process_name
+# but it would not be as instructive.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="FUSERREF"
+></A
+><B
+CLASS="COMMAND"
+>fuser</B
+></DT
+><DD
+><P
+>Identifies the processes (by PID) that are accessing
+	      a given file, set of files, or directory. May also be
+	      invoked with the <TT
+CLASS="OPTION"
+>-k</TT
+> option, which kills
+	      those processes. This has interesting implications for
+	      system security, especially in scripts preventing
+	      unauthorized users from accessing system services.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>fuser -u /usr/bin/vim</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>/usr/bin/vim:         3207e(bozo)</TT
+>
+
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>fuser -u /dev/null</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>/dev/null:            3009(bozo)  3010(bozo)  3197(bozo)  3199(bozo)</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>One important application for <B
+CLASS="COMMAND"
+>fuser</B
+> is
+	     when physically inserting or removing storage media, such
+	     as CD ROM disks or USB flash drives. Sometimes trying
+	     a <A
+HREF="system.html#UMOUNTREF"
+>umount</A
+> fails with a
+	     <SPAN
+CLASS="ERRORNAME"
+>device is busy</SPAN
+> error message. This
+	     means that some user(s) and/or process(es) are accessing
+	     the device. An <B
+CLASS="COMMAND"
+>fuser -um /dev/device_name</B
+>
+	     will clear up the mystery, so you can kill any relevant
+	     processes.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>umount /mnt/usbdrive</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>umount: /mnt/usbdrive: device is busy</TT
+>
+
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>fuser -um /dev/usbdrive</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>/mnt/usbdrive:        1772c(bozo)</TT
+>
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>kill -9 1772</B
+></TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>umount /mnt/usbdrive</B
+></TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+> The <B
+CLASS="COMMAND"
+>fuser</B
+> command, invoked with the
+	      <TT
+CLASS="OPTION"
+>-n</TT
+> option identifies the processes
+	      accessing a <I
+CLASS="FIRSTTERM"
+>port</I
+>. This
+	      is especially useful in combination with <A
+HREF="system.html#NMAPREF"
+>nmap</A
+>.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>root# </TT
+><TT
+CLASS="USERINPUT"
+><B
+>nmap localhost.localdomain</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>PORT     STATE SERVICE
+ 25/tcp   open  smtp</TT
+>
+
+
+
+<TT
+CLASS="PROMPT"
+>root# </TT
+><TT
+CLASS="USERINPUT"
+><B
+>fuser -un tcp 25</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>25/tcp:               2095(root)</TT
+>
+
+<TT
+CLASS="PROMPT"
+>root# </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ps ax | grep 2095 | grep -v grep</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>2095 ?        Ss     0:00 sendmail: accepting connections</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+            </P
+></DD
+><DT
+><A
+NAME="CRONREF"
+></A
+><B
+CLASS="COMMAND"
+>cron</B
+></DT
+><DD
+><P
+>Administrative program scheduler, performing such
+	      duties as cleaning up and deleting system log files and
+	      updating the <SPAN
+CLASS="DATABASE"
+>slocate</SPAN
+> database. This
+	      is the <I
+CLASS="FIRSTTERM"
+>superuser</I
+> version of <A
+HREF="timedate.html#ATREF"
+>at</A
+> (although each user may have
+	      their own <TT
+CLASS="FILENAME"
+>crontab</TT
+> file which can be
+	      changed with the <B
+CLASS="COMMAND"
+>crontab</B
+> command).
+	      It runs as a <A
+HREF="communications.html#DAEMONREF"
+>daemon</A
+>
+	      and executes scheduled entries from
+	      <TT
+CLASS="FILENAME"
+>/etc/crontab</TT
+>.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Some flavors of Linux run
+	      <B
+CLASS="COMMAND"
+>crond</B
+>, Matthew Dillon's version of
+	      <B
+CLASS="COMMAND"
+>cron</B
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="RUNCONTROLSYS1"
+></A
+>Process Control and Booting</B
+></P
+><DL
+><DT
+><A
+NAME="INITREF"
+></A
+><B
+CLASS="COMMAND"
+>init</B
+></DT
+><DD
+><P
+><A
+NAME="INITTABREF"
+></A
+></P
+><P
+>The <B
+CLASS="COMMAND"
+>init</B
+> command is the <A
+HREF="internal.html#FORKREF"
+>parent</A
+> of all processes. Called
+	      in the final step of a bootup, <B
+CLASS="COMMAND"
+>init</B
+>
+	      determines the runlevel of the system from
+	      <TT
+CLASS="FILENAME"
+>/etc/inittab</TT
+>. Invoked by its alias
+	      <B
+CLASS="COMMAND"
+>telinit</B
+>, and by
+	      <I
+CLASS="FIRSTTERM"
+>root</I
+> only.</P
+></DD
+><DT
+><A
+NAME="TELINITREF"
+></A
+><B
+CLASS="COMMAND"
+>telinit</B
+></DT
+><DD
+><P
+>Symlinked to <B
+CLASS="COMMAND"
+>init</B
+>, this is a means of changing the system runlevel,
+	      usually done for system maintenance or emergency filesystem
+	      repairs. Invoked only by <I
+CLASS="FIRSTTERM"
+>root</I
+>. This
+	      command can be dangerous -- be certain you understand it
+	      well before using!</P
+></DD
+><DT
+><A
+NAME="RUNLEVELREF"
+></A
+><B
+CLASS="COMMAND"
+>runlevel</B
+></DT
+><DD
+><P
+>Shows the current and last runlevel, that is, whether the system
+	      is halted (runlevel <TT
+CLASS="LITERAL"
+>0</TT
+>), in single-user mode
+	      (<TT
+CLASS="LITERAL"
+>1</TT
+>), in multi-user mode (<TT
+CLASS="LITERAL"
+>2</TT
+>
+	      or <TT
+CLASS="LITERAL"
+>3</TT
+>), in X Windows (<TT
+CLASS="LITERAL"
+>5</TT
+>), or
+	      rebooting (<TT
+CLASS="LITERAL"
+>6</TT
+>). This command accesses the
+	      <TT
+CLASS="FILENAME"
+>/var/run/utmp</TT
+> file.</P
+></DD
+><DT
+><A
+NAME="HALTREF"
+></A
+><B
+CLASS="COMMAND"
+>halt</B
+>, <A
+NAME="SHUTDOWNREF"
+></A
+><B
+CLASS="COMMAND"
+>shutdown</B
+>, <A
+NAME="REBOOTREF"
+></A
+><B
+CLASS="COMMAND"
+>reboot</B
+></DT
+><DD
+><P
+>Command set to shut the system down, usually just prior to a power down.</P
+><DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/warning.gif"
+HSPACE="5"
+ALT="Warning"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>On some Linux distros, the <B
+CLASS="COMMAND"
+>halt</B
+> command
+	      has 755 permissions, so it can be invoked by a non-root user.
+	      A careless <I
+CLASS="FIRSTTERM"
+>halt</I
+> in a terminal or a script
+	      may shut down the system!</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="SERVICEREF"
+></A
+><B
+CLASS="COMMAND"
+>service</B
+></DT
+><DD
+><P
+>Starts or stops a system <I
+CLASS="FIRSTTERM"
+>service</I
+>.
+	    The startup scripts in <TT
+CLASS="FILENAME"
+>/etc/init.d</TT
+>
+	    and <TT
+CLASS="FILENAME"
+>/etc/rc.d</TT
+> use this
+	    command to start services at bootup.</P
+><P
+><A
+NAME="IPTABLES01"
+></A
+></P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>root# </TT
+><TT
+CLASS="USERINPUT"
+><B
+>/sbin/service iptables stop</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Flushing firewall rules:                                   [  OK  ]
+ Setting chains to policy ACCEPT: filter                    [  OK  ]
+ Unloading iptables modules:                                [  OK  ]</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="NETWORKSYS1"
+></A
+>Network</B
+></P
+><DL
+><DT
+><A
+NAME="NMAPREF"
+></A
+><B
+CLASS="COMMAND"
+>nmap</B
+></DT
+><DD
+><P
+><B
+CLASS="COMMAND"
+>N</B
+>etwork <B
+CLASS="COMMAND"
+>map</B
+>per
+	      and port scanner. This command scans a server to
+	      locate open ports and the services associated with those
+	      ports. It can also report information about packet filters and
+	      firewalls. This is an important security tool for locking down
+	      a network against hacking attempts.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+SERVER=$HOST                           # localhost.localdomain (127.0.0.1).
+PORT_NUMBER=25                         # SMTP port.
+
+nmap $SERVER | grep -w "$PORT_NUMBER"  # Is that particular port open?
+#              grep -w matches whole words only,
+#+             so this wouldn't match port 1025, for example.
+
+exit 0
+
+# 25/tcp     open        smtp</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><A
+NAME="IFCONFIGREF"
+></A
+><B
+CLASS="COMMAND"
+>ifconfig</B
+></DT
+><DD
+><P
+>Network <I
+CLASS="FIRSTTERM"
+>interface configuration</I
+>
+	      and tuning utility.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ifconfig -a</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>lo        Link encap:Local Loopback
+           inet addr:127.0.0.1  Mask:255.0.0.0
+           UP LOOPBACK RUNNING  MTU:16436  Metric:1
+           RX packets:10 errors:0 dropped:0 overruns:0 frame:0
+           TX packets:10 errors:0 dropped:0 overruns:0 carrier:0
+           collisions:0 txqueuelen:0 
+           RX bytes:700 (700.0 b)  TX bytes:700 (700.0 b)</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>The <B
+CLASS="COMMAND"
+>ifconfig</B
+> command is most often used
+	      at bootup to set up the interfaces, or to shut them down
+	      when rebooting.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># Code snippets from /etc/rc.d/init.d/network
+
+# ...
+
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] &#38;&#38; exit 0
+
+[ -x /sbin/ifconfig ] || exit 0
+
+# ...
+
+for i in $interfaces ; do
+  if ifconfig $i 2&#62;/dev/null | grep -q "UP" &#62;/dev/null 2&#62;&#38;1 ; then
+    action "Shutting down interface $i: " ./ifdown $i boot
+  fi
+#  The GNU-specific "-q" option to "grep" means "quiet", i.e.,
+#+ producing no output.
+#  Redirecting output to /dev/null is therefore not strictly necessary.
+       
+# ...
+
+echo "Currently active devices:"
+echo `/sbin/ifconfig | grep ^[a-z] | awk '{print $1}'`
+#                            ^^^^^  should be quoted to prevent globbing.
+#  The following also work.
+#    echo $(/sbin/ifconfig | awk '/^[a-z]/ { print $1 })'
+#    echo $(/sbin/ifconfig | sed -e 's/ .*//')
+#  Thanks, S.C., for additional comments.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>See also <A
+HREF="debugging.html#ONLINE"
+>Example 32-6</A
+>.</P
+></DD
+><DT
+><A
+NAME="NETSTATREF"
+></A
+><B
+CLASS="COMMAND"
+>netstat</B
+></DT
+><DD
+><P
+>Show current network statistics and information, 
+	      such as routing tables and active connections. This utility
+	      accesses information in <TT
+CLASS="FILENAME"
+>/proc/net</TT
+>
+	      (<A
+HREF="devproc.html"
+>Chapter 29</A
+>). See <A
+HREF="procref1.html#CONSTAT"
+>Example 29-4</A
+>.</P
+><P
+><B
+CLASS="COMMAND"
+>netstat -r</B
+> is equivalent to <A
+HREF="system.html#ROUTEREF"
+>route</A
+>.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>netstat</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Active Internet connections (w/o servers)
+ Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+ Active UNIX domain sockets (w/o servers)
+ Proto RefCnt Flags       Type       State         I-Node Path
+ unix  11     [ ]         DGRAM                    906    /dev/log
+ unix  3      [ ]         STREAM     CONNECTED     4514   /tmp/.X11-unix/X0
+ unix  3      [ ]         STREAM     CONNECTED     4513
+ . . .</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>A <B
+CLASS="COMMAND"
+>netstat -lptu</B
+> shows <A
+HREF="devref1.html#SOCKETREF"
+>sockets</A
+> that are listening
+	    to ports, and the associated processes. This can be useful
+	    for determining whether a computer has been hacked or
+	    compromised.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="IWCONFIGREF"
+></A
+><B
+CLASS="COMMAND"
+>iwconfig</B
+></DT
+><DD
+><P
+>This is the command set for configuring a wireless network.
+	      It is the wireless equivalent of <B
+CLASS="COMMAND"
+>ifconfig</B
+>,
+	      above.</P
+></DD
+><DT
+><A
+NAME="IPREF"
+></A
+><B
+CLASS="COMMAND"
+>ip</B
+></DT
+><DD
+><P
+>General purpose utility for setting up, changing, and
+	      analyzing <I
+CLASS="FIRSTTERM"
+>IP</I
+> (Internet Protocol)
+	      networks and attached devices. This command is part of
+	      the <I
+CLASS="FIRSTTERM"
+>iproute2</I
+> package.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ip link show</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>1: lo: &#60;LOOPBACK,UP&#62; mtu 16436 qdisc noqueue 
+     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+ 2: eth0: &#60;BROADCAST,MULTICAST&#62; mtu 1500 qdisc pfifo_fast qlen 1000
+     link/ether 00:d0:59:ce:af:da brd ff:ff:ff:ff:ff:ff
+ 3: sit0: &#60;NOARP&#62; mtu 1480 qdisc noop 
+     link/sit 0.0.0.0 brd 0.0.0.0</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ip route list</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>169.254.0.0/16 dev lo  scope link</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>Or, in a script:</P
+><P
+><A
+NAME="IPSCRIPT0"
+></A
+>
+              <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# Script by Juan Nicolas Ruiz
+# Used with his kind permission.
+
+# Setting up (and stopping) a GRE tunnel.
+
+
+# --- start-tunnel.sh ---
+
+LOCAL_IP="192.168.1.17"
+REMOTE_IP="10.0.5.33"
+OTHER_IFACE="192.168.0.100"
+REMOTE_NET="192.168.3.0/24"
+
+/sbin/ip tunnel add netb mode gre remote $REMOTE_IP \
+  local $LOCAL_IP ttl 255
+/sbin/ip addr add $OTHER_IFACE dev netb
+/sbin/ip link set netb up
+/sbin/ip route add $REMOTE_NET dev netb
+
+exit 0  #############################################
+
+# --- stop-tunnel.sh ---
+
+REMOTE_NET="192.168.3.0/24"
+
+/sbin/ip route del $REMOTE_NET dev netb
+/sbin/ip link set netb down
+/sbin/ip tunnel del netb
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="ROUTEREF"
+></A
+><B
+CLASS="COMMAND"
+>route</B
+></DT
+><DD
+><P
+>Show info about or make changes to the kernel routing table.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>route</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+ pm3-67.bozosisp *               255.255.255.255 UH       40 0          0 ppp0
+ 127.0.0.0       *               255.0.0.0       U        40 0          0 lo
+ default         pm3-67.bozosisp 0.0.0.0         UG       40 0          0 ppp0</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="IPTABLESREF"
+></A
+><B
+CLASS="COMMAND"
+>iptables</B
+></DT
+><DD
+><P
+> The <B
+CLASS="COMMAND"
+>iptables</B
+> command set is
+		  a packet filtering tool used mainly for such security
+		  purposes as setting up network firewalls. This
+		  is a complex tool, and a detailed explanation of
+		  its use is beyond the scope of this document. <A
+HREF="http://www.frozentux.net/iptables-tutorial/iptables-tutorial.html"
+TARGET="_top"
+>Oskar
+		  Andreasson's tutorial</A
+> is a reasonable starting
+		  point.</P
+><P
+>See also <A
+HREF="system.html#IPTABLES01"
+>shutting down
+        <I
+CLASS="FIRSTTERM"
+>iptables</I
+></A
+> and <A
+HREF="networkprogramming.html#IPADDRESSES"
+>Example 30-2</A
+>.</P
+></DD
+><DT
+><A
+NAME="CHKCONFIGREF"
+></A
+><B
+CLASS="COMMAND"
+>chkconfig</B
+></DT
+><DD
+><P
+>Check network and system configuration. This command
+	      lists and
+	      manages the network and system services started at bootup in
+	      the <TT
+CLASS="FILENAME"
+>/etc/rc?.d</TT
+>
+	      directory.</P
+><P
+>Originally a port from IRIX to Red Hat Linux,
+	      <B
+CLASS="COMMAND"
+>chkconfig</B
+> may not be part of the core
+	      installation of some Linux flavors.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>chkconfig --list</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>atd             0:off   1:off   2:off   3:on    4:on    5:on    6:off
+ rwhod           0:off   1:off   2:off   3:off   4:off   5:off   6:off
+ ...</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="TCPDUMPREF"
+></A
+><B
+CLASS="COMMAND"
+>tcpdump</B
+></DT
+><DD
+><P
+>Network packet <SPAN
+CLASS="QUOTE"
+>"sniffer."</SPAN
+> This is a tool for
+	      analyzing and troubleshooting traffic on a network by dumping
+	      packet headers that match specified criteria.</P
+><P
+>Dump ip packet traffic between hosts
+	        <EM
+>bozoville</EM
+> and
+	        <EM
+>caduceus</EM
+>:</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>tcpdump ip host bozoville and caduceus</B
+></TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><P
+>Of course, the output of <B
+CLASS="COMMAND"
+>tcpdump</B
+> can be
+	        parsed with certain of the previously discussed <A
+HREF="textproc.html#TPCOMMANDLISTING1"
+>text processing
+		utilities</A
+>.</P
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="FILESYSTEMSYS1"
+></A
+>Filesystem</B
+></P
+><DL
+><DT
+><A
+NAME="MOUNTREF"
+></A
+><B
+CLASS="COMMAND"
+>mount</B
+></DT
+><DD
+><P
+>Mount a filesystem, usually on an external device,
+	      such as a floppy or CDROM. <A
+NAME="FSTABREF"
+></A
+>The file
+	      <TT
+CLASS="FILENAME"
+>/etc/fstab</TT
+> provides a handy listing
+	      of available filesystems, partitions, and devices,
+	      including options, that may be automatically or manually
+	      mounted. The file <TT
+CLASS="FILENAME"
+>/etc/mtab</TT
+> shows
+	      the currently mounted filesystems and partitions
+	      (including the virtual ones, such as <TT
+CLASS="FILENAME"
+>/proc</TT
+>).</P
+><P
+><B
+CLASS="COMMAND"
+>mount -a</B
+> mounts all filesystems and
+	      partitions listed in <TT
+CLASS="FILENAME"
+>/etc/fstab</TT
+>,
+	      except those with a <TT
+CLASS="OPTION"
+>noauto</TT
+>
+	      option. At bootup, a startup script in
+	      <TT
+CLASS="FILENAME"
+>/etc/rc.d</TT
+>
+	      (<TT
+CLASS="FILENAME"
+>rc.sysinit</TT
+> or something similar)
+	      invokes this to get everything mounted.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>mount -t iso9660 /dev/cdrom /mnt/cdrom
+# Mounts CD ROM. ISO 9660 is a standard CD ROM filesystem.
+mount /mnt/cdrom
+# Shortcut, if /mnt/cdrom listed in /etc/fstab</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+     </P
+><P
+><A
+NAME="ISOMOUNTREF0"
+></A
+></P
+><P
+>The versatile <I
+CLASS="FIRSTTERM"
+>mount</I
+> command can even
+       mount an ordinary file on a block device, and the file will
+       act as if it were a filesystem. <I
+CLASS="FIRSTTERM"
+>Mount</I
+>
+       accomplishes that by associating the file with a <A
+HREF="devref1.html#LOOPBACKREF"
+>loopback device</A
+>. One application of
+       this is to mount and examine an ISO9660 filesystem image before
+       burning it onto a CDR.
+
+	  <A
+NAME="AEN16255"
+HREF="system.html#FTN.AEN16255"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>
+
+       </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="ISOMOUNTREF"
+></A
+><P
+><B
+>Example 17-7. Checking a CD image</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># As root...
+
+mkdir /mnt/cdtest  # Prepare a mount point, if not already there.
+
+mount -r -t iso9660 -o loop cd-image.iso /mnt/cdtest   # Mount the image.
+#                  "-o loop" option equivalent to "losetup /dev/loop0"
+cd /mnt/cdtest     # Now, check the image.
+ls -alR            # List the files in the directory tree there.
+                   # And so forth.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="UMOUNTREF"
+></A
+><B
+CLASS="COMMAND"
+>umount</B
+></DT
+><DD
+><P
+>Unmount a currently mounted filesystem. Before physically removing a
+	      previously mounted floppy or CDROM disk, the device must be
+	      <B
+CLASS="COMMAND"
+>umount</B
+>ed, else filesystem corruption may result.
+	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>umount /mnt/cdrom
+# You may now press the eject button and safely remove the disk.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <B
+CLASS="COMMAND"
+>automount</B
+> utility, if
+		properly installed, can mount and unmount floppies or
+		CDROM disks as they are accessed or removed. On
+		<SPAN
+CLASS="QUOTE"
+>"multispindle"</SPAN
+> laptops with swappable
+		floppy and optical drives, this can cause problems,
+		however.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="GNOMEMOUNTREF"
+></A
+><B
+CLASS="COMMAND"
+>gnome-mount</B
+></DT
+><DD
+><P
+>The newer Linux distros have deprecated
+	    <B
+CLASS="COMMAND"
+>mount</B
+> and <B
+CLASS="COMMAND"
+>umount</B
+>.
+	    The successor, for command-line mounting of removable storage
+	    devices, is <B
+CLASS="COMMAND"
+>gnome-mount</B
+>. It can take the
+	    <TT
+CLASS="OPTION"
+>-d</TT
+> option to mount a <A
+HREF="devref1.html#DEVFILEREF"
+>device file</A
+> by its listing in
+	    <TT
+CLASS="FILENAME"
+>/dev</TT
+>.</P
+><P
+>For example, to mount a USB flash drive:</P
+><P
+>	    <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>gnome-mount -d /dev/sda1</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>gnome-mount 0.4</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>df</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>. . .
+ /dev/sda1                63584     12034     51550  19% /media/disk</TT
+>
+ </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+></DD
+><DT
+><A
+NAME="SYNCREF"
+></A
+><B
+CLASS="COMMAND"
+>sync</B
+></DT
+><DD
+><P
+>Forces an immediate write of all updated data from
+	      buffers to hard drive (synchronize drive
+	      with buffers). While not strictly necessary, a
+	      <B
+CLASS="COMMAND"
+>sync</B
+> assures the sys admin or
+	      user that the data just changed will survive a sudden
+	      power failure. In the olden days, a <TT
+CLASS="USERINPUT"
+><B
+>sync;
+	      sync</B
+></TT
+> (twice, just to make absolutely sure) was a
+	      useful precautionary measure before a system reboot.</P
+><P
+>At times, you may wish to force an immediate buffer
+	      flush, as when securely deleting a file (see <A
+HREF="extmisc.html#BLOTOUT"
+>Example 16-61</A
+>) or when the lights begin to
+	      flicker.</P
+></DD
+><DT
+><A
+NAME="LOSETUPREF"
+></A
+><B
+CLASS="COMMAND"
+>losetup</B
+></DT
+><DD
+><P
+>Sets up and configures <A
+HREF="devref1.html#LOOPBACKREF"
+>	      loopback devices</A
+>.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="CREATEFS"
+></A
+><P
+><B
+>Example 17-8. Creating a filesystem in a file</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>SIZE=1000000  # 1 meg
+
+head -c $SIZE &#60; /dev/zero &#62; file  # Set up file of designated size.
+losetup /dev/loop0 file           # Set it up as loopback device.
+mke2fs /dev/loop0                 # Create filesystem.
+mount -o loop /dev/loop0 /mnt     # Mount it.
+
+# Thanks, S.C.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="MKSWAPREF"
+></A
+><B
+CLASS="COMMAND"
+>mkswap</B
+></DT
+><DD
+><P
+>Creates a swap partition or file. The swap area must
+	      subsequently be enabled with
+	      <B
+CLASS="COMMAND"
+>swapon</B
+>.</P
+></DD
+><DT
+><A
+NAME="SWAPONREF"
+></A
+><B
+CLASS="COMMAND"
+>swapon</B
+>, <A
+NAME="SWAPOFFREF"
+></A
+><B
+CLASS="COMMAND"
+>swapoff</B
+></DT
+><DD
+><P
+>Enable / disable swap partitition or file.
+	      These commands usually take effect at bootup and
+	      shutdown.</P
+></DD
+><DT
+><A
+NAME="MKE2FSREF"
+></A
+><B
+CLASS="COMMAND"
+>mke2fs</B
+></DT
+><DD
+><P
+>Create a Linux <I
+CLASS="FIRSTTERM"
+>ext2</I
+>
+	      filesystem. This command must be invoked as
+	      <I
+CLASS="FIRSTTERM"
+>root</I
+>.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="ADDDRV"
+></A
+><P
+><B
+>Example 17-9. Adding a new hard drive</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# Adding a second hard drive to system.
+# Software configuration. Assumes hardware already mounted.
+# From an article by the author of the ABS Guide.
+# In issue #38 of _Linux Gazette_, http://www.linuxgazette.com.
+
+ROOT_UID=0     # This script must be run as root.
+E_NOTROOT=67   # Non-root exit error.
+
+if [ "$UID" -ne "$ROOT_UID" ]
+then
+  echo "Must be root to run this script."
+  exit $E_NOTROOT
+fi  
+
+# Use with extreme caution!
+# If something goes wrong, you may wipe out your current filesystem.
+
+
+NEWDISK=/dev/hdb         # Assumes /dev/hdb vacant. Check!
+MOUNTPOINT=/mnt/newdisk  # Or choose another mount point.
+
+
+fdisk $NEWDISK
+mke2fs -cv $NEWDISK1   # Check for bad blocks (verbose output).
+#  Note:           ^     /dev/hdb1, *not* /dev/hdb!
+mkdir $MOUNTPOINT
+chmod 777 $MOUNTPOINT  # Makes new drive accessible to all users.
+
+
+# Now, test ...
+# mount -t ext2 /dev/hdb1 /mnt/newdisk
+# Try creating a directory.
+# If it works, umount it, and proceed.
+
+# Final step:
+# Add the following line to /etc/fstab.
+# /dev/hdb1  /mnt/newdisk  ext2  defaults  1 1
+
+exit</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>See also <A
+HREF="system.html#CREATEFS"
+>Example 17-8</A
+> and <A
+HREF="zeros.html#RAMDISK"
+>Example 31-3</A
+>.</P
+></DD
+><DT
+><A
+NAME="MKDOSFSREF"
+></A
+><B
+CLASS="COMMAND"
+>mkdosfs</B
+></DT
+><DD
+><P
+>Create a DOS <I
+CLASS="FIRSTTERM"
+>FAT</I
+>
+              filesystem.</P
+></DD
+><DT
+><A
+NAME="TUNE2FSREF"
+></A
+><B
+CLASS="COMMAND"
+>tune2fs</B
+></DT
+><DD
+><P
+>Tune <I
+CLASS="FIRSTTERM"
+>ext2</I
+> filesystem. May be
+	      used to change filesystem parameters, such as maximum
+	      mount count. This must be invoked as
+	      <I
+CLASS="FIRSTTERM"
+>root</I
+>.</P
+><DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/warning.gif"
+HSPACE="5"
+ALT="Warning"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>This is an extremely dangerous command. Use it at
+	      your own risk, as you may inadvertently destroy your filesystem.
+	      </P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="DUMPE2FSREF"
+></A
+><B
+CLASS="COMMAND"
+>dumpe2fs</B
+></DT
+><DD
+><P
+>Dump (list to <TT
+CLASS="FILENAME"
+>stdout</TT
+>) very verbose
+	      filesystem info. This must be invoked as
+	      <I
+CLASS="FIRSTTERM"
+>root</I
+>.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>root# </TT
+><B
+CLASS="COMMAND"
+>dumpe2fs /dev/hda7 | grep 'ount count'</B
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>dumpe2fs 1.19, 13-Jul-2000 for EXT2 FS 0.5b, 95/08/09
+ Mount count:              6
+ Maximum mount count:      20</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="HDPARMREF"
+></A
+><B
+CLASS="COMMAND"
+>hdparm</B
+></DT
+><DD
+><P
+>List or change hard disk parameters. This command must be
+	      invoked as <I
+CLASS="FIRSTTERM"
+>root</I
+>, and it may be
+	      dangerous if misused.</P
+></DD
+><DT
+><A
+NAME="FDISKREF"
+></A
+><B
+CLASS="COMMAND"
+>fdisk</B
+></DT
+><DD
+><P
+>Create or change a partition table on a storage device,
+	      usually a hard drive. This command must be invoked as
+	      <I
+CLASS="FIRSTTERM"
+>root</I
+>.</P
+><DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/warning.gif"
+HSPACE="5"
+ALT="Warning"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Use this command with extreme caution. If something
+	      goes wrong, you may destroy an existing
+	      filesystem.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="FSCKREF"
+></A
+><B
+CLASS="COMMAND"
+>fsck</B
+>, <A
+NAME="E2FSCKREF"
+></A
+><B
+CLASS="COMMAND"
+>e2fsck</B
+>, <A
+NAME="DEBUGFSREF"
+></A
+><B
+CLASS="COMMAND"
+>debugfs</B
+></DT
+><DD
+><P
+>Filesystem check, repair, and debug command set.</P
+><P
+><B
+CLASS="COMMAND"
+>fsck</B
+>: a front end for checking a UNIX
+	      filesystem (may invoke other utilities). The actual
+	      filesystem type generally defaults to
+	      <I
+CLASS="FIRSTTERM"
+>ext2</I
+>.</P
+><P
+><B
+CLASS="COMMAND"
+>e2fsck</B
+>: ext2 filesystem checker.</P
+><P
+><B
+CLASS="COMMAND"
+>debugfs</B
+>: ext2 filesystem debugger.
+	      One of the uses of this versatile, but dangerous command
+	      is to (attempt to) recover deleted files. For advanced users
+	      only!</P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>All of these should be invoked as
+	      <I
+CLASS="FIRSTTERM"
+>root</I
+>, and they can damage or destroy
+	      a filesystem if misused.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="BADBLOCKSREF"
+></A
+><B
+CLASS="COMMAND"
+>badblocks</B
+></DT
+><DD
+><P
+>Checks for bad blocks (physical media flaws) on a
+	      storage device.  This command finds use when formatting
+	      a newly installed hard drive or testing the integrity
+	      of backup media.
+	        <A
+NAME="AEN16504"
+HREF="system.html#FTN.AEN16504"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+>
+	      As an example, <B
+CLASS="COMMAND"
+>badblocks /dev/fd0</B
+>
+	      tests a floppy disk.</P
+><P
+>The <B
+CLASS="COMMAND"
+>badblocks</B
+> command
+	      may be invoked destructively (overwrite all data) or
+	      in non-destructive read-only mode. If <I
+CLASS="FIRSTTERM"
+>root
+	      user</I
+> owns the device to be tested, as is
+	      generally the case, then <I
+CLASS="FIRSTTERM"
+>root</I
+>
+	      must invoke this command.</P
+></DD
+><DT
+><A
+NAME="LSUSBREF"
+></A
+><B
+CLASS="COMMAND"
+>lsusb</B
+>, <B
+CLASS="COMMAND"
+>usbmodules</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>lsusb</B
+> command lists all USB
+	      (Universal Serial Bus) buses and the devices hooked up to
+	      them.</P
+><P
+>The <B
+CLASS="COMMAND"
+>usbmodules</B
+> command outputs
+	      information about the driver modules for connected USB
+	      devices.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>lsusb</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Bus 001 Device 001: ID 0000:0000  
+ Device Descriptor:
+   bLength                18
+   bDescriptorType         1
+   bcdUSB               1.00
+   bDeviceClass            9 Hub
+   bDeviceSubClass         0 
+   bDeviceProtocol         0 
+   bMaxPacketSize0         8
+   idVendor           0x0000 
+   idProduct          0x0000
+
+   . . .</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+            </P
+></DD
+><DT
+><A
+NAME="LSPCIREF"
+></A
+><B
+CLASS="COMMAND"
+>lspci</B
+></DT
+><DD
+><P
+>Lists <I
+CLASS="FIRSTTERM"
+>pci</I
+> busses present.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>lspci</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>00:00.0 Host bridge: Intel Corporation 82845 845
+ (Brookdale) Chipset Host Bridge (rev 04)
+ 00:01.0 PCI bridge: Intel Corporation 82845 845
+ (Brookdale) Chipset AGP Bridge (rev 04)
+ 00:1d.0 USB Controller: Intel Corporation 82801CA/CAM USB (Hub #1) (rev 02)
+ 00:1d.1 USB Controller: Intel Corporation 82801CA/CAM USB (Hub #2) (rev 02)
+ 00:1d.2 USB Controller: Intel Corporation 82801CA/CAM USB (Hub #3) (rev 02)
+ 00:1e.0 PCI bridge: Intel Corporation 82801 Mobile PCI Bridge (rev 42)
+
+   . . .</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+            </P
+></DD
+><DT
+><A
+NAME="MKBOOTDISKREF"
+></A
+><B
+CLASS="COMMAND"
+>mkbootdisk</B
+></DT
+><DD
+><P
+>Creates a boot floppy which can be used to bring up the
+	      system if, for example, the MBR (master boot record) becomes
+	      corrupted. Of special interest is the <TT
+CLASS="OPTION"
+>--iso</TT
+>
+	      option, which uses <B
+CLASS="COMMAND"
+>mkisofs</B
+> to create a
+	      bootable <I
+CLASS="FIRSTTERM"
+>ISO9660</I
+> filesystem image
+	      suitable for burning a bootable CDR.</P
+><P
+>The <B
+CLASS="COMMAND"
+>mkbootdisk</B
+> command is actually
+	      a Bash script, written by Erik Troan, in the <TT
+CLASS="FILENAME"
+>/sbin</TT
+> directory.</P
+></DD
+><DT
+><A
+NAME="MKISOFSREF"
+></A
+><B
+CLASS="COMMAND"
+>mkisofs</B
+></DT
+><DD
+><P
+>Creates an <I
+CLASS="FIRSTTERM"
+>ISO9660</I
+> filesystem
+	      suitable for a CDR image.</P
+></DD
+><DT
+><A
+NAME="CHROOTREF"
+></A
+><B
+CLASS="COMMAND"
+>chroot</B
+></DT
+><DD
+><P
+>CHange ROOT directory. Normally commands are fetched
+	      from <A
+HREF="internalvariables.html#PATHREF"
+>$PATH</A
+>, relative to
+	      <TT
+CLASS="FILENAME"
+>/</TT
+>, the default
+	      <I
+CLASS="FIRSTTERM"
+>root
+	      directory</I
+>. This changes the
+	      <I
+CLASS="FIRSTTERM"
+>root</I
+> directory to a different one
+	      (and also changes the working directory to there).  This is
+	      useful for security purposes, for instance when the system
+	      administrator wishes to restrict certain users, such as
+	      those <A
+HREF="communications.html#TELNETREF"
+>telnetting</A
+> in,
+	      to a secured portion of the filesystem (this is sometimes
+	      referred to as confining a guest user to a <SPAN
+CLASS="QUOTE"
+>"chroot
+	      jail"</SPAN
+>). Note that after a <B
+CLASS="COMMAND"
+>chroot</B
+>,
+	      the execution path for system binaries is no longer
+	      valid.</P
+><P
+>A <TT
+CLASS="USERINPUT"
+><B
+>chroot /opt</B
+></TT
+> would cause
+		references to <TT
+CLASS="FILENAME"
+>/usr/bin</TT
+>
+		to be translated to <TT
+CLASS="FILENAME"
+>/opt/usr/bin</TT
+>. Likewise,
+		<TT
+CLASS="USERINPUT"
+><B
+>chroot /aaa/bbb /bin/ls</B
+></TT
+> would
+		redirect future instances of <B
+CLASS="COMMAND"
+>ls</B
+>
+		to <TT
+CLASS="FILENAME"
+>/aaa/bbb</TT
+> as the base directory,
+		rather than <TT
+CLASS="FILENAME"
+>/</TT
+> as is
+		normally the case. An <B
+CLASS="COMMAND"
+>alias XX 'chroot /aaa/bbb
+		ls'</B
+> in a user's <A
+HREF="sample-bashrc.html"
+><TT
+CLASS="FILENAME"
+>~/.bashrc</TT
+></A
+>
+		effectively restricts which portion of the filesystem
+		she may run command <SPAN
+CLASS="QUOTE"
+>"XX"</SPAN
+> on.</P
+><P
+>The <B
+CLASS="COMMAND"
+>chroot</B
+> command is also handy
+	      when running from an emergency boot floppy 
+	      (<B
+CLASS="COMMAND"
+>chroot</B
+> to <TT
+CLASS="FILENAME"
+>/dev/fd0</TT
+>),
+	      or as an option to <B
+CLASS="COMMAND"
+>lilo</B
+> when recovering
+	      from a system crash. Other uses include installation from a
+	      different filesystem (an <A
+HREF="filearchiv.html#RPMREF"
+>rpm</A
+>
+	      option) or running a readonly filesystem from a CD ROM.
+	      Invoke only as <I
+CLASS="FIRSTTERM"
+>root</I
+>, and use with
+	      care.</P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>It might be necessary to copy certain system
+	      files to a <I
+CLASS="FIRSTTERM"
+>chrooted</I
+> directory,
+	      since the normal <TT
+CLASS="VARNAME"
+>$PATH</TT
+> can no longer
+	      be relied upon.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="LOCKFILEREF"
+></A
+><B
+CLASS="COMMAND"
+>lockfile</B
+></DT
+><DD
+><P
+>This utility is part of the <B
+CLASS="COMMAND"
+>procmail</B
+>
+	      package (<A
+HREF="http://www.procmail.org"
+TARGET="_top"
+>www.procmail.org</A
+>).
+	      It creates a <I
+CLASS="FIRSTTERM"
+>lock file</I
+>, a
+	      <I
+CLASS="FIRSTTERM"
+>semaphore</I
+> that controls access to
+	      a file, device, or resource.</P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><A
+NAME="AEN16645"
+></A
+><P
+></P
+><P
+><A
+NAME="SEMAPHOREREF"
+></A
+>
+		  <TT
+CLASS="USERINPUT"
+><B
+>Definition:</B
+></TT
+>
+		  A <I
+CLASS="FIRSTTERM"
+>semaphore</I
+> is a flag or
+		  signal. (The usage originated in railroading, where a
+		  colored flag, lantern, or striped movable arm
+		  <I
+CLASS="FIRSTTERM"
+>semaphore</I
+> indicated whether a
+		  particular track was in use and therefore unavailable
+		  for another train.) A UNIX process can check the
+		  appropriate semaphore to determine whether a particular
+		  resource is available/accessible.</P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>The lock file serves as a flag that this particular
+	      file, device, or resource is in use by a process (and
+	      is therefore <SPAN
+CLASS="QUOTE"
+>"busy"</SPAN
+>). The presence of a
+	      lock file permits only restricted access (or no access)
+	      to other processes.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>lockfile /home/bozo/lockfiles/$0.lock
+# Creates a write-protected lockfile prefixed with the name of the script.
+
+lockfile /home/bozo/lockfiles/${0##*/}.lock
+# A safer version of the above, as pointed out by E. Choroba.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>Lock files are used in such applications as protecting 
+	      system mail folders from simultaneously being changed
+	      by multiple users, indicating that a modem port
+	      is being accessed, and showing that an instance of
+	      <SPAN
+CLASS="APPLICATION"
+>Firefox</SPAN
+> is using its cache.
+	      Scripts may check for the existence of a lock file created
+	      by a certain process to check if that process is running.
+	      Note that if a script attempts to create a lock file that
+	      already exists, the script will likely hang.</P
+><P
+>Normally, applications create and check for lock files
+	      in the <TT
+CLASS="FILENAME"
+>/var/lock</TT
+>
+	      directory.
+	         <A
+NAME="AEN16659"
+HREF="system.html#FTN.AEN16659"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+>
+	      A script can test for the presence of a lock file by
+	      something like the following.
+	        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>appname=xyzip
+# Application "xyzip" created lock file "/var/lock/xyzip.lock".
+
+if [ -e "/var/lock/$appname.lock" ]
+then   #+ Prevent other programs &#38; scripts
+       #  from accessing files/resources used by xyzip.
+  ...</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+><A
+NAME="FLOCKREF"
+></A
+><B
+CLASS="COMMAND"
+>flock</B
+></DT
+><DD
+><P
+>Much less useful than the <B
+CLASS="COMMAND"
+>lockfile</B
+>
+	      command is <B
+CLASS="COMMAND"
+>flock</B
+>. It sets an
+	      <SPAN
+CLASS="QUOTE"
+>"advisory"</SPAN
+> lock on a file and then executes
+	      a command while the lock is on. This is to prevent
+	      any other process from setting a lock on that file until
+	      completion of the specified command.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>flock $0 cat $0 &#62; lockfile__$0
+#  Set a lock on the script the above line appears in,
+#+ while listing the script to stdout.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Unlike <B
+CLASS="COMMAND"
+>lockfile</B
+>,
+	      <B
+CLASS="COMMAND"
+>flock</B
+> does <EM
+>not</EM
+>
+	      automatically create a lock file.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="MKNODREF"
+></A
+><B
+CLASS="COMMAND"
+>mknod</B
+></DT
+><DD
+><P
+>Creates block or character <A
+HREF="devref1.html#DEVFILEREF"
+>device files</A
+> (may be
+	      necessary when installing new hardware on the system). The
+	      <B
+CLASS="COMMAND"
+>MAKEDEV</B
+> utility has virtually
+	      all of the functionality of <B
+CLASS="COMMAND"
+>mknod</B
+>,
+	      and is easier to use.</P
+></DD
+><DT
+><A
+NAME="MAKEDEVREF"
+></A
+><B
+CLASS="COMMAND"
+>MAKEDEV</B
+></DT
+><DD
+><P
+>Utility for creating device files. It must be run as
+	      <I
+CLASS="FIRSTTERM"
+>root</I
+>, and in the <TT
+CLASS="FILENAME"
+>/dev</TT
+> directory. It is a sort
+	      of advanced version of <B
+CLASS="COMMAND"
+>mknod</B
+>.</P
+></DD
+><DT
+><A
+NAME="TMPWATCHREF"
+></A
+><B
+CLASS="COMMAND"
+>tmpwatch</B
+></DT
+><DD
+><P
+>Automatically deletes files which have not been accessed
+	      within a specified period of time. Usually invoked by
+	      <A
+HREF="system.html#CRONREF"
+>cron</A
+> to remove stale log
+	      files.</P
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="PERIPHSYS1"
+></A
+>Backup</B
+></P
+><DL
+><DT
+><A
+NAME="DUMPREF"
+></A
+><B
+CLASS="COMMAND"
+>dump</B
+>, <A
+NAME="RESTOREREF"
+></A
+><B
+CLASS="COMMAND"
+>restore</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>dump</B
+> command is an elaborate
+	      filesystem backup utility, generally used on larger
+	      installations and networks.
+		<A
+NAME="AEN16748"
+HREF="system.html#FTN.AEN16748"
+><SPAN
+CLASS="footnote"
+>[6]</SPAN
+></A
+>
+	      It reads raw disk partitions and writes a backup file
+	      in a binary format.  Files to be backed up may be saved
+	      to a variety of storage media, including disks and tape
+	      drives. The <B
+CLASS="COMMAND"
+>restore</B
+> command restores
+	      backups made with <B
+CLASS="COMMAND"
+>dump</B
+>.</P
+></DD
+><DT
+><A
+NAME="FDFORMATREF"
+></A
+><B
+CLASS="COMMAND"
+>fdformat</B
+></DT
+><DD
+><P
+>Perform a low-level format on a floppy disk
+	    (<TT
+CLASS="FILENAME"
+>/dev/fd0*</TT
+>).</P
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="SYSRESOURCES1"
+></A
+>System Resources</B
+></P
+><DL
+><DT
+><A
+NAME="ULIMITREF"
+></A
+><B
+CLASS="COMMAND"
+>ulimit</B
+></DT
+><DD
+><P
+>Sets an <I
+CLASS="FIRSTTERM"
+>upper limit</I
+> on use
+	     of system resources. Usually invoked with the
+	     <TT
+CLASS="OPTION"
+>-f</TT
+> option, which sets a limit on file size
+	     (<B
+CLASS="COMMAND"
+>ulimit -f 1000</B
+> limits files to 1 meg
+	     maximum).
+                <A
+NAME="AEN16782"
+HREF="system.html#FTN.AEN16782"
+><SPAN
+CLASS="footnote"
+>[7]</SPAN
+></A
+>
+	     The <TT
+CLASS="OPTION"
+>-t</TT
+> option limits the coredump
+	     size (<B
+CLASS="COMMAND"
+>ulimit -c 0</B
+> eliminates coredumps).
+	     Normally, the value of <B
+CLASS="COMMAND"
+>ulimit</B
+>
+	     would be set in <TT
+CLASS="FILENAME"
+>/etc/profile</TT
+>
+	     and/or <TT
+CLASS="FILENAME"
+>~/.bash_profile</TT
+> (see <A
+HREF="files.html"
+>Appendix H</A
+>).</P
+><DIV
+CLASS="IMPORTANT"
+><P
+></P
+><TABLE
+CLASS="IMPORTANT"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Judicious use of <B
+CLASS="COMMAND"
+>ulimit</B
+> can
+	      protect a system against the dreaded <I
+CLASS="FIRSTTERM"
+>fork
+	      bomb</I
+>.</P
+><P
+>	    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# This script is for illustrative purposes only.
+# Run it at your own peril -- it WILL freeze your system.
+
+while true  #  Endless loop.
+do
+  $0 &#38;      #  This script invokes itself . . .
+            #+ forks an infinite number of times . . .
+            #+ until the system freezes up because all resources exhausted.
+done        #  This is the notorious <SPAN
+CLASS="QUOTE"
+>"sorcerer's appentice"</SPAN
+> scenario.
+
+exit 0      #  Will not exit here, because this script will never terminate.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><P
+>A <B
+CLASS="COMMAND"
+>ulimit -Hu XX</B
+> (where
+	      <EM
+>XX</EM
+> is the user process limit) in
+	      <TT
+CLASS="FILENAME"
+>/etc/profile</TT
+> would abort
+	      this script when it exceeded the preset limit.
+	    </P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="QUOTAREF"
+></A
+><B
+CLASS="COMMAND"
+>quota</B
+></DT
+><DD
+><P
+>Display user or group disk quotas.</P
+></DD
+><DT
+><A
+NAME="SETQUOTAREF"
+></A
+><B
+CLASS="COMMAND"
+>setquota</B
+></DT
+><DD
+><P
+>Set user or group disk quotas from the command-line.</P
+></DD
+><DT
+><A
+NAME="UMASKREF"
+></A
+><B
+CLASS="COMMAND"
+>umask</B
+></DT
+><DD
+><P
+>User file creation permissions
+	      <I
+CLASS="FIRSTTERM"
+>mask</I
+>. Limit the default file
+	      attributes for a particular user.  All files created
+	      by that user take on the attributes specified by
+	      <B
+CLASS="COMMAND"
+>umask</B
+>. The (octal) value passed to
+	      <B
+CLASS="COMMAND"
+>umask</B
+> defines the file permissions
+	      <I
+CLASS="FIRSTTERM"
+>disabled</I
+>. For example, <B
+CLASS="COMMAND"
+>umask
+	      022</B
+> ensures that new files will have at most
+	      755 permissions (777 NAND 022).
+
+                <A
+NAME="AEN16847"
+HREF="system.html#FTN.AEN16847"
+><SPAN
+CLASS="footnote"
+>[8]</SPAN
+></A
+>
+
+	      Of course, the user may later change the
+	      attributes of particular files with <A
+HREF="basic.html#CHMODREF"
+>chmod</A
+>. The usual practice
+	      is to set the value of <B
+CLASS="COMMAND"
+>umask</B
+>
+	      in <TT
+CLASS="FILENAME"
+>/etc/profile</TT
+> and/or
+	      <TT
+CLASS="FILENAME"
+>~/.bash_profile</TT
+> (see <A
+HREF="files.html"
+>Appendix H</A
+>).</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="ROT13A"
+></A
+><P
+><B
+>Example 17-10. Using <I
+CLASS="FIRSTTERM"
+>umask</I
+> to hide an output file
+	        from prying eyes</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# rot13a.sh: Same as "rot13.sh" script, but writes output to "secure" file.
+
+# Usage: ./rot13a.sh filename
+# or     ./rot13a.sh &#60;filename
+# or     ./rot13a.sh and supply keyboard input (stdin)
+
+umask 177               #  File creation mask.
+                        #  Files created by this script
+                        #+ will have 600 permissions.
+
+OUTFILE=decrypted.txt   #  Results output to file "decrypted.txt"
+                        #+ which can only be read/written
+                        #  by invoker of script (or root).
+
+cat "$@" | tr 'a-zA-Z' 'n-za-mN-ZA-M' &#62; $OUTFILE 
+#    ^^ Input from stdin or a file.   ^^^^^^^^^^ Output redirected to file. 
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="RDEVREF"
+></A
+><B
+CLASS="COMMAND"
+>rdev</B
+></DT
+><DD
+><P
+>Get info about or make changes to root device, swap space, or video
+	       mode.  The functionality of <B
+CLASS="COMMAND"
+>rdev</B
+> has generally been taken over by
+	       <B
+CLASS="COMMAND"
+>lilo</B
+>, but <B
+CLASS="COMMAND"
+>rdev</B
+> remains
+	       useful for setting up a ram disk. This is a dangerous command, if misused.
+	     </P
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="MODULESSYS1"
+></A
+>Modules</B
+></P
+><DL
+><DT
+><A
+NAME="LSMODREF"
+></A
+><B
+CLASS="COMMAND"
+>lsmod</B
+></DT
+><DD
+><P
+>List installed kernel modules.</P
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>lsmod</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Module                  Size  Used by
+ autofs                  9456   2 (autoclean)
+ opl3                   11376   0
+ serial_cs               5456   0 (unused)
+ sb                     34752   0
+ uart401                 6384   0 [sb]
+ sound                  58368   0 [opl3 sb uart401]
+ soundlow                 464   0 [sound]
+ soundcore               2800   6 [sb sound]
+ ds                      6448   2 [serial_cs]
+ i82365                 22928   2
+ pcmcia_core            45984   0 [serial_cs ds i82365]</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	    </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Doing a <B
+CLASS="COMMAND"
+>cat /proc/modules</B
+> gives the
+	      same information.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="INSMODREF"
+></A
+><B
+CLASS="COMMAND"
+>insmod</B
+></DT
+><DD
+><P
+>Force installation of a kernel module (use
+	      <B
+CLASS="COMMAND"
+>modprobe</B
+> instead, when possible). Must
+	      be invoked as <I
+CLASS="FIRSTTERM"
+>root</I
+>.</P
+></DD
+><DT
+><A
+NAME="RMMODREF"
+></A
+><B
+CLASS="COMMAND"
+>rmmod</B
+></DT
+><DD
+><P
+>Force unloading of a kernel module. Must be invoked
+	      as <I
+CLASS="FIRSTTERM"
+>root</I
+>.</P
+></DD
+><DT
+><A
+NAME="MODPROBEREF"
+></A
+><B
+CLASS="COMMAND"
+>modprobe</B
+></DT
+><DD
+><P
+>Module loader that is normally invoked automatically
+	      in a startup script. Must be invoked as
+	      <I
+CLASS="FIRSTTERM"
+>root</I
+>.</P
+></DD
+><DT
+><A
+NAME="DEPMODREF"
+></A
+><B
+CLASS="COMMAND"
+>depmod</B
+></DT
+><DD
+><P
+>Creates module dependency file. Usually invoked from a
+	      startup script.</P
+></DD
+><DT
+><A
+NAME="MODINFOREF"
+></A
+><B
+CLASS="COMMAND"
+>modinfo</B
+></DT
+><DD
+><P
+>Output information about a loadable module.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>modinfo hid</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>filename:    /lib/modules/2.4.20-6/kernel/drivers/usb/hid.o
+ description: "USB HID support drivers"
+ author:      "Andreas Gal, Vojtech Pavlik &#60;vojtech@suse.cz&#62;"
+ license:     "GPL"</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="MISCSYS1"
+></A
+>Miscellaneous</B
+></P
+><DL
+><DT
+><A
+NAME="ENVVREF"
+></A
+><B
+CLASS="COMMAND"
+>env</B
+></DT
+><DD
+><P
+>	      Runs a program or script with certain <A
+HREF="othertypesv.html#ENVREF"
+>environmental variables</A
+>
+	      set or changed (without changing the overall system
+	      environment). The <TT
+CLASS="OPTION"
+>[varname=xxx]</TT
+>
+	      permits changing the environmental variable
+	      <TT
+CLASS="VARNAME"
+>varname</TT
+> for the duration of the
+	      script. With no options specified, this command lists all
+	      the environmental variable settings.
+
+	    <A
+NAME="AEN16975"
+HREF="system.html#FTN.AEN16975"
+><SPAN
+CLASS="footnote"
+>[9]</SPAN
+></A
+>
+	    </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><A
+NAME="ENVV2REF"
+></A
+>The first line of a script (the
+	      <SPAN
+CLASS="QUOTE"
+>"sha-bang"</SPAN
+> line) may use <B
+CLASS="COMMAND"
+>env</B
+>
+	      when the path to the shell or interpreter is unknown.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#! /usr/bin/env perl
+
+print "This Perl script will run,\n";
+print "even when I don't know where to find Perl.\n";
+
+# Good for portable cross-platform scripts,
+# where the Perl binaries may not be in the expected place.
+# Thanks, S.C.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>Or even ... </P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/env bash
+# Queries the $PATH enviromental variable for the location of bash.
+# Therefore ...
+# This script will run where Bash is not in its usual place, in /bin.
+...</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="LDDREF"
+></A
+><B
+CLASS="COMMAND"
+>ldd</B
+></DT
+><DD
+><P
+>Show shared lib dependencies for an executable file.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>ldd /bin/ls</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>libc.so.6 =&#62; /lib/libc.so.6 (0x4000c000)
+/lib/ld-linux.so.2 =&#62; /lib/ld-linux.so.2 (0x80000000)</TT
+></PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DD
+><DT
+><A
+NAME="WATCHREF"
+></A
+><B
+CLASS="COMMAND"
+>watch</B
+></DT
+><DD
+><P
+>Run a command repeatedly, at specified time intervals.</P
+><P
+>The default is two-second intervals, but this may be changed
+	      with the <TT
+CLASS="OPTION"
+>-n</TT
+> option.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>watch -n 5 tail /var/log/messages
+# Shows tail end of system log, /var/log/messages, every five seconds.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Unfortunately, <A
+HREF="special-chars.html#PIPEREF"
+>piping</A
+>
+	      the output of <B
+CLASS="COMMAND"
+>watch command</B
+> to <A
+HREF="textproc.html#GREPREF"
+>grep</A
+> does not work.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="STRIPREF"
+></A
+><B
+CLASS="COMMAND"
+>strip</B
+></DT
+><DD
+><P
+>Remove the debugging symbolic references from an executable
+	      binary. This decreases its size, but makes debugging it
+	      impossible.</P
+><P
+>This command often occurs in a <A
+HREF="filearchiv.html#MAKEFILEREF"
+>Makefile</A
+>,
+	      but rarely in a shell script.</P
+></DD
+><DT
+><A
+NAME="NMREF"
+></A
+><B
+CLASS="COMMAND"
+>nm</B
+></DT
+><DD
+><P
+>List symbols in an unstripped compiled binary.</P
+></DD
+><DT
+><A
+NAME="XRANDRREF"
+></A
+><B
+CLASS="COMMAND"
+>xrandr</B
+></DT
+><DD
+><P
+>Command-line tool for manipulating the root window
+              of the screen.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="BACKLIGHT"
+></A
+><P
+><B
+>Example 17-11. <I
+CLASS="FIRSTTERM"
+>Backlight</I
+>: changes
+	        the brightness of the (laptop) screen backlight</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# backlight.sh
+# reldate 02dec2011
+
+#  A bug in Fedora Core 16/17 messes up the keyboard backlight controls.
+#  This script is a quick-n-dirty workaround, essentially a shell wrapper
+#+ for xrandr. It gives more control than on-screen sliders and widgets.
+
+OUTPUT=$(xrandr | grep LV | awk '{print $1}')   # Get display name!
+INCR=.05      # For finer-grained control, set INCR to .03 or .02.
+
+old_brightness=$(xrandr --verbose | grep rightness | awk '{ print $2 }')
+
+
+if [ -z "$1" ]
+then
+  bright=1    # If no command-line arg, set brightness to 1.0 (default).
+
+  else
+    if [ "$1" = "+" ]
+    then
+      bright=$(echo "scale=2; $old_brightness + $INCR" | bc)   # +.05
+
+  else
+    if [ "$1" = "-" ]
+    then
+      bright=$(echo "scale=2; $old_brightness - $INCR" | bc)   # -.05
+
+  else
+    if [ "$1" = "#" ]   # Echoes current brightness; does not change it.
+    then
+      bright=$old_brightness
+
+  else
+    if [[ "$1" = "h" || "$1" = "H" ]]
+    then
+      echo
+      echo "Usage:"
+      echo "$0 [No args]    Sets/resets brightness to default (1.0)."
+      echo "$0 +            Increments brightness by 0.5."
+      echo "$0 -            Decrements brightness by 0.5."
+      echo "$0 #            Echoes current brightness without changing it."
+      echo "$0 N (number)   Sets brightness to N (useful range .7 - 1.2)."
+      echo "$0 h [H]        Echoes this help message."
+      echo "$0 any-other    Gives xrandr usage message."
+
+      bright=$old_brightness
+
+  else
+    bright="$1"
+
+      fi
+     fi
+    fi
+  fi
+fi
+
+
+xrandr --output "$OUTPUT" --brightness "$bright"   # See xrandr manpage.
+                                                   # As root!
+E_CHANGE0=$?
+echo "Current brightness = $bright"
+
+exit $E_CHANGE0
+
+
+# =========== Or, alternately . . . ==================== #
+
+#!/bin/bash
+# backlight2.sh
+# reldate 20jun2012
+
+#  A bug in Fedora Core 16/17 messes up the keyboard backlight controls.
+#  This is a quick-n-dirty workaround, an alternate to backlight.sh.
+
+target_dir=\
+/sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/backlight/acpi_video0
+# Hardware directory.
+
+actual_brightness=$(cat $target_dir/actual_brightness)
+max_brightness=$(cat $target_dir/max_brightness)
+Brightness=$target_dir/brightness
+
+let "req_brightness = actual_brightness"   # Requested brightness.
+
+if [ "$1" = "-" ]
+then     # Decrement brightness 1 notch.
+  let "req_brightness = $actual_brightness - 1"
+else
+  if [ "$1" = "+" ]
+  then   # Increment brightness 1 notch.
+    let "req_brightness = $actual_brightness + 1"
+   fi
+fi
+
+if [ $req_brightness -gt $max_brightness ]
+then
+  req_brightness=$max_brightness
+fi   # Do not exceed max. hardware design brightness.
+
+echo
+
+echo "Old brightness = $actual_brightness"
+echo "Max brightness = $max_brightness"
+echo "Requested brightness = $req_brightness"
+echo
+
+# =====================================
+echo $req_brightness &#62; $Brightness
+# Must be root for this to take effect.
+E_CHANGE1=$?   # Successful?
+# =====================================
+
+if [ "$?" -eq 0 ]
+then
+  echo "Changed brightness!"
+else
+  echo "Failed to change brightness!"
+fi
+
+act_brightness=$(cat $Brightness)
+echo "Actual brightness = $act_brightness"
+
+scale0=2
+sf=100 # Scale factor.
+pct=$(echo "scale=$scale0; $act_brightness / $max_brightness * $sf" | bc)
+echo "Percentage brightness = $pct%"
+
+exit $E_CHANGE1</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="RDISTREF"
+></A
+><B
+CLASS="COMMAND"
+>rdist</B
+></DT
+><DD
+><P
+>Remote distribution client: synchronizes, clones,
+	      or backs up a file system on a remote server.</P
+></DD
+></DL
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN14695"
+HREF="system.html#AEN14695"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>This is the case on a Linux machine or a UNIX
+		   system with disk quotas.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN14727"
+HREF="system.html#AEN14727"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>The <B
+CLASS="COMMAND"
+>userdel</B
+> command
+		   will fail if the particular user being deleted is
+		   still logged on.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN16255"
+HREF="system.html#AEN16255"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>For more detail on burning CDRs, see Alex
+	    Withers' article, <A
+HREF="http://www2.linuxjournal.com/lj-issues/issue66/3335.html"
+TARGET="_top"
+>Creating
+	    CDs</A
+>, in the October, 1999 issue of <A
+HREF="http://www.linuxjournal.com"
+TARGET="_top"
+><I
+CLASS="CITETITLE"
+>Linux
+	     Journal</I
+></A
+>.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN16504"
+HREF="system.html#AEN16504"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>The <TT
+CLASS="OPTION"
+>-c</TT
+> option to <A
+HREF="system.html#MKE2FSREF"
+>mke2fs</A
+> also invokes a check for bad
+		blocks.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN16659"
+HREF="system.html#AEN16659"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Since only <I
+CLASS="FIRSTTERM"
+>root</I
+>
+		 has write permission in the <TT
+CLASS="FILENAME"
+>/var/lock</TT
+> directory,
+		 a user script cannot set a lock file there.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN16748"
+HREF="system.html#AEN16748"
+><SPAN
+CLASS="footnote"
+>[6]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Operators of single-user Linux systems
+		  generally prefer something simpler for backups, such
+		  as <B
+CLASS="COMMAND"
+>tar</B
+>.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN16782"
+HREF="system.html#AEN16782"
+><SPAN
+CLASS="footnote"
+>[7]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>As of the <A
+HREF="bashver4.html#BASH4REF"
+>version
+                4 update</A
+> of Bash, the <TT
+CLASS="OPTION"
+>-f</TT
+>
+                and <TT
+CLASS="OPTION"
+>-c</TT
+> options take a block size
+                of 512 when in <A
+HREF="sha-bang.html#POSIX2REF"
+>POSIX</A
+>
+		mode. Additionally, there are two new options:
+		<TT
+CLASS="OPTION"
+>-b</TT
+> for <A
+HREF="devref1.html#SOCKETREF"
+>socket</A
+> buffer size, and
+		<TT
+CLASS="OPTION"
+>-T</TT
+> for the limit on the number of
+		<I
+CLASS="FIRSTTERM"
+>threads</I
+>.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN16847"
+HREF="system.html#AEN16847"
+><SPAN
+CLASS="footnote"
+>[8]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>NAND is the logical
+		  <I
+CLASS="FIRSTTERM"
+>not-and</I
+> operator. Its effect
+		  is somewhat similar to subtraction.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN16975"
+HREF="system.html#AEN16975"
+><SPAN
+CLASS="footnote"
+>[9]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>In Bash and other Bourne shell derivatives, it is
+	      possible to set variables in a single command's environment.
+	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>var1=value1 var2=value2 commandXXX
+# $var1 and $var2 set in the environment of 'commandXXX' only.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>	      
+            </P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="extmisc.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="sysscripts.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Miscellaneous Commands</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part4.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Analyzing a System Script</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

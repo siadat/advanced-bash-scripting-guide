@@ -1,0 +1,732 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Topics"
+HREF="part5.html"><LINK
+REL="PREVIOUS"
+TITLE="Process Substitution"
+HREF="process-sub.html"><LINK
+REL="NEXT"
+TITLE="Complex Functions and Function Complexities"
+HREF="complexfunct.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="process-sub.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="complexfunct.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="FUNCTIONS"
+></A
+>Chapter 24. Functions</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+>24.1. <A
+HREF="complexfunct.html"
+>Complex Functions and Function Complexities</A
+></DT
+><DT
+>24.2. <A
+HREF="localvar.html"
+>Local Variables</A
+></DT
+><DT
+>24.3. <A
+HREF="recurnolocvar.html"
+>Recursion Without Local Variables</A
+></DT
+></DL
+></DIV
+><P
+><A
+NAME="FUNCTIONREF"
+></A
+></P
+><P
+>Like <SPAN
+CLASS="QUOTE"
+>"real"</SPAN
+> programming languages,
+	Bash has functions, though in a somewhat limited implementation.
+	A function is a subroutine, a <A
+HREF="special-chars.html#CODEBLOCKREF"
+>code
+	block</A
+> that implements a set of operations, a <SPAN
+CLASS="QUOTE"
+>"black
+	box"</SPAN
+> that performs a specified task.  Wherever there is
+	repetitive code, when a task repeats with only slight variations in
+	procedure, then consider using a function.</P
+><P
+><P
+><B
+CLASS="COMMAND"
+>function</B
+>   <TT
+CLASS="REPLACEABLE"
+><I
+>function_name</I
+></TT
+>   { <BR>  <TT
+CLASS="REPLACEABLE"
+><I
+>command</I
+></TT
+>... <BR>  } <BR></P
+>
+	or 
+	<P
+> <TT
+CLASS="REPLACEABLE"
+><I
+>function_name</I
+></TT
+>   ()   { <BR>  <TT
+CLASS="REPLACEABLE"
+><I
+>command</I
+></TT
+>... <BR>  } <BR></P
+>
+      </P
+><P
+>This second form will cheer the hearts of C programmers
+	      (and is more <A
+HREF="portabilityissues.html"
+>portable</A
+>).</P
+><P
+>As in C, the function's opening bracket may optionally appear
+        on the second line.</P
+><P
+><P
+> <TT
+CLASS="REPLACEABLE"
+><I
+>function_name</I
+></TT
+>   () <BR>  { <BR>  <TT
+CLASS="REPLACEABLE"
+><I
+>command</I
+></TT
+>... <BR>  } <BR></P
+>
+      </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>A function may be <SPAN
+CLASS="QUOTE"
+>"compacted"</SPAN
+> into a single
+          line.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>fun () { echo "This is a function"; echo; }
+#                                 ^     ^</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>In this case, however, a <I
+CLASS="FIRSTTERM"
+>semicolon</I
+>
+          must follow the final command in the function.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>fun () { echo "This is a function"; echo } # Error!
+#                                       ^
+
+fun2 () { echo "Even a single-command function? Yes!"; }
+#                                                    ^</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Functions are called, <I
+CLASS="FIRSTTERM"
+>triggered</I
+>, simply by
+	invoking their names. <EM
+>A function call is equivalent to
+	a command.</EM
+></P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX59"
+></A
+><P
+><B
+>Example 24-1. Simple functions</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# ex59.sh: Exercising functions (simple).
+
+JUST_A_SECOND=1
+
+funky ()
+{ # This is about as simple as functions get.
+  echo "This is a funky function."
+  echo "Now exiting funky function."
+} # Function declaration must precede call.
+
+
+fun ()
+{ # A somewhat more complex function.
+  i=0
+  REPEATS=30
+
+  echo
+  echo "And now the fun really begins."
+  echo
+
+  sleep $JUST_A_SECOND    # Hey, wait a second!
+  while [ $i -lt $REPEATS ]
+  do
+    echo "----------FUNCTIONS----------&#62;"
+    echo "&#60;------------ARE-------------"
+    echo "&#60;------------FUN------------&#62;"
+    echo
+    let "i+=1"
+  done
+}
+
+  # Now, call the functions.
+
+funky
+fun
+
+exit $?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="FUNCTDEFMUST"
+></A
+></P
+><P
+>The function definition must precede the first call to
+	it. There is no method of <SPAN
+CLASS="QUOTE"
+>"declaring"</SPAN
+> the function,
+	as, for example, in C.
+	  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>f1
+# Will give an error message, since function "f1" not yet defined.
+
+declare -f f1      # This doesn't help either.
+f1                 # Still an error message.
+
+# However...
+
+	  
+f1 ()
+{
+  echo "Calling function \"f2\" from within function \"f1\"."
+  f2
+}
+
+f2 ()
+{
+  echo "Function \"f2\"."
+}
+
+f1  #  Function "f2" is not actually called until this point,
+    #+ although it is referenced before its definition.
+    #  This is permissible.
+    
+    # Thanks, S.C.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+><A
+NAME="EMPTYFUNC"
+></A
+>Functions may not be empty!
+        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# empty-function.sh
+
+empty ()
+{
+}
+
+exit 0  # Will not exit here!
+
+# $ sh empty-function.sh
+# empty-function.sh: line 6: syntax error near unexpected token `}'
+# empty-function.sh: line 6: `}'
+
+# $ echo $?
+# 2
+
+
+# Note that a function containing only comments is empty.
+
+func ()
+{
+  # Comment 1.
+  # Comment 2.
+  # This is still an empty function.
+  # Thank you, Mark Bova, for pointing this out.
+}
+# Results in same error message as above.
+
+
+# However ...
+
+not_quite_empty ()
+{
+  illegal_command
+} #  A script containing this function will *not* bomb
+  #+ as long as the function is not called.
+
+not_empty ()
+{
+  :
+} # Contains a : (null command), and this is okay.
+
+
+# Thank you, Dominick Geyer and Thiemo Kellner.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>It is even possible to nest a function within another function,
+        although this is not very useful.
+	  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>f1 ()
+{
+
+  f2 () # nested
+  {
+    echo "Function \"f2\", inside \"f1\"."
+  }
+
+}  
+
+f2  #  Gives an error message.
+    #  Even a preceding "declare -f f2" wouldn't help.
+
+echo    
+
+f1  #  Does nothing, since calling "f1" does not automatically call "f2".
+f2  #  Now, it's all right to call "f2",
+    #+ since its definition has been made visible by calling "f1".
+
+    # Thanks, S.C.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>Function declarations can appear in unlikely places, even where a
+        command would otherwise go.
+          <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>ls -l | foo() { echo "foo"; }  # Permissible, but useless.
+
+
+
+if [ "$USER" = bozo ]
+then
+  bozo_greet ()   # Function definition embedded in an if/then construct.
+  {
+    echo "Hello, Bozo."
+  }
+fi  
+
+bozo_greet        # Works only for Bozo, and other users get an error.
+
+
+
+# Something like this might be useful in some contexts.
+NO_EXIT=1   # Will enable function definition below.
+
+[[ $NO_EXIT -eq 1 ]] &#38;&#38; exit() { true; }     # Function definition in an "and-list".
+# If $NO_EXIT is 1, declares "exit ()".
+# This disables the "exit" builtin by aliasing it to "true".
+
+exit  # Invokes "exit ()" function, not "exit" builtin.
+
+
+
+# Or, similarly:
+filename=file1
+
+[ -f "$filename" ] &#38;&#38;
+foo () { rm -f "$filename"; echo "File "$filename" deleted."; } ||
+foo () { echo "File "$filename" not found."; touch bar; }
+
+foo
+
+# Thanks, S.C. and Christopher Head</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+><A
+NAME="FSTRANGEREF"
+></A
+>Function names can take strange
+      forms.
+        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>  _(){ for i in {1..10}; do echo -n "$FUNCNAME"; done; echo; }
+# ^^^         No space between function name and parentheses.
+#             This doesn't always work. Why not?
+
+# Now, let's invoke the function.
+  _         # __________
+#             ^^^^^^^^^^   10 underscores (10 x function name)!  
+# A "naked" underscore is an acceptable function name.
+
+
+# In fact, a colon is likewise an acceptable function name.
+
+:(){ echo ":"; }; :
+
+# Of what use is this?
+# It's a devious way to obfuscate the code in a script.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      See also <A
+HREF="contributed-scripts.html#GRONSFELD"
+>Example A-56</A
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>What happens when different versions of the same function
+        appear in a script?
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#  As Yan Chen points out,
+#  when a function is defined multiple times,
+#  the final version is what is invoked.
+#  This is not, however, particularly useful.
+
+func ()
+{
+  echo "First version of func ()."
+}
+
+func ()
+{
+  echo "Second version of func ()."
+}
+
+func   # Second version of func ().
+
+exit $?
+
+#  It is even possible to use functions to override
+#+ or preempt system commands.
+#  Of course, this is *not* advisable.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="process-sub.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="complexfunct.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Process Substitution</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part5.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Complex Functions and Function Complexities</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,339 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Restricted Shells</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Topics"
+HREF="part5.html"><LINK
+REL="PREVIOUS"
+TITLE="Subshells"
+HREF="subshells.html"><LINK
+REL="NEXT"
+TITLE="Process Substitution"
+HREF="process-sub.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="subshells.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="process-sub.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="RESTRICTED-SH"
+></A
+>Chapter 22. Restricted Shells</H1
+><P
+><A
+NAME="RESTRICTEDSHREF"
+></A
+></P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="DISABLEDCOMMREF"
+></A
+>Disabled commands in restricted
+	  shells</B
+></P
+><DL
+><DT
+></DT
+><DD
+><DIV
+CLASS="FORMALPARA"
+><P
+><B
+> . </B
+>Running a script or portion of a script in
+        <I
+CLASS="FIRSTTERM"
+>restricted mode</I
+> disables certain commands
+        that would otherwise be available. This is a security measure
+        intended to limit the privileges of the script user and to
+        minimize possible damage from running the script.</P
+></DIV
+></DD
+></DL
+></DIV
+><P
+>The following commands and actions are disabled:</P
+><P
+></P
+><UL
+><LI
+><P
+>Using <TT
+CLASS="REPLACEABLE"
+><I
+>cd</I
+></TT
+> to change the working
+	  directory.</P
+></LI
+><LI
+><P
+>Changing the values of the
+	  <TT
+CLASS="REPLACEABLE"
+><I
+>$PATH</I
+></TT
+>,
+	  <TT
+CLASS="REPLACEABLE"
+><I
+>$SHELL</I
+></TT
+>,
+	  <TT
+CLASS="REPLACEABLE"
+><I
+>$BASH_ENV</I
+></TT
+>,
+	  or <TT
+CLASS="REPLACEABLE"
+><I
+>$ENV</I
+></TT
+> <A
+HREF="othertypesv.html#ENVREF"
+>environmental variables</A
+>.</P
+></LI
+><LI
+><P
+>Reading or changing the <TT
+CLASS="REPLACEABLE"
+><I
+>$SHELLOPTS</I
+></TT
+>,
+	  shell environmental options.</P
+></LI
+><LI
+><P
+>Output redirection.</P
+></LI
+><LI
+><P
+>Invoking commands containing one or more
+	  <SPAN
+CLASS="TOKEN"
+>/</SPAN
+>'s.</P
+></LI
+><LI
+><P
+>Invoking <A
+HREF="internal.html#EXECREF"
+>exec</A
+> to substitute
+	  a different process for the shell.</P
+></LI
+><LI
+><P
+>Various other commands that would enable monkeying
+	  with or attempting to subvert the script for an unintended
+	  purpose.</P
+></LI
+><LI
+><P
+>Getting out of restricted mode within the script.</P
+></LI
+></UL
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="RESTRICTED"
+></A
+><P
+><B
+>Example 22-1. Running a script in restricted mode</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+#  Starting the script with "#!/bin/bash -r"
+#+ runs entire script in restricted mode.
+
+echo
+
+echo "Changing directory."
+cd /usr/local
+echo "Now in `pwd`"
+echo "Coming back home."
+cd
+echo "Now in `pwd`"
+echo
+
+# Everything up to here in normal, unrestricted mode.
+
+set -r
+# set --restricted    has same effect.
+echo "==&#62; Now in restricted mode. &#60;=="
+
+echo
+echo
+
+echo "Attempting directory change in restricted mode."
+cd ..
+echo "Still in `pwd`"
+
+echo
+echo
+
+echo "\$SHELL = $SHELL"
+echo "Attempting to change shell in restricted mode."
+SHELL="/bin/ash"
+echo
+echo "\$SHELL= $SHELL"
+
+echo
+echo
+
+echo "Attempting to redirect output in restricted mode."
+ls -l /usr/bin &#62; bin.files
+ls -l bin.files    # Try to list attempted file creation effort.
+
+echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="subshells.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="process-sub.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Subshells</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part5.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Process Substitution</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

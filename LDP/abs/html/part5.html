@@ -1,0 +1,442 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Advanced Topics</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Analyzing a System Script"
+HREF="sysscripts.html"><LINK
+REL="NEXT"
+TITLE="Regular Expressions"
+HREF="regexp.html"></HEAD
+><BODY
+CLASS="PART"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="sysscripts.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="regexp.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="PART"
+><A
+NAME="PART5"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+>Part 5. Advanced Topics</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN17110"
+></A
+><P
+>At this point, we are ready to delve into certain of the
+	difficult and unusual aspects of scripting. Along the way, we
+	will attempt to <SPAN
+CLASS="QUOTE"
+>"push the envelope"</SPAN
+> in various
+	ways and examine <I
+CLASS="FIRSTTERM"
+>boundary conditions</I
+>
+	(what happens when we move into uncharted territory?).</P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+>18. <A
+HREF="regexp.html"
+>Regular Expressions</A
+></DT
+><DD
+><DL
+><DT
+>18.1. <A
+HREF="http://tldp.org/LDP/abs/html/x17129.html"
+>A Brief Introduction to Regular Expressions</A
+></DT
+><DT
+>18.2. <A
+HREF="http://tldp.org/LDP/abs/html/globbingref.html"
+>Globbing</A
+></DT
+></DL
+></DD
+><DT
+>19. <A
+HREF="here-docs.html"
+>Here Documents</A
+></DT
+><DD
+><DL
+><DT
+>19.1. <A
+HREF="x17837.html"
+>Here Strings</A
+></DT
+></DL
+></DD
+><DT
+>20. <A
+HREF="io-redirection.html"
+>I/O Redirection</A
+></DT
+><DD
+><DL
+><DT
+>20.1. <A
+HREF="x17974.html"
+>Using <I
+CLASS="FIRSTTERM"
+>exec</I
+></A
+></DT
+><DT
+>20.2. <A
+HREF="redircb.html"
+>Redirecting Code Blocks</A
+></DT
+><DT
+>20.3. <A
+HREF="redirapps.html"
+>Applications</A
+></DT
+></DL
+></DD
+><DT
+>21. <A
+HREF="subshells.html"
+>Subshells</A
+></DT
+><DT
+>22. <A
+HREF="restricted-sh.html"
+>Restricted Shells</A
+></DT
+><DT
+>23. <A
+HREF="process-sub.html"
+>Process Substitution</A
+></DT
+><DT
+>24. <A
+HREF="functions.html"
+>Functions</A
+></DT
+><DD
+><DL
+><DT
+>24.1. <A
+HREF="complexfunct.html"
+>Complex Functions and Function Complexities</A
+></DT
+><DT
+>24.2. <A
+HREF="localvar.html"
+>Local Variables</A
+></DT
+><DT
+>24.3. <A
+HREF="recurnolocvar.html"
+>Recursion Without Local Variables</A
+></DT
+></DL
+></DD
+><DT
+>25. <A
+HREF="aliases.html"
+>Aliases</A
+></DT
+><DT
+>26. <A
+HREF="list-cons.html"
+>List Constructs</A
+></DT
+><DT
+>27. <A
+HREF="arrays.html"
+>Arrays</A
+></DT
+><DT
+>28. <A
+HREF="ivr.html"
+>Indirect References</A
+></DT
+><DT
+>29. <A
+HREF="devproc.html"
+><TT
+CLASS="FILENAME"
+>/dev</TT
+> and <TT
+CLASS="FILENAME"
+>/proc</TT
+></A
+></DT
+><DD
+><DL
+><DT
+>29.1. <A
+HREF="devref1.html"
+><TT
+CLASS="FILENAME"
+>/dev</TT
+></A
+></DT
+><DT
+>29.2. <A
+HREF="procref1.html"
+><TT
+CLASS="FILENAME"
+>/proc</TT
+></A
+></DT
+></DL
+></DD
+><DT
+>30. <A
+HREF="networkprogramming.html"
+>Network Programming</A
+></DT
+><DT
+>31. <A
+HREF="zeros.html"
+>Of Zeros and Nulls</A
+></DT
+><DT
+>32. <A
+HREF="debugging.html"
+>Debugging</A
+></DT
+><DT
+>33. <A
+HREF="options.html"
+>Options</A
+></DT
+><DT
+>34. <A
+HREF="gotchas.html"
+>Gotchas</A
+></DT
+><DT
+>35. <A
+HREF="scrstyle.html"
+>Scripting With Style</A
+></DT
+><DD
+><DL
+><DT
+>35.1. <A
+HREF="http://tldp.org/LDP/abs/html/unofficialst.html"
+>Unofficial Shell Scripting Stylesheet</A
+></DT
+></DL
+></DD
+><DT
+>36. <A
+HREF="miscellany.html"
+>Miscellany</A
+></DT
+><DD
+><DL
+><DT
+>36.1. <A
+HREF="http://tldp.org/LDP/abs/html/intandnonint.html"
+>Interactive and non-interactive shells and scripts</A
+></DT
+><DT
+>36.2. <A
+HREF="wrapper.html"
+>Shell Wrappers</A
+></DT
+><DT
+>36.3. <A
+HREF="http://tldp.org/LDP/abs/html/testsandcomparisons.html"
+>Tests and Comparisons: Alternatives</A
+></DT
+><DT
+>36.4. <A
+HREF="recursionsct.html"
+>Recursion: a script calling itself</A
+></DT
+><DT
+>36.5. <A
+HREF="colorizing.html"
+><SPAN
+CLASS="QUOTE"
+>"Colorizing"</SPAN
+> Scripts</A
+></DT
+><DT
+>36.6. <A
+HREF="http://tldp.org/LDP/abs/html/optimizations.html"
+>Optimizations</A
+></DT
+><DT
+>36.7. <A
+HREF="assortedtips.html"
+>Assorted Tips</A
+></DT
+><DT
+>36.8. <A
+HREF="http://tldp.org/LDP/abs/html/securityissues.html"
+>Security Issues</A
+></DT
+><DT
+>36.9. <A
+HREF="portabilityissues.html"
+>Portability Issues</A
+></DT
+><DT
+>36.10. <A
+HREF="http://tldp.org/LDP/abs/html/winscript.html"
+>Shell Scripting Under Windows</A
+></DT
+></DL
+></DD
+><DT
+>37. <A
+HREF="bash2.html"
+>Bash, versions 2, 3, and 4</A
+></DT
+><DD
+><DL
+><DT
+>37.1. <A
+HREF="bashver2.html"
+>Bash, version 2</A
+></DT
+><DT
+>37.2. <A
+HREF="http://tldp.org/LDP/abs/html/bashver3.html"
+>Bash, version 3</A
+></DT
+><DT
+>37.3. <A
+HREF="bashver4.html"
+>Bash, version 4</A
+></DT
+></DL
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="sysscripts.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="regexp.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Analyzing a System Script</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Regular Expressions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

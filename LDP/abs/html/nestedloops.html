@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Nested Loops</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Loops and Branches"
+HREF="loops.html"><LINK
+REL="PREVIOUS"
+TITLE="Loops"
+HREF="loops1.html"><LINK
+REL="NEXT"
+TITLE="Loop Control"
+HREF="loopcontrol.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="loops1.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 11. Loops and Branches</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="loopcontrol.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="NESTEDLOOPS"
+></A
+>11.2. Nested Loops</H1
+><P
+>A <I
+CLASS="FIRSTTERM"
+>nested loop</I
+> is a loop within a
+	  loop, an inner loop within the body of an outer one. How
+	  this works is that the first pass of the outer loop triggers
+	  the inner loop, which executes to completion. Then the
+	  second pass of the outer loop triggers the inner loop
+	  again. This repeats until the outer loop finishes. Of course,
+	  a <I
+CLASS="FIRSTTERM"
+>break</I
+> within either the inner or outer
+	  loop would interrupt this process.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="NESTEDLOOP"
+></A
+><P
+><B
+>Example 11-20. Nested Loop</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# nested-loop.sh: Nested "for" loops.
+
+outer=1             # Set outer loop counter.
+
+# Beginning of outer loop.
+for a in 1 2 3 4 5
+do
+  echo "Pass $outer in outer loop."
+  echo "---------------------"
+  inner=1           # Reset inner loop counter.
+
+  # ===============================================
+  # Beginning of inner loop.
+  for b in 1 2 3 4 5
+  do
+    echo "Pass $inner in inner loop."
+    let "inner+=1"  # Increment inner loop counter.
+  done
+  # End of inner loop.
+  # ===============================================
+
+  let "outer+=1"    # Increment outer loop counter. 
+  echo              # Space between output blocks in pass of outer loop.
+done               
+# End of outer loop.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>See <A
+HREF="arrays.html#BUBBLE"
+>Example 27-11</A
+> for an illustration of nested
+	  <A
+HREF="loops1.html#WHILELOOPREF"
+>while loops</A
+>, and <A
+HREF="arrays.html#EX68"
+>Example 27-13</A
+> to see a while loop nested inside an <A
+HREF="loops1.html#UNTILLOOPREF"
+>until loop</A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="loops1.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="loopcontrol.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Loops</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="loops.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Loop Control</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

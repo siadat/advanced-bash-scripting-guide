@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>A Sed and Awk Micro-Primer</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Reference Cards"
+HREF="refcards.html"><LINK
+REL="NEXT"
+TITLE="Sed"
+HREF="x23170.html"></HEAD
+><BODY
+CLASS="APPENDIX"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="refcards.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x23170.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="APPENDIX"
+><H1
+><A
+NAME="SEDAWK"
+></A
+>Appendix C. A Sed and Awk Micro-Primer</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+>C.1. <A
+HREF="x23170.html"
+>Sed</A
+></DT
+><DT
+>C.2. <A
+HREF="awk.html"
+>Awk</A
+></DT
+></DL
+></DIV
+><P
+><A
+NAME="SEDREF"
+></A
+></P
+><P
+>This is a very brief introduction to the <B
+CLASS="COMMAND"
+>sed</B
+>
+	and <B
+CLASS="COMMAND"
+>awk</B
+> text processing utilities. We will
+	deal with only a few basic commands here, but that will suffice
+	for understanding simple sed and awk constructs within shell
+	scripts.</P
+><P
+><B
+CLASS="COMMAND"
+>sed</B
+>: a non-interactive
+         text file editor</P
+><P
+><B
+CLASS="COMMAND"
+>awk</B
+>: a field-oriented pattern processing
+         language with a <B
+CLASS="COMMAND"
+>C</B
+>-style syntax</P
+><P
+>For all their differences, the two utilities share a similar
+	 invocation syntax, use <A
+HREF="regexp.html#REGEXREF"
+>regular
+	 expressions </A
+>, read input by default
+	 from <TT
+CLASS="FILENAME"
+>stdin</TT
+>, and output to
+	 <TT
+CLASS="FILENAME"
+>stdout</TT
+>. These are well-behaved UNIX tools,
+	 and they work together well. The output from one can be piped
+	 to the other, and their combined capabilities give shell scripts
+	 some of the power of <A
+HREF="wrapper.html#PERLREF"
+>Perl</A
+>.</P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>One important difference between the utilities is
+	 that while shell scripts can easily pass arguments to sed, it
+	 is more cumbersome for awk (see <A
+HREF="wrapper.html#COLTOTALER"
+>Example 36-5</A
+>
+	 and <A
+HREF="ivr.html#COLTOTALER2"
+>Example 28-2</A
+>).
+	 </P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="refcards.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x23170.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Reference Cards</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Sed</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

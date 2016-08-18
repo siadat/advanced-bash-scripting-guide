@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Applications</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="I/O Redirection"
+HREF="io-redirection.html"><LINK
+REL="PREVIOUS"
+TITLE="Redirecting Code Blocks"
+HREF="redircb.html"><LINK
+REL="NEXT"
+TITLE="Subshells"
+HREF="subshells.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="redircb.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 20. I/O Redirection</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="subshells.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="REDIRAPPS"
+></A
+>20.3. Applications</H1
+><P
+>Clever use of I/O redirection permits parsing and stitching
+	together snippets of command output (see <A
+HREF="internal.html#READREDIR"
+>Example 15-7</A
+>). This permits
+	 generating report and log files.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="LOGEVENTS"
+></A
+><P
+><B
+>Example 20-12. Logging events</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# logevents.sh
+# Author: Stephane Chazelas.
+# Used in ABS Guide with permission.
+
+# Event logging to a file.
+# Must be run as root (for write access in /var/log).
+
+ROOT_UID=0     # Only users with $UID 0 have root privileges.
+E_NOTROOT=67   # Non-root exit error.
+
+
+if [ "$UID" -ne "$ROOT_UID" ]
+then
+  echo "Must be root to run this script."
+  exit $E_NOTROOT
+fi  
+
+
+FD_DEBUG1=3
+FD_DEBUG2=4
+FD_DEBUG3=5
+
+# === Uncomment one of the two lines below to activate script. ===
+# LOG_EVENTS=1
+# LOG_VARS=1
+
+
+log()  # Writes time and date to log file.
+{
+echo "$(date)  $*" &#62;&#38;7     # This *appends* the date to the file.
+#     ^^^^^^^  command substitution
+                           # See below.
+}
+
+
+
+case $LOG_LEVEL in
+ 1) exec 3&#62;&#38;2         4&#62; /dev/null 5&#62; /dev/null;;
+ 2) exec 3&#62;&#38;2         4&#62;&#38;2         5&#62; /dev/null;;
+ 3) exec 3&#62;&#38;2         4&#62;&#38;2         5&#62;&#38;2;;
+ *) exec 3&#62; /dev/null 4&#62; /dev/null 5&#62; /dev/null;;
+esac
+
+FD_LOGVARS=6
+if [[ $LOG_VARS ]]
+then exec 6&#62;&#62; /var/log/vars.log
+else exec 6&#62; /dev/null                     # Bury output.
+fi
+
+FD_LOGEVENTS=7
+if [[ $LOG_EVENTS ]]
+then
+  # exec 7 &#62;(exec gawk '{print strftime(), $0}' &#62;&#62; /var/log/event.log)
+  # Above line fails in versions of Bash more recent than 2.04. Why?
+  exec 7&#62;&#62; /var/log/event.log              # Append to "event.log".
+  log                                      # Write time and date.
+else exec 7&#62; /dev/null                     # Bury output.
+fi
+
+echo "DEBUG3: beginning" &#62;&#38;${FD_DEBUG3}
+
+ls -l &#62;&#38;5 2&#62;&#38;4                             # command1 &#62;&#38;5 2&#62;&#38;4
+
+echo "Done"                                # command2 
+
+echo "sending mail" &#62;&#38;${FD_LOGEVENTS}
+# Writes "sending mail" to file descriptor #7.
+
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="redircb.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="subshells.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Redirecting Code Blocks</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="io-redirection.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Subshells</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

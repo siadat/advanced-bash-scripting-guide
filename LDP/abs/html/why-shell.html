@@ -1,0 +1,759 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Shell Programming!</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Introduction"
+HREF="part1.html"><LINK
+REL="PREVIOUS"
+TITLE="Introduction"
+HREF="part1.html"><LINK
+REL="NEXT"
+TITLE="Starting Off With a Sha-Bang"
+HREF="sha-bang.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="part1.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="sha-bang.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="WHY-SHELL"
+></A
+>Chapter 1. Shell Programming!</H1
+><TABLE
+BORDER="0"
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+CLASS="EPIGRAPH"
+><TR
+><TD
+WIDTH="45%"
+>&nbsp;</TD
+><TD
+WIDTH="45%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+><P
+><I
+>No programming language is perfect. There is not even a single
+        best language; there are only languages well suited or perhaps
+        poorly suited for particular purposes.</I
+></P
+><P
+><I
+>--Herbert Mayer</I
+></P
+></I
+></TD
+></TR
+></TABLE
+><P
+>A working knowledge of shell scripting is essential to anyone
+      wishing to become reasonably proficient at system administration,
+      even if they do not anticipate ever having to actually write a
+      script. Consider that as a Linux machine boots up, it executes the
+      shell scripts in <TT
+CLASS="FILENAME"
+>/etc/rc.d</TT
+>
+      to restore the system configuration and set up services. A detailed
+      understanding of these startup scripts is important for analyzing
+      the behavior of a system, and possibly modifying it.</P
+><P
+>The craft of scripting is not hard to master,
+      since scripts can be built in bite-sized sections and there
+      is only a fairly small set of shell-specific operators and options
+
+      <A
+NAME="AEN62"
+HREF="why-shell.html#FTN.AEN62"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+
+      to learn. The syntax is simple -- even austere -- similar to
+      that of invoking and chaining together utilities at the command
+      line, and there are only a few <SPAN
+CLASS="QUOTE"
+>"rules"</SPAN
+> governing
+      their use. Most short scripts work right the first time, and
+      debugging even the longer ones is straightforward.</P
+><P
+>	    <A
+NAME="AEN67"
+></A
+><BLOCKQUOTE
+CLASS="BLOCKQUOTE"
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;In&nbsp;the&nbsp;early&nbsp;days&nbsp;of&nbsp;personal&nbsp;computing,&nbsp;the&nbsp;BASIC&nbsp;language&nbsp;enabled<br>
+&nbsp;&nbsp;&nbsp;&nbsp;anyone&nbsp;reasonably&nbsp;computer&nbsp;proficient&nbsp;to&nbsp;write&nbsp;programs&nbsp;on&nbsp;an&nbsp;early<br>
+&nbsp;&nbsp;&nbsp;&nbsp;generation&nbsp;of&nbsp;microcomputers.&nbsp;Decades&nbsp;later,&nbsp;the&nbsp;Bash&nbsp;scripting<br>
+&nbsp;&nbsp;&nbsp;&nbsp;language&nbsp;enables&nbsp;anyone&nbsp;with&nbsp;a&nbsp;rudimentary&nbsp;knowledge&nbsp;of&nbsp;Linux&nbsp;or<br>
+&nbsp;&nbsp;&nbsp;&nbsp;UNIX&nbsp;to&nbsp;do&nbsp;the&nbsp;same&nbsp;on&nbsp;modern&nbsp;machines.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;We&nbsp;now&nbsp;have&nbsp;miniaturized&nbsp;single-board&nbsp;computers&nbsp;with&nbsp;amazing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;capabilities,&nbsp;such&nbsp;as&nbsp;the&nbsp;<A
+HREF="http://www.raspberrypi.org/"
+TARGET="_top"
+>Raspberry Pi</A
+>.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Bash&nbsp;scripting&nbsp;provides&nbsp;a&nbsp;way&nbsp;to&nbsp;explore&nbsp;the&nbsp;capabilities&nbsp;of&nbsp;these<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fascinating&nbsp;devices.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></BLOCKQUOTE
+>
+    </P
+><P
+>A shell script is a quick-and-dirty method of prototyping
+      a complex application. Getting even a limited subset of
+      the functionality to work in a script is often a useful
+      first stage in project development. In this way, the structure
+      of the application can be tested and tinkered with, and the
+      major pitfalls found before proceeding to the final coding
+      in <I
+CLASS="FIRSTTERM"
+>C</I
+>, <I
+CLASS="FIRSTTERM"
+>C++</I
+>,
+      <I
+CLASS="FIRSTTERM"
+>Java</I
+>, <A
+HREF="wrapper.html#PERLREF"
+>Perl</A
+>,
+      or <I
+CLASS="FIRSTTERM"
+>Python</I
+>.</P
+><P
+>Shell scripting hearkens back to the classic UNIX philosophy
+      of breaking complex projects into simpler subtasks, of chaining
+      together components and utilities. Many consider this a better,
+      or at least more esthetically pleasing approach to problem solving
+      than using one of the new generation of high-powered all-in-one
+      languages, such as <I
+CLASS="FIRSTTERM"
+>Perl</I
+>, which attempt to
+      be all things to all people, but at the cost of forcing you to
+      alter your thinking processes to fit the tool.</P
+><P
+>According to <A
+HREF="biblio.html#MAYERREF"
+>Herbert Mayer</A
+>,
+      <SPAN
+CLASS="QUOTE"
+>"a useful language needs arrays, pointers,
+	and a generic mechanism for building data structures."</SPAN
+>
+	By these criteria, shell scripting falls somewhat short of being
+	<SPAN
+CLASS="QUOTE"
+>"useful."</SPAN
+> Or, perhaps not. . . .</P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><A
+NAME="AEN82"
+></A
+><P
+></P
+><P
+>When not to use shell scripts
+
+      <P
+></P
+><UL
+><LI
+><P
+>Resource-intensive tasks, especially where speed is
+	    a factor (sorting, hashing, recursion
+
+            <A
+NAME="AEN87"
+HREF="why-shell.html#FTN.AEN87"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>
+	    
+	    ...)</P
+></LI
+><LI
+><P
+>Procedures involving heavy-duty math operations,
+	    especially floating point arithmetic, arbitrary
+	    precision calculations, or complex numbers (use
+	    <I
+CLASS="FIRSTTERM"
+>C++</I
+> or <I
+CLASS="FIRSTTERM"
+>FORTRAN</I
+>
+	    instead)</P
+></LI
+><LI
+><P
+>Cross-platform portability required (use
+	    <I
+CLASS="FIRSTTERM"
+>C</I
+> or <I
+CLASS="FIRSTTERM"
+>Java</I
+>
+	    instead)</P
+></LI
+><LI
+><P
+>Complex applications, where structured programming is
+	    a necessity (type-checking of variables, function
+	    prototypes, etc.)</P
+></LI
+><LI
+><P
+>Mission-critical applications upon which you are betting the
+	     future of the company</P
+></LI
+><LI
+><P
+>Situations where <EM
+>security</EM
+> is
+	    important, where you need to guarantee the integrity of
+	    your system and protect against intrusion, cracking, and
+	    vandalism</P
+></LI
+><LI
+><P
+>Project consists of subcomponents with interlocking
+	    dependencies</P
+></LI
+><LI
+><P
+>Extensive file operations required
+	    (<I
+CLASS="FIRSTTERM"
+>Bash</I
+> is limited to serial file access,
+	    and that only in a particularly clumsy and inefficient
+	    line-by-line fashion.)</P
+></LI
+><LI
+><P
+>Need native support for multi-dimensional arrays</P
+></LI
+><LI
+><P
+>Need data structures, such as linked lists or trees</P
+></LI
+><LI
+><P
+>Need to generate / manipulate graphics or GUIs</P
+></LI
+><LI
+><P
+>Need direct access to system hardware or
+	    external peripherals</P
+></LI
+><LI
+><P
+>Need port or <A
+HREF="devref1.html#SOCKETREF"
+>socket</A
+>
+	    I/O</P
+></LI
+><LI
+><P
+>Need to use libraries or interface with legacy code</P
+></LI
+><LI
+><P
+>Proprietary, closed-source applications (Shell scripts
+	    put the source code right out in the open for all the world
+	    to see.)</P
+></LI
+></UL
+></P
+><P
+>If any of the above applies, consider a more powerful scripting
+      language -- perhaps <I
+CLASS="FIRSTTERM"
+>Perl</I
+>,
+      <I
+CLASS="FIRSTTERM"
+>Tcl</I
+>, <I
+CLASS="FIRSTTERM"
+>Python</I
+>,
+      <I
+CLASS="FIRSTTERM"
+>Ruby</I
+> -- or possibly a
+      compiled language such as <I
+CLASS="FIRSTTERM"
+>C</I
+>,
+      <I
+CLASS="FIRSTTERM"
+>C++</I
+>, or <I
+CLASS="FIRSTTERM"
+>Java</I
+>. Even
+      then, prototyping the application as a shell script might still
+      be a useful development step.</P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+><A
+NAME="BASHDEF"
+></A
+></P
+><P
+>We will be using <SPAN
+CLASS="ACRONYM"
+>Bash</SPAN
+>, an acronym
+
+        <A
+NAME="AEN139"
+HREF="why-shell.html#FTN.AEN139"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>
+
+      for <SPAN
+CLASS="QUOTE"
+>"Bourne-Again shell"</SPAN
+> and a pun on Stephen Bourne's
+      now classic <I
+CLASS="FIRSTTERM"
+>Bourne</I
+> shell. Bash has become
+      a <I
+CLASS="FOREIGNPHRASE"
+>de facto</I
+> standard for shell
+      scripting on most flavors of UNIX. Most of the principles this
+      book covers apply equally well to scripting with other shells,
+      such as the <I
+CLASS="FIRSTTERM"
+>Korn Shell</I
+>, from which Bash
+      derives some of its features,
+
+       <A
+NAME="AEN147"
+HREF="why-shell.html#FTN.AEN147"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+>
+
+      and the <I
+CLASS="FIRSTTERM"
+>C Shell</I
+> and its variants. (Note that
+      <I
+CLASS="FIRSTTERM"
+>C Shell</I
+> programming is not recommended due to
+      certain inherent problems, as pointed out in an October, 1993 <A
+HREF="http://www.faqs.org/faqs/unix-faq/shell/csh-whynot/"
+TARGET="_top"
+>Usenet
+      post</A
+> by Tom Christiansen.)  </P
+><P
+>What follows is a tutorial on shell scripting. It relies
+      heavily on examples to illustrate various features of the shell.
+      The example scripts work -- they've been tested, insofar as
+      possible -- and some of them are even useful in real life. The
+      reader can play with the actual working code of the examples
+      in the source archive (<TT
+CLASS="FILENAME"
+>scriptname.sh</TT
+> or
+      <TT
+CLASS="FILENAME"
+>scriptname.bash</TT
+>),
+
+         <A
+NAME="AEN157"
+HREF="why-shell.html#FTN.AEN157"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+>
+
+      give them <I
+CLASS="FIRSTTERM"
+>execute</I
+> permission
+      (<TT
+CLASS="USERINPUT"
+><B
+>chmod u+rx scriptname</B
+></TT
+>),
+      then run them to see what happens. Should the <A
+HREF="http://bash.deta.in/abs-guide-latest.tar.bz2"
+TARGET="_top"
+>source
+      archive</A
+> not be available, then cut-and-paste from the <A
+HREF="http://www.tldp.org/LDP/abs/abs-guide.html.tar.gz"
+TARGET="_top"
+>HTML</A
+> or
+      <A
+HREF="http://bash.deta.in/abs-guide.pdf"
+TARGET="_top"
+>pdf</A
+>
+      rendered versions. Be aware that some of the scripts presented here
+      introduce features before they are explained, and this may require
+      the reader to temporarily skip ahead for enlightenment.</P
+><P
+>Unless otherwise noted, <A
+HREF="mailto:thegrendel.abs@gmail.com"
+TARGET="_top"
+>the author</A
+> of this
+       book wrote the example scripts that follow.</P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+CLASS="EPIGRAPH"
+><TR
+><TD
+WIDTH="45%"
+>&nbsp;</TD
+><TD
+WIDTH="45%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+><P
+><I
+>His countenance was bold and bashed not.</I
+></P
+><P
+><I
+>--Edmund Spenser</I
+></P
+></I
+></TD
+></TR
+></TABLE
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN62"
+HREF="why-shell.html#AEN62"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>These are referred to as <A
+HREF="internal.html#BUILTINREF"
+>builtins</A
+>, features internal to the
+        shell.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN87"
+HREF="why-shell.html#AEN87"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Although <A
+HREF="localvar.html#RECURSIONREF0"
+>recursion
+	      <EM
+>is</EM
+> possible in a shell script</A
+>,
+	      it tends to be slow and its implementation is often
+	      an <A
+HREF="recurnolocvar.html#FIBOREF"
+>ugly kludge</A
+>.
+	      </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN139"
+HREF="why-shell.html#AEN139"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>An <I
+CLASS="FIRSTTERM"
+>acronym</I
+>
+        is an <EM
+>ersatz</EM
+> word formed by pasting
+        together the initial letters of the words into a tongue-tripping
+	phrase. This morally corrupt and pernicious practice
+	deserves appropriately severe punishment. Public
+	flogging suggests itself.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN147"
+HREF="why-shell.html#AEN147"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Many of the features of <I
+CLASS="FIRSTTERM"
+>ksh88</I
+>,
+	 and even a few from the updated <I
+CLASS="FIRSTTERM"
+>ksh93</I
+>
+	 have been merged into Bash.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN157"
+HREF="why-shell.html#AEN157"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>By convention, user-written shell scripts
+         that are Bourne shell compliant generally take a name with a
+         <TT
+CLASS="FILENAME"
+>.sh</TT
+> extension.  System scripts, such as
+         those found in <TT
+CLASS="FILENAME"
+>/etc/rc.d</TT
+>,
+         do not necessarily conform to this nomenclature.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="part1.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="sha-bang.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Introduction</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part1.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Starting Off With a Sha-Bang</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

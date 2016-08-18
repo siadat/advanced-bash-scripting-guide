@@ -1,0 +1,394 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Analyzing Scripts</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Exercises"
+HREF="exercises.html"><LINK
+REL="PREVIOUS"
+TITLE="Exercises"
+HREF="exercises.html"><LINK
+REL="NEXT"
+TITLE="Writing Scripts"
+HREF="writingscripts.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="exercises.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Appendix O. Exercises</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="writingscripts.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="SCRIPTANALYSIS"
+></A
+>O.1. Analyzing Scripts</H1
+><P
+>Examine the following script. Run it, then explain what it
+        does.  Annotate the script and rewrite it in a more compact and
+        elegant manner.</P
+><P
+>       <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+MAX=10000
+
+
+  for((nr=1; nr&#60;$MAX; nr++))
+  do
+
+    let "t1 = nr % 5"
+    if [ "$t1" -ne 3 ]
+    then
+      continue
+    fi
+
+    let "t2 = nr % 7"
+    if [ "$t2" -ne 4 ]
+    then
+      continue
+    fi
+
+    let "t3 = nr % 9"
+    if [ "$t3" -ne 5 ]
+    then
+      continue
+    fi
+
+  break   # What happens when you comment out this line? Why?
+
+  done
+
+  echo "Number = $nr"
+
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+       </P
+><P
+>---</P
+><P
+>Explain what the following script does. It is really just
+        a parameterized command-line pipe.</P
+><P
+>        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+DIRNAME=/usr/bin
+FILETYPE="shell script"
+LOGFILE=logfile
+
+file "$DIRNAME"/* | fgrep "$FILETYPE" | tee $LOGFILE | wc -l
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>---</P
+><P
+>Examine and explain the following script. For hints, you
+        might refer to the listings for <A
+HREF="moreadv.html#FINDREF"
+>find</A
+> and <A
+HREF="system.html#STATREF"
+>stat</A
+>.</P
+><P
+>        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# Author:  Nathan Coulter
+# This code is released to the public domain.
+# The author gave permission to use this code snippet in the ABS Guide.
+
+find -maxdepth 1 -type f -printf '%f\000'  | {
+   while read -d $'\000'; do
+      mv "$REPLY" "$(date -d "$(stat -c '%y' "$REPLY") " '+%Y%m%d%H%M%S'
+      )-$REPLY"
+   done
+}
+
+# Warning: Test-drive this script in a "scratch" directory.
+# It will somehow affect all the files there.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>---</P
+><P
+>A reader sent in the following code snippet.</P
+><P
+>         <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>while read LINE
+do
+  echo $LINE
+done &#60; `tail -f /var/log/messages`</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	 </P
+><P
+>He wished to write a script tracking changes to the system log
+	   file, <TT
+CLASS="FILENAME"
+>/var/log/messages</TT
+>. Unfortunately,
+	   the above code block hangs and does nothing
+	   useful. Why? Fix this so it does work. (Hint:
+	   rather than <A
+HREF="redircb.html#REDIRREF"
+>redirecting the
+	   <TT
+CLASS="FILENAME"
+>stdin</TT
+> of the loop</A
+>, try a <A
+HREF="special-chars.html#PIPEREF"
+>pipe</A
+>.)</P
+><P
+>---</P
+><P
+>Analyze the following <SPAN
+CLASS="QUOTE"
+>"one-liner"</SPAN
+> (here
+        split into two lines for clarity) contributed by Rory
+        Winston:</P
+><P
+>      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>export SUM=0; for f in $(find src -name "*.java");
+do export SUM=$(($SUM + $(wc -l $f | awk '{ print $1 }'))); done; echo $SUM</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	 </P
+><P
+>Hint: First, break the script up into bite-sized
+	sections. Then, carefully examine its use of <A
+HREF="dblparens.html"
+>double-parentheses</A
+> arithmetic,
+	the <A
+HREF="internal.html#EXPORTREF"
+>export</A
+> command,
+	the <A
+HREF="moreadv.html#FINDREF"
+>find</A
+> command, the
+	<A
+HREF="textproc.html#WCREF"
+>wc</A
+> command, and <A
+HREF="awk.html#AWKREF"
+>awk</A
+>.</P
+><P
+>---</P
+><P
+>Analyze <A
+HREF="contributed-scripts.html#LIFESLOW"
+>Example A-10</A
+>, and reorganize it in a
+	simplified and more logical style. See how many of the variables
+	can be eliminated, and try to optimize the script to speed up
+	its execution time.</P
+><P
+>Alter the script so that it accepts any ordinary ASCII
+	text file as input for its initial <SPAN
+CLASS="QUOTE"
+>"generation"</SPAN
+>. The
+	script will read the first <TT
+CLASS="PARAMETER"
+><I
+>$ROW*$COL</I
+></TT
+>
+	characters, and set the occurrences of vowels as
+	<SPAN
+CLASS="QUOTE"
+>"living"</SPAN
+> cells. Hint: be sure to translate the
+	spaces in the input file to underscore characters.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="exercises.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="writingscripts.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Exercises</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="exercises.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Writing Scripts</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

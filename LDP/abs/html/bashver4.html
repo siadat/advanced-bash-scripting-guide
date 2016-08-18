@@ -1,0 +1,1973 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Bash, version 4</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Bash, versions 2, 3, and 4"
+HREF="bash2.html"><LINK
+REL="PREVIOUS"
+TITLE="Bash, version 3"
+HREF="http://tldp.org/LDP/abs/html/bashver3.html"><LINK
+REL="NEXT"
+TITLE="Endnotes"
+HREF="endnotes.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="http://tldp.org/LDP/abs/html/bashver3.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 37. Bash, versions 2, 3, and 4</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="endnotes.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="BASHVER4"
+></A
+>37.3. Bash, version 4</H1
+><P
+><A
+NAME="BASH4REF"
+></A
+></P
+><P
+>Chet Ramey announced Version 4 of Bash on the 20th
+        of February, 2009. This release has a number of significant
+	new features, as well as some important bugfixes.</P
+><P
+>Among the new goodies:</P
+><P
+></P
+><UL
+><LI
+><P
+><A
+NAME="ASSOCARR"
+></A
+>Associative arrays.
+                  <A
+NAME="AEN21025"
+HREF="bashver4.html#FTN.AEN21025"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+                </P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><A
+NAME="AEN21029"
+></A
+><P
+></P
+><P
+>An <I
+CLASS="FIRSTTERM"
+>associative</I
+> array can
+        be thought of as a set of two linked arrays -- one holding
+        the <I
+CLASS="FIRSTTERM"
+>data</I
+>, and the other the
+        <I
+CLASS="FIRSTTERM"
+>keys</I
+> that index the individual elements
+	of the <I
+CLASS="FIRSTTERM"
+>data</I
+> array.</P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="FETCHADDRESS"
+></A
+><P
+><B
+>Example 37-5. A simple address database</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+# fetch_address.sh
+
+declare -A address
+#       -A option declares associative array.
+
+address[Charles]="414 W. 10th Ave., Baltimore, MD 21236"
+address[John]="202 E. 3rd St., New York, NY 10009"
+address[Wilma]="1854 Vermont Ave, Los Angeles, CA 90023"
+
+
+echo "Charles's address is ${address[Charles]}."
+# Charles's address is 414 W. 10th Ave., Baltimore, MD 21236.
+echo "Wilma's address is ${address[Wilma]}."
+# Wilma's address is 1854 Vermont Ave, Los Angeles, CA 90023.
+echo "John's address is ${address[John]}."
+# John's address is 202 E. 3rd St., New York, NY 10009.
+
+echo
+
+echo "${!address[*]}"   # The array indices ...
+# Charles John Wilma</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="FETCHADDRESS2"
+></A
+><P
+><B
+>Example 37-6. A somewhat more elaborate address database</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+# fetch_address-2.sh
+# A more elaborate version of fetch_address.sh.
+
+SUCCESS=0
+E_DB=99    # Error code for missing entry.
+
+declare -A address
+#       -A option declares associative array.
+
+
+store_address ()
+{
+  address[$1]="$2"
+  return $?
+}
+
+
+fetch_address ()
+{
+  if [[ -z "${address[$1]}" ]]
+  then
+    echo "$1's address is not in database."
+    return $E_DB
+  fi
+
+  echo "$1's address is ${address[$1]}."
+  return $?
+}
+
+
+store_address "Lucas Fayne" "414 W. 13th Ave., Baltimore, MD 21236"
+store_address "Arvid Boyce" "202 E. 3rd St., New York, NY 10009"
+store_address "Velma Winston" "1854 Vermont Ave, Los Angeles, CA 90023"
+#  Exercise:
+#  Rewrite the above store_address calls to read data from a file,
+#+ then assign field 1 to name, field 2 to address in the array.
+#  Each line in the file would have a format corresponding to the above.
+#  Use a while-read loop to read from file, sed or awk to parse the fields.
+
+fetch_address "Lucas Fayne"
+# Lucas Fayne's address is 414 W. 13th Ave., Baltimore, MD 21236.
+fetch_address "Velma Winston"
+# Velma Winston's address is 1854 Vermont Ave, Los Angeles, CA 90023.
+fetch_address "Arvid Boyce"
+# Arvid Boyce's address is 202 E. 3rd St., New York, NY 10009.
+fetch_address "Bozo Bozeman"
+# Bozo Bozeman's address is not in database.
+
+exit $?   # In this case, exit code = 99, since that is function return.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>See <A
+HREF="contributed-scripts.html#SAMORSE"
+>Example A-53</A
+> for an interesting
+            usage of an <I
+CLASS="FIRSTTERM"
+>associative array</I
+>.</P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Elements of the <I
+CLASS="FIRSTTERM"
+>index</I
+> array
+          may include embedded <A
+HREF="special-chars.html#WHITESPACEREF"
+>space
+          characters</A
+>, or even leading and/or trailing space
+          characters. However, index array elements containing
+	  <EM
+>only</EM
+> <I
+CLASS="FIRSTTERM"
+>whitespace</I
+>
+	  are <EM
+>not</EM
+> permitted.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>address[   ]="Blank"   # Error!</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+  </P
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+><LI
+><P
+><A
+NAME="NCTERM"
+></A
+>Enhancements to the
+            <A
+HREF="testbranch.html#CASEESAC1"
+>case</A
+> construct:
+            the <TT
+CLASS="REPLACEABLE"
+><I
+>;;&#38;</I
+></TT
+> and
+            <TT
+CLASS="REPLACEABLE"
+><I
+>;&#38;</I
+></TT
+> terminators.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="CASE4"
+></A
+><P
+><B
+>Example 37-7. Testing characters</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+
+test_char ()
+{
+  case "$1" in
+    [[:print:]] )  echo "$1 is a printable character.";;&#38;       # |
+    # The ;;&#38; terminator continues to the next pattern test.      |
+    [[:alnum:]] )  echo "$1 is an alpha/numeric character.";;&#38;  # v
+    [[:alpha:]] )  echo "$1 is an alphabetic character.";;&#38;     # v
+    [[:lower:]] )  echo "$1 is a lowercase alphabetic character.";;&#38;
+    [[:digit:]] )  echo "$1 is an numeric character.";&#38;         # |
+    # The ;&#38; terminator executes the next statement ...         # |
+    %%%@@@@@    )  echo "********************************";;    # v
+#   ^^^^^^^^  ... even with a dummy pattern.
+  esac
+}
+
+echo
+
+test_char 3
+# 3 is a printable character.
+# 3 is an alpha/numeric character.
+# 3 is an numeric character.
+# ********************************
+echo
+
+test_char m
+# m is a printable character.
+# m is an alpha/numeric character.
+# m is an alphabetic character.
+# m is a lowercase alphabetic character.
+echo
+
+test_char /
+# / is a printable character.
+
+echo
+
+# The ;;&#38; terminator can save complex if/then conditions.
+# The ;&#38; is somewhat less useful.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+><LI
+><P
+><A
+NAME="COPROCREF"
+></A
+>The new <B
+CLASS="COMMAND"
+>coproc</B
+>
+            builtin enables two parallel <A
+HREF="special-chars.html#PROCESSREF"
+>processes</A
+> to communicate and
+            interact. As Chet Ramey states in the
+            <A
+HREF="biblio.html#BASHFAQ"
+>Bash FAQ</A
+>
+  <A
+NAME="AEN21068"
+HREF="bashver4.html#FTN.AEN21068"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>
+      , ver. 4.01:
+    </P
+><A
+NAME="AEN21070"
+></A
+><BLOCKQUOTE
+CLASS="BLOCKQUOTE"
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;There&nbsp;is&nbsp;a&nbsp;new&nbsp;'coproc'&nbsp;reserved&nbsp;word&nbsp;that&nbsp;specifies&nbsp;a&nbsp;coprocess:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;an&nbsp;asynchronous&nbsp;command&nbsp;run&nbsp;with&nbsp;two&nbsp;pipes&nbsp;connected&nbsp;to&nbsp;the&nbsp;creating<br>
+&nbsp;&nbsp;&nbsp;&nbsp;shell.&nbsp;Coprocs&nbsp;can&nbsp;be&nbsp;named.&nbsp;The&nbsp;input&nbsp;and&nbsp;output&nbsp;file&nbsp;descriptors<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;the&nbsp;PID&nbsp;of&nbsp;the&nbsp;coprocess&nbsp;are&nbsp;available&nbsp;to&nbsp;the&nbsp;calling&nbsp;shell&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variables&nbsp;with&nbsp;coproc-specific&nbsp;names.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;George&nbsp;Dimitriu&nbsp;explains,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"...&nbsp;coproc&nbsp;...&nbsp;is&nbsp;a&nbsp;feature&nbsp;used&nbsp;in&nbsp;Bash&nbsp;process&nbsp;substitution,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;which&nbsp;now&nbsp;is&nbsp;made&nbsp;publicly&nbsp;available."<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;means&nbsp;it&nbsp;can&nbsp;be&nbsp;explicitly&nbsp;invoked&nbsp;in&nbsp;a&nbsp;script,&nbsp;rather&nbsp;than<br>
+&nbsp;&nbsp;&nbsp;&nbsp;just&nbsp;being&nbsp;a&nbsp;behind-the-scenes&nbsp;mechanism&nbsp;used&nbsp;by&nbsp;Bash.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></BLOCKQUOTE
+><P
+>Coprocesses use <I
+CLASS="FIRSTTERM"
+>file descriptors</I
+>.
+      <A
+HREF="io-redirection.html#FDREF2"
+>File descriptors enable processes and
+        pipes to communicate</A
+>.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+# A coprocess communicates with a while-read loop.
+
+
+coproc { cat mx_data.txt; sleep 2; }
+#                         ^^^^^^^
+# Try running this without "sleep 2" and see what happens.
+
+while read -u ${COPROC[0]} line    #  ${COPROC[0]} is the
+do                                 #+ file descriptor of the coprocess.
+  echo "$line" | sed -e 's/line/NOT-ORIGINAL-TEXT/'
+done
+
+kill $COPROC_PID                   #  No longer need the coprocess,
+                                   #+ so kill its PID.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>But, be careful!</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+
+echo; echo
+a=aaa
+b=bbb
+c=ccc
+
+coproc echo "one two three"
+while read -u ${COPROC[0]} a b c;  #  Note that this loop
+do                                 #+ runs in a subshell.
+  echo "Inside while-read loop: ";
+  echo "a = $a"; echo "b = $b"; echo "c = $c"
+  echo "coproc file descriptor: ${COPROC[0]}"
+done 
+
+# a = one
+# b = two
+# c = three
+# So far, so good, but ...
+
+echo "-----------------"
+echo "Outside while-read loop: "
+echo "a = $a"  # a =
+echo "b = $b"  # b =
+echo "c = $c"  # c =
+echo "coproc file descriptor: ${COPROC[0]}"
+echo
+#  The coproc is still running, but ...
+#+ it still doesn't enable the parent process
+#+ to "inherit" variables from the child process, the while-read loop.
+
+#  Compare this to the "badread.sh" script.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The coprocess is <I
+CLASS="FIRSTTERM"
+>asynchronous</I
+>,
+        and this might cause a problem. It may terminate before another
+        process has finished communicating with it.</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+
+coproc cpname { for i in {0..10}; do echo "index = $i"; done; }
+#      ^^^^^^ This is a *named* coprocess.
+read -u ${cpname[0]}
+echo $REPLY         #  index = 0
+echo ${COPROC[0]}   #+ No output ... the coprocess timed out
+#  after the first loop iteration.
+
+
+
+# However, George Dimitriu has a partial fix.
+
+coproc cpname { for i in {0..10}; do echo "index = $i"; done; sleep 1;
+echo hi &#62; myo; cat - &#62;&#62; myo; }
+#       ^^^^^ This is a *named* coprocess.
+
+echo "I am main"$'\04' &#62;&#38;${cpname[1]}
+myfd=${cpname[0]}
+echo myfd=$myfd
+
+### while read -u $myfd
+### do
+###   echo $REPLY;
+### done
+
+echo $cpname_PID
+
+#  Run this with and without the commented-out while-loop, and it is
+#+ apparent that each process, the executing shell and the coprocess,
+#+ waits for the other to finish writing in its own write-enabled pipe.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+><LI
+><P
+><A
+NAME="MAPFILEREF"
+></A
+>The new <B
+CLASS="COMMAND"
+>mapfile</B
+>
+      builtin makes it possible to load an array with the contents
+      of a text file without using a loop or <A
+HREF="arrays.html#ARRAYINITCS"
+>command substitution</A
+>.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+
+mapfile Arr1 &#60; $0
+# Same result as     Arr1=( $(cat $0) )
+echo "${Arr1[@]}"  # Copies this entire script out to stdout.
+
+echo "--"; echo
+
+# But, not the same as   read -a   !!!
+read -a Arr2 &#60; $0
+echo "${Arr2[@]}"  # Reads only first line of script into the array.
+
+exit</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></LI
+><LI
+><P
+>The <A
+HREF="internal.html#READREF"
+>read</A
+> builtin got
+	a minor facelift. The <TT
+CLASS="OPTION"
+>-t</TT
+>
+	<A
+HREF="internal.html#READTIMED"
+>timeout</A
+> option now accepts
+	(decimal) fractional values
+	        <A
+NAME="AEN21096"
+HREF="bashver4.html#FTN.AEN21096"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>
+	and the <TT
+CLASS="OPTION"
+>-i</TT
+> option
+	permits preloading the edit buffer.
+	        <A
+NAME="AEN21101"
+HREF="bashver4.html#FTN.AEN21101"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+>
+        Unfortunately, these enhancements are still a work in progress
+        and not (yet) usable in scripts.</P
+></LI
+><LI
+><P
+><A
+NAME="CASEMODPARAMSUB"
+></A
+>
+                   <A
+HREF="parameter-substitution.html#PARAMSUBREF"
+>Parameter substitution</A
+>
+        gets <I
+CLASS="FIRSTTERM"
+>case-modification</I
+> operators.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+
+var=veryMixedUpVariable
+echo ${var}            # veryMixedUpVariable
+echo ${var^}           # VeryMixedUpVariable
+#         *              First char --&#62; uppercase.
+echo ${var^^}          # VERYMIXEDUPVARIABLE
+#         **             All chars  --&#62; uppercase.
+echo ${var,}           # veryMixedUpVariable
+#         *              First char --&#62; lowercase.
+echo ${var,,}          # verymixedupvariable
+#         **             All chars  --&#62; lowercase.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></LI
+><LI
+><P
+><A
+NAME="DECLARECASEMOD"
+></A
+></P
+><P
+>The <A
+HREF="declareref.html"
+>declare</A
+> builtin now
+        accepts the <TT
+CLASS="OPTION"
+>-l</TT
+> <I
+CLASS="FIRSTTERM"
+>lowercase</I
+>
+        and <TT
+CLASS="OPTION"
+>-c</TT
+> <I
+CLASS="FIRSTTERM"
+>capitalize</I
+>
+        options.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+
+declare -l var1            # Will change to lowercase
+var1=MixedCaseVARIABLE
+echo "$var1"               # mixedcasevariable
+# Same effect as             echo $var1 | tr A-Z a-z
+
+declare -c var2            # Changes only initial char to uppercase.
+var2=originally_lowercase
+echo "$var2"               # Originally_lowercase
+# NOT the same effect as     echo $var2 | tr a-z A-Z</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></LI
+><LI
+><P
+><A
+NAME="BRACEEXPREF4"
+></A
+>
+      <A
+HREF="special-chars.html#BRACEEXPREF"
+>Brace expansion</A
+> has more options.</P
+><P
+><I
+CLASS="FIRSTTERM"
+>Increment/decrement</I
+>, specified in the
+        final term within braces.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+
+echo {40..60..2}
+# 40 42 44 46 48 50 52 54 56 58 60
+# All the even numbers, between 40 and 60.
+
+echo {60..40..2}
+# 60 58 56 54 52 50 48 46 44 42 40
+# All the even numbers, between 40 and 60, counting backwards.
+# In effect, a decrement.
+echo {60..40..-2}
+# The same output. The minus sign is not necessary.
+
+# But, what about letters and symbols?
+echo {X..d}
+# X Y Z [  ] ^ _ ` a b c d
+# Does not echo the \ which escapes a space.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+><I
+CLASS="FIRSTTERM"
+>Zero-padding</I
+>, specified in the
+	     first term within braces, prefixes each term in the output
+	     with the <EM
+>same number</EM
+> of zeroes.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash4$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo {010..15}</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>010 011 012 013 014 015</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash4$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo {000..10}</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>000 001 002 003 004 005 006 007 008 009 010</TT
+>
+      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+></LI
+><LI
+><P
+><A
+NAME="SUBSTREXTREF4"
+></A
+></P
+><P
+><A
+HREF="bashver4.html#SUBSTREXTREF4"
+><I
+CLASS="FIRSTTERM"
+>Substring
+          extraction</I
+> on <I
+CLASS="FIRSTTERM"
+>positional
+	  parameters</I
+></A
+> now starts with <A
+HREF="othertypesv.html#SCRNAMEPARAM"
+>$0</A
+> as the
+	  <I
+CLASS="FIRSTTERM"
+>zero-index</I
+>. (This corrects an
+	  inconsistency in the treatment of positional parameters.)</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# show-params.bash
+# Requires version 4+ of Bash.
+
+# Invoke this scripts with at least one positional parameter.
+
+E_BADPARAMS=99
+
+if [ -z "$1" ]
+then
+  echo "Usage $0 param1 ..."
+  exit $E_BADPARAMS
+fi
+
+echo ${@:0}
+
+# bash3 show-params.bash4 one two three
+# one two three
+
+# bash4 show-params.bash4 one two three
+# show-params.bash4 one two three
+
+# $0                $1  $2  $3</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></LI
+><LI
+><P
+><A
+NAME="GLOBSTARREF"
+></A
+>The new <SPAN
+CLASS="TOKEN"
+>**</SPAN
+>
+            <A
+HREF="http://tldp.org/LDP/abs/html/globbingref.html"
+>globbing</A
+> operator
+	    matches filenames and directories
+	    <A
+HREF="localvar.html#RECURSIONREF0"
+>recursively</A
+>.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+# filelist.bash4
+
+shopt -s globstar  # Must enable globstar, otherwise ** doesn't work.
+                   # The globstar shell option is new to version 4 of Bash.
+
+echo "Using *"; echo
+for filename in *
+do
+  echo "$filename"
+done   # Lists only files in current directory ($PWD).
+
+echo; echo "--------------"; echo
+
+echo "Using **"
+for filename in **
+do
+  echo "$filename"
+done   # Lists complete file tree, recursively.
+
+exit
+
+Using *
+
+allmyfiles
+filelist.bash4
+
+--------------
+
+Using **
+
+allmyfiles
+allmyfiles/file.index.txt
+allmyfiles/my_music
+allmyfiles/my_music/me-singing-60s-folksongs.ogg
+allmyfiles/my_music/me-singing-opera.ogg
+allmyfiles/my_music/piano-lesson.1.ogg
+allmyfiles/my_pictures
+allmyfiles/my_pictures/at-beach-with-Jade.png
+allmyfiles/my_pictures/picnic-with-Melissa.png
+filelist.bash4</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></LI
+><LI
+><P
+>The new <A
+HREF="internalvariables.html#BASHPIDREF"
+>$BASHPID</A
+>
+        internal variable.</P
+></LI
+><LI
+><P
+><A
+NAME="CNFH"
+></A
+></P
+><P
+>There is a new <A
+HREF="internal.html#BUILTINREF"
+>builtin</A
+>
+            error-handling function named
+	    <B
+CLASS="COMMAND"
+>command_not_found_handle</B
+>.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash4
+
+command_not_found_handle ()
+{ # Accepts implicit parameters.
+  echo "The following command is not valid: \""$1\"""
+  echo "With the following argument(s): \""$2\"" \""$3\"""   # $4, $5 ...
+} # $1, $2, etc. are not explicitly passed to the function.
+
+bad_command arg1 arg2
+
+# The following command is not valid: "bad_command"
+# With the following argument(s): "arg1" "arg2"</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></LI
+></UL
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><A
+NAME="AEN21170"
+></A
+><P
+></P
+><P
+><EM
+>Editorial comment</EM
+></P
+><P
+>Associative arrays? Coprocesses? Whatever happened
+          to the lean and mean Bash we have come to know and love?
+          Could it be suffering from (horrors!) <SPAN
+CLASS="QUOTE"
+>"feature
+          creep"</SPAN
+>? Or perhaps even Korn shell envy?</P
+><P
+><EM
+>Note to Chet Ramey:</EM
+> Please add only
+          <EM
+>essential</EM
+> features in future Bash
+	  releases -- perhaps <I
+CLASS="FIRSTTERM"
+>for-each</I
+>
+	  loops and support for multi-dimensional arrays.
+	    <A
+NAME="AEN21179"
+HREF="bashver4.html#FTN.AEN21179"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+>
+	  Most Bash users won't need, won't use, and likely won't greatly
+	  appreciate complex <SPAN
+CLASS="QUOTE"
+>"features"</SPAN
+> like built-in
+	  debuggers, Perl interfaces, and bolt-on rocket boosters.</P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN21183"
+></A
+>37.3.1. Bash, version 4.1</H2
+><P
+><A
+NAME="BASH41"
+></A
+>Version 4.1 of Bash, released in May,
+	   2010, was primarily a bugfix update.</P
+><P
+></P
+><UL
+><LI
+><P
+>The <A
+HREF="internal.html#PRINTFREF"
+>printf</A
+> command
+        now accepts a <TT
+CLASS="OPTION"
+>-v</TT
+> option for setting <A
+HREF="arrays.html#ARRAYREF"
+>array</A
+> indices.</P
+></LI
+><LI
+><P
+>Within <A
+HREF="testconstructs.html#DBLBRACKETS"
+>double brackets</A
+>,
+        the <B
+CLASS="COMMAND"
+>&#62;</B
+> and <B
+CLASS="COMMAND"
+>&#60;</B
+>
+        string comparison operators now conform to the <A
+HREF="localization.html#LOCALEREF"
+>locale</A
+>. Since the locale setting may
+        affect the sorting order of string expressions, this
+	has side-effects on comparison tests within
+        <EM
+>[[ ... ]]</EM
+> expressions.</P
+></LI
+><LI
+><P
+>The <A
+HREF="internal.html#READREF"
+>read</A
+> builtin
+        now takes a <TT
+CLASS="OPTION"
+>-N</TT
+> option (<I
+CLASS="FIRSTTERM"
+>read -N
+        chars</I
+>), which causes the <I
+CLASS="FIRSTTERM"
+>read</I
+>
+        to terminate after <I
+CLASS="FIRSTTERM"
+>chars</I
+>
+        characters.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="READN"
+></A
+><P
+><B
+>Example 37-8. Reading N characters</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# Requires Bash version -ge 4.1 ...
+
+num_chars=61
+
+read -N $num_chars var &#60; $0   # Read first 61 characters of script!
+echo "$var"
+exit
+
+####### Output of Script #######
+
+#!/bin/bash
+# Requires Bash version -ge 4.1 ...
+
+num_chars=61</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+><LI
+><P
+><A
+HREF="here-docs.html#HEREDOCREF"
+>Here documents</A
+>
+	      embedded in <A
+HREF="varassignment.html#COMMANDSUBREF0"
+>              <TT
+CLASS="USERINPUT"
+><B
+>$( ... )</B
+></TT
+> command substitution</A
+>
+	      constructs may terminate with a simple
+	      <B
+CLASS="COMMAND"
+>)</B
+>.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="HERECOMMSUB"
+></A
+><P
+><B
+>Example 37-9. Using a <I
+CLASS="FIRSTTERM"
+>here document</I
+>
+                       to set a variable</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# here-commsub.sh
+# Requires Bash version -ge 4.1 ...
+
+multi_line_var=$( cat &#60;&#60;ENDxxx
+------------------------------
+This is line 1 of the variable
+This is line 2 of the variable
+This is line 3 of the variable
+------------------------------
+ENDxxx)
+
+#  Rather than what Bash 4.0 requires:
+#+ that the terminating limit string and
+#+ the terminating close-parenthesis be on separate lines.
+
+# ENDxxx
+# )
+
+
+echo "$multi_line_var"
+
+#  Bash still emits a warning, though.
+#  warning: here-document at line 10 delimited
+#+ by end-of-file (wanted `ENDxxx')</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN21220"
+></A
+>37.3.2. Bash, version 4.2</H2
+><P
+><A
+NAME="BASH42"
+></A
+>Version 4.2 of Bash, released
+	   in February, 2011, contains a number of new features and
+	   enhancements, in addition to bugfixes.</P
+><P
+></P
+><UL
+><LI
+><P
+>Bash now supports the the
+		<TT
+CLASS="REPLACEABLE"
+><I
+>\u</I
+></TT
+>
+		and <TT
+CLASS="REPLACEABLE"
+><I
+>\U</I
+></TT
+>
+		<I
+CLASS="FIRSTTERM"
+>Unicode</I
+> escape.</P
+><P
+><A
+NAME="UNICODEREF"
+></A
+></P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><A
+NAME="AEN21232"
+></A
+><P
+></P
+><P
+>Unicode is a cross-platform standard for encoding
+          into numerical values letters and graphic symbols.
+          This permits representing and displaying characters
+          in foreign alphabets and unusual fonts.</P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+><A
+NAME="UNICODEREF2"
+></A
+></P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>echo -e '\u2630'   # Horizontal triple bar character.
+# Equivalent to the more roundabout:
+echo -e "\xE2\x98\xB0"
+                   # Recognized by earlier Bash versions.
+
+echo -e '\u220F'   # PI (Greek letter and mathematical symbol)
+echo -e '\u0416'   # Capital "ZHE" (Cyrillic letter)
+echo -e '\u2708'   # Airplane (Dingbat font) symbol
+echo -e '\u2622'   # Radioactivity trefoil
+
+echo -e "The amplifier circuit requires a 100 \u2126 pull-up resistor."
+
+
+unicode_var='\u2640'
+echo -e $unicode_var      # Female symbol
+printf "$unicode_var \n"  # Female symbol, with newline
+
+
+#  And for something a bit more elaborate . . .
+
+#  We can store Unicode symbols in an associative array,
+#+ then retrieve them by name.
+#  Run this in a gnome-terminal or a terminal with a large, bold font
+#+ for better legibility.
+
+declare -A symbol  # Associative array.
+
+symbol[script_E]='\u2130'
+symbol[script_F]='\u2131'
+symbol[script_J]='\u2110'
+symbol[script_M]='\u2133'
+symbol[Rx]='\u211E'
+symbol[TEL]='\u2121'
+symbol[FAX]='\u213B'
+symbol[care_of]='\u2105'
+symbol[account]='\u2100'
+symbol[trademark]='\u2122'
+
+
+echo -ne "${symbol[script_E]}   "
+echo -ne "${symbol[script_F]}   "
+echo -ne "${symbol[script_J]}   "
+echo -ne "${symbol[script_M]}   "
+echo -ne "${symbol[Rx]}   "
+echo -ne "${symbol[TEL]}   "
+echo -ne "${symbol[FAX]}   "
+echo -ne "${symbol[care_of]}   "
+echo -ne "${symbol[account]}   "
+echo -ne "${symbol[trademark]}   "
+echo</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The above example uses the
+          <A
+HREF="escapingsection.html#STRQ"
+><B
+CLASS="COMMAND"
+>$' ... '</B
+></A
+>
+          <I
+CLASS="FIRSTTERM"
+>string-expansion</I
+> construct.</P
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+><LI
+><P
+><A
+NAME="LASTPIPEREF"
+></A
+></P
+><P
+>When the <TT
+CLASS="REPLACEABLE"
+><I
+>lastpipe</I
+></TT
+> shell option
+          is set, the last command in a <A
+HREF="special-chars.html#PIPEREF"
+>pipe</A
+> <EM
+>doesn't run in a
+	  subshell</EM
+>.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="LASTPIPEOPT"
+></A
+><P
+><B
+>Example 37-10. Piping input to a <A
+HREF="internal.html#READREF"
+>read</A
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# lastpipe-option.sh
+
+line=''                   # Null value.
+echo "\$line = "$line""   # $line =
+
+echo
+
+shopt -s lastpipe         # Error on Bash version -lt 4.2.
+echo "Exit status of attempting to set \"lastpipe\" option is $?"
+#     1 if Bash version -lt 4.2, 0 otherwise.
+
+echo
+
+head -1 $0 | read line    # Pipe the first line of the script to read.
+#            ^^^^^^^^^      Not in a subshell!!!
+
+echo "\$line = "$line""
+# Older Bash releases       $line =
+# Bash version 4.2          $line = #!/bin/bash</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>This option offers possible <SPAN
+CLASS="QUOTE"
+>"fixups"</SPAN
+>
+		    for these example scripts:
+		    <A
+HREF="gotchas.html#BADREAD"
+>Example 34-3</A
+> and
+                    <A
+HREF="internal.html#READPIPE"
+>Example 15-8</A
+>.</P
+></LI
+><LI
+><P
+>Negative <A
+HREF="arrays.html#ARRAYREF"
+>array</A
+> indices
+           permit counting backwards from the end of an array.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="NEGARRAY"
+></A
+><P
+><B
+>Example 37-11. Negative array indices</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# neg-array.sh
+# Requires Bash, version -ge 4.2.
+
+array=( zero one two three four five )   # Six-element array.
+#         0    1   2    3    4    5
+#        -6   -5  -4   -3   -2   -1
+
+# Negative array indices now permitted.
+echo ${array[-1]}   # five
+echo ${array[-2]}   # four
+# ...
+echo ${array[-6]}   # zero
+# Negative array indices count backward from the last element+1.
+
+# But, you cannot index past the beginning of the array.
+echo ${array[-7]}   # array: bad array subscript
+
+
+# So, what is this new feature good for?
+
+echo "The last element in the array is "${array[-1]}""
+# Which is quite a bit more straightforward than:
+echo "The last element in the array is "${array[${#array[*]}-1]}""
+echo
+
+# And ...
+
+index=0
+let "neg_element_count = 0 - ${#array[*]}"
+# Number of elements, converted to a negative number.
+
+while [ $index -gt $neg_element_count ]; do
+  ((index--)); echo -n "${array[index]} "
+done  # Lists the elements in the array, backwards.
+      # We have just simulated the "tac" command on this array.
+
+echo
+
+# See also neg-offset.sh.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+><LI
+><P
+><A
+HREF="string-manipulation.html#SUBSTREXTR01"
+>Substring extraction</A
+>
+           uses a negative <I
+CLASS="FIRSTTERM"
+>length</I
+> parameter to
+           specify an offset from the <I
+CLASS="FIRSTTERM"
+>end</I
+> of the
+           target string.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="NEGOFFSET"
+></A
+><P
+><B
+>Example 37-12. Negative parameter in string-extraction
+                      construct</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# Bash, version -ge 4.2
+# Negative length-index in substring extraction.
+# Important: It changes the interpretation of this construct!
+
+stringZ=abcABC123ABCabc
+
+echo ${stringZ}                              # abcABC123ABCabc
+#                   Position within string:    0123456789.....
+echo ${stringZ:2:3}                          #   cAB
+#  Count 2 chars forward from string beginning, and extract 3 chars.
+#  ${string:position:length}
+
+#  So far, nothing new, but now ...
+
+                                             # abcABC123ABCabc
+#                   Position within string:    0123....6543210
+echo ${stringZ:3:-6}                         #    ABC123
+#                ^
+#  Index 3 chars forward from beginning and 6 chars backward from end,
+#+ and extract everything in between.
+#  ${string:offset-from-front:offset-from-end}
+#  When the "length" parameter is negative, 
+#+ it serves as an offset-from-end parameter.
+
+#  See also neg-array.sh.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+></UL
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN21025"
+HREF="bashver4.html#AEN21025"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>To be more specific, Bash 4+ has
+                  <EM
+>limited</EM
+> support for associative
+		  arrays. It's a bare-bones implementation,
+		  and it lacks the much of the functionality of such
+		  arrays in other programming languages. Note, however,
+		  that <A
+HREF="http://tldp.org/LDP/abs/html/optimizations.html#ASSOCARRTST"
+>associative arrays in
+		  Bash seem to execute faster and more efficiently than
+		  numerically-indexed arrays</A
+>.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN21068"
+HREF="bashver4.html#AEN21068"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Copyright 1995-2009 by Chester Ramey.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN21096"
+HREF="bashver4.html#AEN21096"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>This only works with <A
+HREF="special-chars.html#PIPEREF"
+>pipes</A
+> and certain other
+                <I
+CLASS="FIRSTTERM"
+>special</I
+> files.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN21101"
+HREF="bashver4.html#AEN21101"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>But only in conjunction with
+                <A
+HREF="internal.html#READLINEREF"
+>readline</A
+>, i.e.,
+                from the command-line.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN21179"
+HREF="bashver4.html#AEN21179"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>And while you're at it, consider fixing
+              the notorious <A
+HREF="internal.html#PIPEREADREF0"
+>piped read</A
+>
+	      problem.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="http://tldp.org/LDP/abs/html/bashver3.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="endnotes.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Bash, version 3</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="bash2.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Endnotes</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

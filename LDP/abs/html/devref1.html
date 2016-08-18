@@ -1,0 +1,839 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>/dev</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="/dev and /proc"
+HREF="devproc.html"><LINK
+REL="PREVIOUS"
+TITLE="/dev and /proc"
+HREF="devproc.html"><LINK
+REL="NEXT"
+TITLE="/proc"
+HREF="procref1.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="devproc.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 29. <TT
+CLASS="FILENAME"
+>/dev</TT
+> and <TT
+CLASS="FILENAME"
+>/proc</TT
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="procref1.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="DEVREF1"
+></A
+>29.1. <TT
+CLASS="FILENAME"
+>/dev</TT
+></H1
+><P
+><A
+NAME="DEVFILEREF"
+></A
+>The <TT
+CLASS="FILENAME"
+>/dev</TT
+> directory contains entries for
+	the <I
+CLASS="FIRSTTERM"
+>physical devices</I
+> that may or may not
+	be present in the hardware.
+
+	   <A
+NAME="AEN19045"
+HREF="devref1.html#FTN.AEN19045"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+	
+	Appropriately enough, these are called <I
+CLASS="FIRSTTERM"
+>device
+	files</I
+>.
+	As an example, the hard drive partitions containing
+	the mounted filesystem(s) have entries in <TT
+CLASS="FILENAME"
+>/dev</TT
+>, as <A
+HREF="system.html#DFREF"
+>df</A
+> shows.</P
+><P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>df</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Filesystem           1k-blocks      Used Available Use%
+ Mounted on
+ /dev/hda6               495876    222748    247527  48% /
+ /dev/hda1                50755      3887     44248   9% /boot
+ /dev/hda8               367013     13262    334803   4% /home
+ /dev/hda5              1714416   1123624    503704  70% /usr</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+        </P
+><P
+><A
+NAME="LOOPBACKREF"
+></A
+>Among other things, the <TT
+CLASS="FILENAME"
+>/dev</TT
+> directory
+	contains <I
+CLASS="FIRSTTERM"
+>loopback</I
+> devices, such as
+	<TT
+CLASS="FILENAME"
+>/dev/loop0</TT
+>. A loopback device is a gimmick
+	that allows an ordinary file to be accessed as if it were a
+	block device.
+
+	  <A
+NAME="AEN19065"
+HREF="devref1.html#FTN.AEN19065"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>
+
+	This permits mounting an entire filesystem within a
+	single large file. See <A
+HREF="system.html#CREATEFS"
+>Example 17-8</A
+> and <A
+HREF="system.html#ISOMOUNTREF"
+>Example 17-7</A
+>.</P
+><P
+>A few of the pseudo-devices in <TT
+CLASS="FILENAME"
+>/dev</TT
+>
+	 have other specialized uses, such as <A
+HREF="zeros.html#ZEROSREF"
+><TT
+CLASS="FILENAME"
+>/dev/null</TT
+></A
+>, <A
+HREF="zeros.html#ZEROSREF1"
+><TT
+CLASS="FILENAME"
+>/dev/zero</TT
+></A
+>, <A
+HREF="randomvar.html#URANDOMREF"
+><TT
+CLASS="FILENAME"
+>/dev/urandom</TT
+></A
+>,
+	 <TT
+CLASS="FILENAME"
+>/dev/sda1</TT
+> (hard drive partition),
+	 <TT
+CLASS="FILENAME"
+>/dev/udp</TT
+> (<I
+CLASS="FIRSTTERM"
+>User
+	 Datagram Packet</I
+> port), and <A
+HREF="devref1.html#DEVTCP"
+><TT
+CLASS="FILENAME"
+>/dev/tcp</TT
+></A
+>.</P
+><P
+>For instance:</P
+><P
+>To manually <A
+HREF="system.html#MOUNTREF"
+>mount</A
+>
+         a USB flash drive, append the following line to
+         <A
+HREF="system.html#FSTABREF"
+><TT
+CLASS="FILENAME"
+>/etc/fstab</TT
+></A
+>.
+
+	      <A
+NAME="AEN19093"
+HREF="devref1.html#FTN.AEN19093"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>
+
+	   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>/dev/sda1    /mnt/flashdrive    auto    noauto,user,noatime    0 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+
+         (See also <A
+HREF="contributed-scripts.html#USBINST"
+>Example A-23</A
+>.)</P
+><P
+>Checking whether a disk is in the CD-burner
+         (soft-linked to <TT
+CLASS="FILENAME"
+>/dev/hdc</TT
+>):
+
+	 <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>head -1 /dev/hdc
+
+
+#  head: cannot open '/dev/hdc' for reading: No medium found
+#  (No disc in the drive.)
+
+#  head: error reading '/dev/hdc': Input/output error
+#  (There is a disk in the drive, but it can't be read;
+#+  possibly it's an unrecorded CDR blank.)   
+
+#  Stream of characters and assorted gibberish
+#  (There is a pre-recorded disk in the drive,
+#+ and this is raw output -- a stream of ASCII and binary data.)
+#  Here we see the wisdom of using 'head' to limit the output
+#+ to manageable proportions, rather than 'cat' or something similar.
+
+
+#  Now, it's just a matter of checking/parsing the output and taking
+#+ appropriate action.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+><A
+NAME="SOCKETREF"
+></A
+></P
+><P
+>When executing a command on a
+         <TT
+CLASS="FILENAME"
+>/dev/tcp/$host/$port</TT
+> pseudo-device file, Bash
+	 opens a TCP connection to the associated
+	 <I
+CLASS="FIRSTTERM"
+>socket</I
+>.</P
+><TABLE
+CLASS="SIDEBAR"
+BORDER="1"
+CELLPADDING="5"
+><TR
+><TD
+><DIV
+CLASS="SIDEBAR"
+><A
+NAME="AEN19112"
+></A
+><P
+></P
+><P
+>A <I
+CLASS="FIRSTTERM"
+>socket</I
+> is a
+	      communications node associated with a specific I/O
+	      port. (This is analogous to a <I
+CLASS="FIRSTTERM"
+>hardware
+	      socket</I
+>, or <I
+CLASS="FIRSTTERM"
+>receptacle</I
+>,
+	      for a connecting cable.) It permits data transfer between
+	      hardware devices on the same machine, between machines
+	      on the same network, between machines across different
+	      networks, and, of course, between machines at different
+	      locations on the Internet.</P
+><P
+></P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+><A
+NAME="NPREF"
+></A
+>The following examples assume an active Internet
+         connection.</P
+><P
+>Getting the time from <TT
+CLASS="FILENAME"
+>nist.gov</TT
+>:</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>cat &#60;/dev/tcp/time.nist.gov/13</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>53082 04-03-18 04:26:54 68 0 0 502.3 UTC(NIST) *</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>[Mark contributed this example.]</P
+><P
+>Generalizing the above into a script:</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# This script must run with root permissions.
+
+URL="time.nist.gov/13"
+
+Time=$(cat &#60;/dev/tcp/"$URL")
+UTC=$(echo "$Time" | awk '{print$3}')   # Third field is UTC (GMT) time.
+# Exercise: modify this for different time zones.
+
+echo "UTC Time = "$UTC""</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+><A
+NAME="NW001"
+></A
+>Downloading a URL:</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>exec 5&#60;&#62;/dev/tcp/www.net.cn/80</B
+></TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>echo -e "GET / HTTP/1.0\n" &#62;&#38;5</B
+></TT
+>
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>cat &#60;&#38;5</B
+></TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>[Thanks, Mark and Mihai Maties.]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="DEVTCP"
+></A
+><P
+><B
+>Example 29-1. Using <TT
+CLASS="FILENAME"
+>/dev/tcp</TT
+> for
+	      troubleshooting</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# dev-tcp.sh: /dev/tcp redirection to check Internet connection.
+
+# Script by Troy Engel.
+# Used with permission.
+ 
+TCP_HOST=news-15.net       # A known spam-friendly ISP.
+TCP_PORT=80                # Port 80 is http.
+  
+# Try to connect. (Somewhat similar to a 'ping' . . .) 
+echo "HEAD / HTTP/1.0" &#62;/dev/tcp/${TCP_HOST}/${TCP_PORT}
+MYEXIT=$?
+
+: &#60;&#60;EXPLANATION
+If bash was compiled with --enable-net-redirections, it has the capability of
+using a special character device for both TCP and UDP redirections. These
+redirections are used identically as STDIN/STDOUT/STDERR. The device entries
+are 30,36 for /dev/tcp:
+
+  mknod /dev/tcp c 30 36
+
+&#62;From the bash reference:
+/dev/tcp/host/port
+    If host is a valid hostname or Internet address, and port is an integer
+port number or service name, Bash attempts to open a TCP connection to the
+corresponding socket.
+EXPLANATION
+
+   
+if [ "X$MYEXIT" = "X0" ]; then
+  echo "Connection successful. Exit code: $MYEXIT"
+else
+  echo "Connection unsuccessful. Exit code: $MYEXIT"
+fi
+
+exit $MYEXIT</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="MUSICSCR"
+></A
+><P
+><B
+>Example 29-2. Playing music</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# music.sh
+
+# Music without external files
+
+# Author: Antonio Macchi
+# Used in ABS Guide with permission.
+
+
+#  /dev/dsp default = 8000 frames per second, 8 bits per frame (1 byte),
+#+ 1 channel (mono)
+
+duration=2000       # If 8000 bytes = 1 second, then 2000 = 1/4 second.
+volume=$'\xc0'      # Max volume = \xff (or \x00).
+mute=$'\x80'        # No volume = \x80 (the middle).
+
+function mknote ()  # $1=Note Hz in bytes (e.g. A = 440Hz ::
+{                   #+ 8000 fps / 440 = 16 :: A = 16 bytes per second)
+  for t in `seq 0 $duration`
+  do
+    test $(( $t % $1 )) = 0 &#38;&#38; echo -n $volume || echo -n $mute
+  done
+}
+
+e=`mknote 49`
+g=`mknote 41`
+a=`mknote 36`
+b=`mknote 32`
+c=`mknote 30`
+cis=`mknote 29`
+d=`mknote 27`
+e2=`mknote 24`
+n=`mknote 32767`
+# European notation.
+
+echo -n "$g$e2$d$c$d$c$a$g$n$g$e$n$g$e2$d$c$c$b$c$cis$n$cis$d \
+$n$g$e2$d$c$d$c$a$g$n$g$e$n$g$a$d$c$b$a$b$c" &#62; /dev/dsp
+# dsp = Digital Signal Processor
+
+exit      # A "bonny" example of an elegant shell script!</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN19045"
+HREF="devref1.html#AEN19045"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>The entries in <TT
+CLASS="FILENAME"
+>/dev</TT
+>
+	     provide mount points for physical and virtual devices. These
+	     entries use very little drive space.</P
+><P
+>Some devices, such as <TT
+CLASS="FILENAME"
+>/dev/null</TT
+>,
+	   <TT
+CLASS="FILENAME"
+>/dev/zero</TT
+>,
+	   and <TT
+CLASS="FILENAME"
+>/dev/urandom</TT
+> are virtual. They
+	   are not actual physical devices and exist only in
+	   software.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN19065"
+HREF="devref1.html#AEN19065"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+><A
+NAME="BLOCKDEVREF"
+></A
+>A <I
+CLASS="FIRSTTERM"
+>block
+	    device</I
+> reads and/or writes data in chunks,
+	    or <I
+CLASS="FIRSTTERM"
+>blocks</I
+>, in contrast to a <A
+NAME="CHARDEVREF"
+></A
+><I
+CLASS="FIRSTTERM"
+>character device</I
+>,
+	    which acesses data in <I
+CLASS="FIRSTTERM"
+>character</I
+>
+	    units. Examples of block devices are hard drives, CDROM
+	    drives, and flash drives. Examples of character devices are
+	    keyboards, modems, sound cards.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN19093"
+HREF="devref1.html#AEN19093"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Of course, the mount point
+	        <TT
+CLASS="FILENAME"
+>/mnt/flashdrive</TT
+> must exist. If not,
+		then, as <I
+CLASS="FIRSTTERM"
+>root</I
+>, <B
+CLASS="COMMAND"
+>mkdir
+		/mnt/flashdrive</B
+>.</P
+><P
+>To actually mount the drive, use the following command:
+	       <B
+CLASS="COMMAND"
+>mount /mnt/flashdrive</B
+></P
+><P
+>Newer Linux distros automount flash drives in the
+	       <TT
+CLASS="FILENAME"
+>/media</TT
+>
+	       directory without user intervention.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="devproc.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="procref1.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><TT
+CLASS="FILENAME"
+>/dev</TT
+> and <TT
+CLASS="FILENAME"
+>/proc</TT
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="devproc.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><TT
+CLASS="FILENAME"
+>/proc</TT
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

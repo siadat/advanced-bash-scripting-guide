@@ -1,0 +1,481 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Here Strings</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Here Documents"
+HREF="here-docs.html"><LINK
+REL="PREVIOUS"
+TITLE="Here Documents"
+HREF="here-docs.html"><LINK
+REL="NEXT"
+TITLE="I/O Redirection"
+HREF="io-redirection.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="here-docs.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 19. Here Documents</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="io-redirection.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN17837"
+></A
+>19.1. Here Strings</H1
+><P
+><A
+NAME="HERESTRINGSREF"
+></A
+></P
+><A
+NAME="AEN17841"
+></A
+><BLOCKQUOTE
+CLASS="BLOCKQUOTE"
+><P
+CLASS="LITERALLAYOUT"
+>A&nbsp;<I
+CLASS="FIRSTTERM"
+>here string</I
+>&nbsp;can&nbsp;be&nbsp;considered&nbsp;as&nbsp;a&nbsp;stripped-down&nbsp;form&nbsp;of&nbsp;a&nbsp;<I
+CLASS="FIRSTTERM"
+>here document</I
+>.<br>
+It&nbsp;consists&nbsp;of&nbsp;nothing&nbsp;more&nbsp;than&nbsp;<B
+CLASS="COMMAND"
+>COMMAND &#60;&#60;&#60; $WORD</B
+>,<br>
+where&nbsp;<TT
+CLASS="VARNAME"
+>$WORD</TT
+>&nbsp;is&nbsp;expanded&nbsp;and&nbsp;fed&nbsp;to&nbsp;the&nbsp;<TT
+CLASS="FILENAME"
+>stdin</TT
+>&nbsp;of&nbsp;<B
+CLASS="COMMAND"
+>COMMAND</B
+>.<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></BLOCKQUOTE
+><P
+>As a simple example, consider this alternative to the <A
+HREF="internal.html#ECHOGREPREF"
+>echo-grep</A
+> construction.</P
+><P
+>	  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># Instead of:
+if echo "$VAR" | grep -q txt   # if [[ $VAR = *txt* ]]
+# etc.
+
+# Try:
+if grep -q "txt" &#60;&#60;&#60; "$VAR"
+then   #         ^^^
+   echo "$VAR contains the substring sequence \"txt\""
+fi
+# Thank you, Sebastian Kaminski, for the suggestion.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+        </P
+><P
+><A
+NAME="HSREAD"
+></A
+></P
+><P
+>Or, in combination with <A
+HREF="internal.html#READREF"
+>read</A
+>:</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>String="This is a string of words."
+
+read -r -a Words &#60;&#60;&#60; "$String"
+#  The -a option to "read"
+#+ assigns the resulting values to successive members of an array.
+
+echo "First word in String is:    ${Words[0]}"   # This
+echo "Second word in String is:   ${Words[1]}"   # is
+echo "Third word in String is:    ${Words[2]}"   # a
+echo "Fourth word in String is:   ${Words[3]}"   # string
+echo "Fifth word in String is:    ${Words[4]}"   # of
+echo "Sixth word in String is:    ${Words[5]}"   # words.
+echo "Seventh word in String is:  ${Words[6]}"   # (null)
+                                                 # Past end of $String.
+
+# Thank you, Francisco Lobo, for the suggestion.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+        </P
+><P
+><A
+NAME="HSLOOP"
+></A
+>It is, of course, possible to feed
+	  the output of a <I
+CLASS="FIRSTTERM"
+>here string</I
+>
+	  into the <TT
+CLASS="FILENAME"
+>stdin</TT
+> of a <A
+HREF="loops.html#LOOPREF00"
+>loop</A
+>.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># As Seamus points out . . .
+
+ArrayVar=( element0 element1 element2 {A..D} )
+
+while read element ; do
+  echo "$element" 1&#62;&#38;2
+done &#60;&#60;&#60; $(echo ${ArrayVar[*]})
+
+# element0 element1 element2 A B C D</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+><A
+NAME="HSPRE"
+></A
+></P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="PREPENDEX"
+></A
+><P
+><B
+>Example 19-13. Prepending a line to a file</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# prepend.sh: Add text at beginning of file.
+#
+#  Example contributed by Kenny Stauffer,
+#+ and slightly modified by document author.
+
+
+E_NOSUCHFILE=85
+
+read -p "File: " file   # -p arg to 'read' displays prompt.
+if [ ! -e "$file" ]
+then   # Bail out if no such file.
+  echo "File $file not found."
+  exit $E_NOSUCHFILE
+fi
+
+read -p "Title: " title
+cat - $file &#60;&#60;&#60;$title &#62; $file.new
+
+echo "Modified file is $file.new"
+
+exit  # Ends script execution.
+
+  from 'man bash':
+  Here Strings
+  	A variant of here documents, the format is:
+  
+  		&#60;&#60;&#60;word
+  
+  	The word is expanded and supplied to the command on its standard input.
+
+
+  Of course, the following also works:
+   sed -e '1i\
+   Title: ' $file</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="MAILBOXGREP"
+></A
+><P
+><B
+>Example 19-14. Parsing a mailbox</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+#  Script by Francisco Lobo,
+#+ and slightly modified and commented by ABS Guide author.
+#  Used in ABS Guide with permission. (Thank you!)
+
+# This script will not run under Bash versions -lt 3.0.
+
+
+E_MISSING_ARG=87
+if [ -z "$1" ]
+then
+  echo "Usage: $0 mailbox-file"
+  exit $E_MISSING_ARG
+fi
+
+mbox_grep()  # Parse mailbox file.
+{
+    declare -i body=0 match=0
+    declare -a date sender
+    declare mail header value
+
+
+    while IFS= read -r mail
+#         ^^^^                 Reset $IFS.
+#  Otherwise "read" will strip leading &#38; trailing space from its input.
+
+   do
+       if [[ $mail =~ ^From  ]]   # Match "From" field in message.
+       then
+          (( body  = 0 ))           # "Zero out" variables.
+          (( match = 0 ))
+          unset date
+
+       elif (( body ))
+       then
+            (( match ))
+            #  echo "$mail"
+            #  Uncomment above line if you want entire body
+            #+ of message to display.
+
+   elif [[ $mail ]]; then
+      IFS=: read -r header value &#60;&#60;&#60; "$mail"
+      #                          ^^^  "here string"
+
+      case "$header" in
+      [Ff][Rr][Oo][Mm] ) [[ $value =~ "$2" ]] &#38;&#38; (( match++ )) ;;
+      # Match "From" line.
+      [Dd][Aa][Tt][Ee] ) read -r -a date &#60;&#60;&#60; "$value" ;;
+      #                                  ^^^
+      # Match "Date" line.
+      [Rr][Ee][Cc][Ee][Ii][Vv][Ee][Dd] ) read -r -a sender &#60;&#60;&#60; "$value" ;;
+      #                                                    ^^^
+      # Match IP Address (may be spoofed).
+      esac
+
+       else
+          (( body++ ))
+          (( match  )) &#38;&#38;
+          echo "MESSAGE ${date:+of: ${date[*]} }"
+       #    Entire $date array             ^
+          echo "IP address of sender: ${sender[1]}"
+       #    Second field of "Received" line    ^
+
+       fi
+
+
+    done &#60; "$1" # Redirect stdout of file into loop.
+}
+
+
+mbox_grep "$1"  # Send mailbox file to function.
+
+exit $?
+
+# Exercises:
+# ---------
+# 1) Break the single function, above, into multiple functions,
+#+   for the sake of readability.
+# 2) Add additional parsing to the script, checking for various keywords.
+
+
+
+$ mailbox_grep.sh scam_mail
+  MESSAGE of Thu, 5 Jan 2006 08:00:56 -0500 (EST) 
+  IP address of sender: 196.3.62.4</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Exercise: Find other uses for <I
+CLASS="FIRSTTERM"
+>here
+           strings</I
+>, such as, for example, <A
+HREF="mathc.html#GOLDENRATIO"
+>feeding input to
+           <I
+CLASS="FIRSTTERM"
+>dc</I
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="here-docs.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="io-redirection.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Here Documents</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="here-docs.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>I/O Redirection</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

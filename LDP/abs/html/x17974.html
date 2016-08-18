@@ -1,0 +1,533 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Using exec</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="I/O Redirection"
+HREF="io-redirection.html"><LINK
+REL="PREVIOUS"
+TITLE="I/O Redirection"
+HREF="io-redirection.html"><LINK
+REL="NEXT"
+TITLE="Redirecting Code Blocks"
+HREF="redircb.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="io-redirection.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 20. I/O Redirection</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="redircb.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN17974"
+></A
+>20.1. Using <I
+CLASS="FIRSTTERM"
+>exec</I
+></H1
+><P
+><A
+NAME="USINGEXECREF"
+></A
+></P
+><P
+>An <B
+CLASS="COMMAND"
+>exec &#60;filename</B
+> command redirects
+	  <TT
+CLASS="FILENAME"
+>stdin</TT
+> to a file. From that point on, all
+	  <TT
+CLASS="FILENAME"
+>stdin</TT
+> comes from that file, rather than
+	  its normal source (usually keyboard input). This provides a
+	  method of reading a file line by line and possibly parsing
+	  each line of input using <A
+HREF="sedawk.html#SEDREF"
+>sed</A
+>
+	  and/or <A
+HREF="awk.html#AWKREF"
+>awk</A
+>.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="REDIR1"
+></A
+><P
+><B
+>Example 20-1. Redirecting <TT
+CLASS="FILENAME"
+>stdin</TT
+> using
+	  <I
+CLASS="FIRSTTERM"
+>exec</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# Redirecting stdin using 'exec'.
+
+
+exec 6&#60;&#38;0          # Link file descriptor #6 with stdin.
+                   # Saves stdin.
+
+exec &#60; data-file   # stdin replaced by file "data-file"
+
+read a1            # Reads first line of file "data-file".
+read a2            # Reads second line of file "data-file."
+
+echo
+echo "Following lines read from file."
+echo "-------------------------------"
+echo $a1
+echo $a2
+
+echo; echo; echo
+
+exec 0&#60;&#38;6 6&#60;&#38;-
+#  Now restore stdin from fd #6, where it had been saved,
+#+ and close fd #6 ( 6&#60;&#38;- ) to free it for other processes to use.
+#
+# &#60;&#38;6 6&#60;&#38;-    also works.
+
+echo -n "Enter data  "
+read b1  # Now "read" functions as expected, reading from normal stdin.
+echo "Input read from stdin."
+echo "----------------------"
+echo "b1 = $b1"
+
+echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Similarly, an <B
+CLASS="COMMAND"
+>exec &#62;filename</B
+>
+	  command redirects <TT
+CLASS="FILENAME"
+>stdout</TT
+> to a designated
+	  file.  This sends all command output that would normally go
+	  to <TT
+CLASS="FILENAME"
+>stdout</TT
+> to that file.</P
+><DIV
+CLASS="IMPORTANT"
+><P
+></P
+><TABLE
+CLASS="IMPORTANT"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>	  <B
+CLASS="COMMAND"
+>exec N &#62; filename</B
+> affects the entire
+	  script or <I
+CLASS="FIRSTTERM"
+>current shell</I
+>. Redirection in
+	  the <A
+HREF="special-chars.html#PROCESSIDREF"
+>PID</A
+> of the script or shell
+	  from that point on has changed. However . . .
+        </P
+><P
+>	  <B
+CLASS="COMMAND"
+>N &#62; filename</B
+> affects only the newly-forked process,
+	  not the entire script or shell.
+        </P
+><P
+>Thank you, Ahmed Darwish, for pointing this out.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="REASSIGNSTDOUT"
+></A
+><P
+><B
+>Example 20-2. Redirecting <TT
+CLASS="FILENAME"
+>stdout</TT
+> using
+	  <I
+CLASS="FIRSTTERM"
+>exec</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# reassign-stdout.sh
+
+LOGFILE=logfile.txt
+
+exec 6&#62;&#38;1           # Link file descriptor #6 with stdout.
+                    # Saves stdout.
+
+exec &#62; $LOGFILE     # stdout replaced with file "logfile.txt".
+
+# ----------------------------------------------------------- #
+# All output from commands in this block sent to file $LOGFILE.
+
+echo -n "Logfile: "
+date
+echo "-------------------------------------"
+echo
+
+echo "Output of \"ls -al\" command"
+echo
+ls -al
+echo; echo
+echo "Output of \"df\" command"
+echo
+df
+
+# ----------------------------------------------------------- #
+
+exec 1&#62;&#38;6 6&#62;&#38;-      # Restore stdout and close file descriptor #6.
+
+echo
+echo "== stdout now restored to default == "
+echo
+ls -al
+echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="UPPERCONV"
+></A
+><P
+><B
+>Example 20-3. Redirecting both <TT
+CLASS="FILENAME"
+>stdin</TT
+> and
+	  <TT
+CLASS="FILENAME"
+>stdout</TT
+> in the same script with
+	  <I
+CLASS="FIRSTTERM"
+>exec</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# upperconv.sh
+# Converts a specified input file to uppercase.
+
+E_FILE_ACCESS=70
+E_WRONG_ARGS=71
+
+if [ ! -r "$1" ]     # Is specified input file readable?
+then
+  echo "Can't read from input file!"
+  echo "Usage: $0 input-file output-file"
+  exit $E_FILE_ACCESS
+fi                   #  Will exit with same error
+                     #+ even if input file ($1) not specified (why?).
+
+if [ -z "$2" ]
+then
+  echo "Need to specify output file."
+  echo "Usage: $0 input-file output-file"
+  exit $E_WRONG_ARGS
+fi
+
+
+exec 4&#60;&#38;0
+exec &#60; $1            # Will read from input file.
+
+exec 7&#62;&#38;1
+exec &#62; $2            # Will write to output file.
+                     # Assumes output file writable (add check?).
+
+# -----------------------------------------------
+    cat - | tr a-z A-Z   # Uppercase conversion.
+#   ^^^^^                # Reads from stdin.
+#           ^^^^^^^^^^   # Writes to stdout.
+# However, both stdin and stdout were redirected.
+# Note that the 'cat' can be omitted.
+# -----------------------------------------------
+
+exec 1&#62;&#38;7 7&#62;&#38;-       # Restore stout.
+exec 0&#60;&#38;4 4&#60;&#38;-       # Restore stdin.
+
+# After restoration, the following line prints to stdout as expected.
+echo "File \"$1\" written to \"$2\" as uppercase conversion."
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>I/O redirection is a clever way of avoiding the dreaded <A
+HREF="subshells.html#PARVIS"
+>inaccessible variables within a subshell</A
+>
+      problem.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AVOIDSUBSHELL"
+></A
+><P
+><B
+>Example 20-4. Avoiding a subshell</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# avoid-subshell.sh
+# Suggested by Matthew Walker.
+
+Lines=0
+
+echo
+
+cat myfile.txt | while read line;
+                 do {
+                   echo $line
+                   (( Lines++ ));  #  Incremented values of this variable
+                                   #+ inaccessible outside loop.
+                                   #  Subshell problem.
+                 }
+                 done
+
+echo "Number of lines read = $Lines"     # 0
+                                         # Wrong!
+
+echo "------------------------"
+
+
+exec 3&#60;&#62; myfile.txt
+while read line &#60;&#38;3
+do {
+  echo "$line"
+  (( Lines++ ));                   #  Incremented values of this variable
+                                   #+ accessible outside loop.
+                                   #  No subshell, no problem.
+}
+done
+exec 3&#62;&#38;-
+
+echo "Number of lines read = $Lines"     # 8
+
+echo
+
+exit 0
+
+# Lines below not seen by script.
+
+$ cat myfile.txt
+
+Line 1.
+Line 2.
+Line 3.
+Line 4.
+Line 5.
+Line 6.
+Line 7.
+Line 8.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="io-redirection.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="redircb.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>I/O Redirection</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="io-redirection.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Redirecting Code Blocks</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

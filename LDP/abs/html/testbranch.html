@@ -1,0 +1,1096 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Testing and Branching</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Loops and Branches"
+HREF="loops.html"><LINK
+REL="PREVIOUS"
+TITLE="Loop Control"
+HREF="loopcontrol.html"><LINK
+REL="NEXT"
+TITLE="Command Substitution"
+HREF="commandsub.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="loopcontrol.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 11. Loops and Branches</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="commandsub.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="TESTBRANCH"
+></A
+>11.4. Testing and Branching</H1
+><P
+>The <B
+CLASS="COMMAND"
+>case</B
+> and <B
+CLASS="COMMAND"
+>select</B
+>
+	  constructs are technically not loops, since they do not iterate the
+	  execution of a code block. Like loops, however, they direct
+	  program flow according to conditions at the top or bottom of
+	  the block.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="CASEESAC1"
+></A
+>Controlling program flow in a code
+	    block</B
+></P
+><DL
+><DT
+><B
+CLASS="COMMAND"
+>case (in) / esac</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>case</B
+> construct is the shell
+	      scripting analog to <TT
+CLASS="REPLACEABLE"
+><I
+>switch</I
+></TT
+>
+	      in <B
+CLASS="COMMAND"
+>C/C++</B
+>.
+	      It permits branching to one of a number of code blocks,
+	      depending on condition tests. It serves as a kind of
+	      shorthand for multiple <SPAN
+CLASS="TOKEN"
+>if/then/else</SPAN
+>
+	      statements and is an appropriate tool for creating
+	      menus.</P
+><P
+><P
+><B
+CLASS="COMMAND"
+>case</B
+>   "$<TT
+CLASS="REPLACEABLE"
+><I
+>variable</I
+></TT
+>"   in <BR><BR>   "$<TT
+CLASS="REPLACEABLE"
+><I
+>condition1</I
+></TT
+>" ) <BR>   <TT
+CLASS="REPLACEABLE"
+><I
+>command</I
+></TT
+>... <BR>   ;; <BR><BR>   "$<TT
+CLASS="REPLACEABLE"
+><I
+>condition2</I
+></TT
+>" ) <BR>   <TT
+CLASS="REPLACEABLE"
+><I
+>command</I
+></TT
+>... <BR>   ;; <BR><BR><BR><B
+CLASS="COMMAND"
+>esac</B
+> </P
+></P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>	      <P
+></P
+><UL
+><LI
+><P
+>Quoting the variables is not mandatory,
+		since word splitting does not take place.</P
+></LI
+><LI
+><P
+><A
+NAME="CASEPAREN"
+></A
+>Each test line
+                    ends with a right paren <B
+CLASS="COMMAND"
+>)</B
+>.
+
+  <A
+NAME="AEN7087"
+HREF="testbranch.html#FTN.AEN7087"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+			  </P
+></LI
+><LI
+><P
+>Each condition block ends
+		with a <EM
+>double</EM
+> semicolon
+		<SPAN
+CLASS="TOKEN"
+>;;</SPAN
+>.</P
+></LI
+><LI
+><P
+>If a condition tests
+                <I
+CLASS="FIRSTTERM"
+>true</I
+>, then the associated
+		commands execute and the <B
+CLASS="COMMAND"
+>case</B
+>
+		block terminates.</P
+></LI
+><LI
+><P
+>The entire <B
+CLASS="COMMAND"
+>case</B
+>
+		block ends with an <B
+CLASS="COMMAND"
+>esac</B
+>
+		(<I
+CLASS="WORDASWORD"
+>case</I
+> spelled backwards).</P
+></LI
+></UL
+>
+	    </P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX29"
+></A
+><P
+><B
+>Example 11-25. Using <I
+CLASS="FIRSTTERM"
+>case</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# Testing ranges of characters.
+
+echo; echo "Hit a key, then hit return."
+read Keypress
+
+case "$Keypress" in
+  [[:lower:]]   ) echo "Lowercase letter";;
+  [[:upper:]]   ) echo "Uppercase letter";;
+  [0-9]         ) echo "Digit";;
+  *             ) echo "Punctuation, whitespace, or other";;
+esac      #  Allows ranges of characters in [square brackets],
+          #+ or POSIX ranges in [[double square brackets.
+
+#  In the first version of this example,
+#+ the tests for lowercase and uppercase characters were
+#+ [a-z] and [A-Z].
+#  This no longer works in certain locales and/or Linux distros.
+#  POSIX is more portable.
+#  Thanks to Frank Wang for pointing this out.
+
+#  Exercise:
+#  --------
+#  As the script stands, it accepts a single keystroke, then terminates.
+#  Change the script so it accepts repeated input,
+#+ reports on each keystroke, and terminates only when "X" is hit.
+#  Hint: enclose everything in a "while" loop.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX30"
+></A
+><P
+><B
+>Example 11-26. Creating menus using <I
+CLASS="FIRSTTERM"
+>case</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# Crude address database
+
+clear # Clear the screen.
+
+echo "          Contact List"
+echo "          ------- ----"
+echo "Choose one of the following persons:" 
+echo
+echo "[E]vans, Roland"
+echo "[J]ones, Mildred"
+echo "[S]mith, Julie"
+echo "[Z]ane, Morris"
+echo
+
+read person
+
+case "$person" in
+# Note variable is quoted.
+
+  "E" | "e" )
+  # Accept upper or lowercase input.
+  echo
+  echo "Roland Evans"
+  echo "4321 Flash Dr."
+  echo "Hardscrabble, CO 80753"
+  echo "(303) 734-9874"
+  echo "(303) 734-9892 fax"
+  echo "revans@zzy.net"
+  echo "Business partner &#38; old friend"
+  ;;
+# Note double semicolon to terminate each option.
+
+  "J" | "j" )
+  echo
+  echo "Mildred Jones"
+  echo "249 E. 7th St., Apt. 19"
+  echo "New York, NY 10009"
+  echo "(212) 533-2814"
+  echo "(212) 533-9972 fax"
+  echo "milliej@loisaida.com"
+  echo "Ex-girlfriend"
+  echo "Birthday: Feb. 11"
+  ;;
+
+# Add info for Smith &#38; Zane later.
+
+          * )
+   # Default option.	  
+   # Empty input (hitting RETURN) fits here, too.
+   echo
+   echo "Not yet in database."
+  ;;
+
+esac
+
+echo
+
+#  Exercise:
+#  --------
+#  Change the script so it accepts multiple inputs,
+#+ instead of terminating after displaying just one address.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="CASECL"
+></A
+></P
+><P
+>An exceptionally clever use of <B
+CLASS="COMMAND"
+>case</B
+>
+	      involves testing for command-line parameters.
+	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#! /bin/bash
+
+case "$1" in
+  "") echo "Usage: ${0##*/} &#60;filename&#62;"; exit $E_PARAM;;
+                      # No command-line parameters,
+                      # or first parameter empty.
+# Note that ${0##*/} is ${var##pattern} param substitution.
+                      # Net result is $0.
+
+  -*) FILENAME=./$1;;   #  If filename passed as argument ($1)
+                      #+ starts with a dash,
+                      #+ replace it with ./$1
+                      #+ so further commands don't interpret it
+                      #+ as an option.
+
+  * ) FILENAME=$1;;     # Otherwise, $1.
+esac</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><P
+>Here is a more straightforward example of
+	      command-line parameter handling:
+	      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#! /bin/bash
+
+
+while [ $# -gt 0 ]; do    # Until you run out of parameters . . .
+  case "$1" in
+    -d|--debug)
+              # "-d" or "--debug" parameter?
+              DEBUG=1
+              ;;
+    -c|--conf)
+              CONFFILE="$2"
+              shift
+              if [ ! -f $CONFFILE ]; then
+                echo "Error: Supplied file doesn't exist!"
+                exit $E_CONFFILE     # File not found error.
+              fi
+              ;;
+  esac
+  shift       # Check next set of parameters.
+done
+
+#  From Stefano Falsetto's "Log2Rot" script,
+#+ part of his "rottlog" package.
+#  Used with permission.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="CASECMD"
+></A
+><P
+><B
+>Example 11-27. Using <I
+CLASS="FIRSTTERM"
+>command substitution</I
+>
+	      to generate the <I
+CLASS="FIRSTTERM"
+>case</I
+> variable</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# case-cmd.sh: Using command substitution to generate a "case" variable.
+
+case $( arch ) in   # $( arch ) returns machine architecture.
+                    # Equivalent to 'uname -m' ...
+  i386 ) echo "80386-based machine";;
+  i486 ) echo "80486-based machine";;
+  i586 ) echo "Pentium-based machine";;
+  i686 ) echo "Pentium2+-based machine";;
+  *    ) echo "Other type of machine";;
+esac
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="CSGLOB"
+></A
+></P
+><P
+>A <B
+CLASS="COMMAND"
+>case</B
+> construct can filter strings for
+	      <A
+HREF="http://tldp.org/LDP/abs/html/globbingref.html"
+>globbing</A
+> patterns.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="MATCHSTRING"
+></A
+><P
+><B
+>Example 11-28. Simple string matching</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# match-string.sh: Simple string matching
+#                  using a 'case' construct.
+
+match_string ()
+{ # Exact string match.
+  MATCH=0
+  E_NOMATCH=90
+  PARAMS=2     # Function requires 2 arguments.
+  E_BAD_PARAMS=91
+
+  [ $# -eq $PARAMS ] || return $E_BAD_PARAMS
+
+  case "$1" in
+  "$2") return $MATCH;;
+  *   ) return $E_NOMATCH;;
+  esac
+
+}  
+
+
+a=one
+b=two
+c=three
+d=two
+
+
+match_string $a     # wrong number of parameters
+echo $?             # 91
+
+match_string $a $b  # no match
+echo $?             # 90
+
+match_string $b $d  # match
+echo $?             # 0
+
+
+exit 0		    </PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="ISALPHA"
+></A
+><P
+><B
+>Example 11-29. Checking for alphabetic input</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# isalpha.sh: Using a "case" structure to filter a string.
+
+SUCCESS=0
+FAILURE=1   #  Was FAILURE=-1,
+            #+ but Bash no longer allows negative return value.
+
+isalpha ()  # Tests whether *first character* of input string is alphabetic.
+{
+if [ -z "$1" ]                # No argument passed?
+then
+  return $FAILURE
+fi
+
+case "$1" in
+  [a-zA-Z]*) return $SUCCESS;;  # Begins with a letter?
+  *        ) return $FAILURE;;
+esac
+}             # Compare this with "isalpha ()" function in C.
+
+
+isalpha2 ()   # Tests whether *entire string* is alphabetic.
+{
+  [ $# -eq 1 ] || return $FAILURE
+
+  case $1 in
+  *[!a-zA-Z]*|"") return $FAILURE;;
+               *) return $SUCCESS;;
+  esac
+}
+
+isdigit ()    # Tests whether *entire string* is numerical.
+{             # In other words, tests for integer variable.
+  [ $# -eq 1 ] || return $FAILURE
+
+  case $1 in
+    *[!0-9]*|"") return $FAILURE;;
+              *) return $SUCCESS;;
+  esac
+}
+
+
+
+check_var ()  # Front-end to isalpha ().
+{
+if isalpha "$@"
+then
+  echo "\"$*\" begins with an alpha character."
+  if isalpha2 "$@"
+  then        # No point in testing if first char is non-alpha.
+    echo "\"$*\" contains only alpha characters."
+  else
+    echo "\"$*\" contains at least one non-alpha character."
+  fi  
+else
+  echo "\"$*\" begins with a non-alpha character."
+              # Also "non-alpha" if no argument passed.
+fi
+
+echo
+
+}
+
+digit_check ()  # Front-end to isdigit ().
+{
+if isdigit "$@"
+then
+  echo "\"$*\" contains only digits [0 - 9]."
+else
+  echo "\"$*\" has at least one non-digit character."
+fi
+
+echo
+
+}
+
+a=23skidoo
+b=H3llo
+c=-What?
+d=What?
+e=$(echo $b)   # Command substitution.
+f=AbcDef
+g=27234
+h=27a34
+i=27.34
+
+check_var $a
+check_var $b
+check_var $c
+check_var $d
+check_var $e
+check_var $f
+check_var     # No argument passed, so what happens?
+#
+digit_check $g
+digit_check $h
+digit_check $i
+
+
+exit 0        # Script improved by S.C.
+
+# Exercise:
+# --------
+#  Write an 'isfloat ()' function that tests for floating point numbers.
+#  Hint: The function duplicates 'isdigit ()',
+#+ but adds a test for a mandatory decimal point.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><A
+NAME="SELECTREF"
+></A
+><B
+CLASS="COMMAND"
+>select</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>select</B
+> construct, adopted from the Korn
+	      Shell, is yet another tool for building menus.</P
+><P
+><P
+><B
+CLASS="COMMAND"
+>select</B
+>   <TT
+CLASS="REPLACEABLE"
+><I
+>variable</I
+></TT
+>  [in <TT
+CLASS="REPLACEABLE"
+><I
+>list</I
+></TT
+>]<BR>  do <BR>   <TT
+CLASS="REPLACEABLE"
+><I
+>command</I
+></TT
+>... <BR>   break <BR>  done </P
+></P
+><P
+>This prompts the user to enter one of the choices presented in the
+	      variable list.  Note that <B
+CLASS="COMMAND"
+>select</B
+> uses the
+	      <TT
+CLASS="VARNAME"
+>$PS3</TT
+> prompt (<TT
+CLASS="PROMPT"
+>#? </TT
+>) by default, 
+		but this may be changed.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX31"
+></A
+><P
+><B
+>Example 11-30. Creating menus using <I
+CLASS="FIRSTTERM"
+>select</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+PS3='Choose your favorite vegetable: ' # Sets the prompt string.
+                                       # Otherwise it defaults to #? .
+
+echo
+
+select vegetable in "beans" "carrots" "potatoes" "onions" "rutabagas"
+do
+  echo
+  echo "Your favorite veggie is $vegetable."
+  echo "Yuck!"
+  echo
+  break  # What happens if there is no 'break' here?
+done
+
+exit
+
+# Exercise:
+# --------
+#  Fix this script to accept user input not specified in
+#+ the "select" statement.
+#  For example, if the user inputs "peas,"
+#+ the script would respond "Sorry. That is not on the menu."</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="INLISTOMIT"
+></A
+></P
+><P
+>If <TT
+CLASS="USERINPUT"
+><B
+>in <TT
+CLASS="REPLACEABLE"
+><I
+>list</I
+></TT
+></B
+></TT
+> is
+	      omitted, then <B
+CLASS="COMMAND"
+>select</B
+> uses the list of command
+	      line arguments (<TT
+CLASS="VARNAME"
+>$@</TT
+>) passed to the script or
+	      the function containing the <B
+CLASS="COMMAND"
+>select</B
+>
+	      construct.</P
+><P
+>Compare this to the behavior of a 
+	      <P
+><B
+CLASS="COMMAND"
+>for</B
+>   <TT
+CLASS="REPLACEABLE"
+><I
+>variable</I
+></TT
+>  [in <TT
+CLASS="REPLACEABLE"
+><I
+>list</I
+></TT
+>]</P
+>
+	      construct with the 
+	      <TT
+CLASS="USERINPUT"
+><B
+>in <TT
+CLASS="REPLACEABLE"
+><I
+>list</I
+></TT
+></B
+></TT
+>
+	      omitted.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX32"
+></A
+><P
+><B
+>Example 11-31. Creating menus using <I
+CLASS="FIRSTTERM"
+>select</I
+>
+	      in a function</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+PS3='Choose your favorite vegetable: '
+
+echo
+
+choice_of()
+{
+select vegetable
+# [in list] omitted, so 'select' uses arguments passed to function.
+do
+  echo
+  echo "Your favorite veggie is $vegetable."
+  echo "Yuck!"
+  echo
+  break
+done
+}
+
+choice_of beans rice carrots radishes rutabaga spinach
+#         $1    $2   $3      $4       $5       $6
+#         passed to choice_of() function
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>See also <A
+HREF="bashver2.html#RESISTOR"
+>Example 37-3</A
+>.</P
+></DD
+></DL
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN7087"
+HREF="testbranch.html#AEN7087"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Pattern-match lines may also <EM
+>start</EM
+>
+    with a <B
+CLASS="COMMAND"
+>(</B
+> left paren to give the layout
+    a more structured appearance.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>case $( arch ) in   # $( arch ) returns machine architecture.
+  ( i386 ) echo "80386-based machine";;
+# ^      ^
+  ( i486 ) echo "80486-based machine";;
+  ( i586 ) echo "Pentium-based machine";;
+  ( i686 ) echo "Pentium2+-based machine";;
+  (    * ) echo "Other type of machine";;
+esac</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="loopcontrol.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="commandsub.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Loop Control</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="loops.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Command Substitution</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

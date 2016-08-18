@@ -1,0 +1,930 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Shell Wrappers</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Miscellany"
+HREF="miscellany.html"><LINK
+REL="PREVIOUS"
+TITLE="Interactive and non-interactive shells and scripts"
+HREF="http://tldp.org/LDP/abs/html/intandnonint.html"><LINK
+REL="NEXT"
+TITLE="Tests and Comparisons: Alternatives"
+HREF="http://tldp.org/LDP/abs/html/testsandcomparisons.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="http://tldp.org/LDP/abs/html/intandnonint.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 36. Miscellany</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="http://tldp.org/LDP/abs/html/testsandcomparisons.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="WRAPPER"
+></A
+>36.2. Shell Wrappers</H1
+><P
+><A
+NAME="SHWRAPPER"
+></A
+></P
+><P
+>A <I
+CLASS="FIRSTTERM"
+>wrapper</I
+> is a shell script that embeds
+	a system command or utility, that accepts and passes a set of
+	parameters to that command.
+
+      <A
+NAME="AEN20130"
+HREF="wrapper.html#FTN.AEN20130"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+	
+	Wrapping a script around a complex command-line
+	simplifies invoking it.  This is expecially useful
+	with <A
+HREF="sedawk.html#SEDREF"
+>sed</A
+> and <A
+HREF="awk.html#AWKREF"
+>awk</A
+>.</P
+><P
+>A
+	<B
+CLASS="COMMAND"
+>	    sed</B
+> or
+	<B
+CLASS="COMMAND"
+>	   
+	    awk</B
+> script would normally be invoked
+	    from the command-line by a <TT
+CLASS="USERINPUT"
+><B
+>sed -e
+	    <TT
+CLASS="REPLACEABLE"
+><I
+>'commands'</I
+></TT
+></B
+></TT
+>
+	    or <TT
+CLASS="USERINPUT"
+><B
+>awk
+	    <TT
+CLASS="REPLACEABLE"
+><I
+>'commands'</I
+></TT
+></B
+></TT
+>.	Embedding
+	    such a script in a Bash script permits calling it more simply,
+	    and makes it <I
+CLASS="FIRSTTERM"
+>reusable</I
+>. This also
+	    enables combining the functionality of <I
+CLASS="FIRSTTERM"
+>sed</I
+>
+	    and <I
+CLASS="FIRSTTERM"
+>awk</I
+>, for example <A
+HREF="special-chars.html#PIPEREF"
+>piping</A
+> the output of a set of
+	    <I
+CLASS="FIRSTTERM"
+>sed</I
+> commands to
+	    <I
+CLASS="FIRSTTERM"
+>awk</I
+>. As a saved executable file,
+	    you can then repeatedly invoke it in its original form or
+	    modified, without the inconvenience of retyping it on the
+	    command-line.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX3"
+></A
+><P
+><B
+>Example 36-1. <I
+CLASS="FIRSTTERM"
+>shell wrapper</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# This simple script removes blank lines from a file.
+# No argument checking.
+#
+# You might wish to add something like:
+#
+# E_NOARGS=85
+# if [ -z "$1" ]
+# then
+#  echo "Usage: `basename $0` target-file"
+#  exit $E_NOARGS
+# fi
+
+
+
+sed -e /^$/d "$1"
+# Same as
+#    sed -e '/^$/d' filename
+# invoked from the command-line.
+
+#  The '-e' means an "editing" command follows (optional here).
+#  '^' indicates the beginning of line, '$' the end.
+#  This matches lines with nothing between the beginning and the end --
+#+ blank lines.
+#  The 'd' is the delete command.
+
+#  Quoting the command-line arg permits
+#+ whitespace and special characters in the filename.
+
+#  Note that this script doesn't actually change the target file.
+#  If you need to do that, redirect its output.
+
+exit</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX4"
+></A
+><P
+><B
+>Example 36-2.  A slightly more complex <I
+CLASS="FIRSTTERM"
+>shell
+	wrapper</I
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+#  subst.sh: a script that substitutes one pattern for
+#+ another in a file,
+#+ i.e., "sh subst.sh Smith Jones letter.txt".
+#                     Jones replaces Smith.
+
+ARGS=3         # Script requires 3 arguments.
+E_BADARGS=85   # Wrong number of arguments passed to script.
+
+if [ $# -ne "$ARGS" ]
+then
+  echo "Usage: `basename $0` old-pattern new-pattern filename"
+  exit $E_BADARGS
+fi
+
+old_pattern=$1
+new_pattern=$2
+
+if [ -f "$3" ]
+then
+    file_name=$3
+else
+    echo "File \"$3\" does not exist."
+    exit $E_BADARGS
+fi
+
+
+# -----------------------------------------------
+#  Here is where the heavy work gets done.
+sed -e "s/$old_pattern/$new_pattern/g" $file_name
+# -----------------------------------------------
+
+#  's' is, of course, the substitute command in sed,
+#+ and /pattern/ invokes address matching.
+#  The 'g,' or global flag causes substitution for EVERY
+#+ occurence of $old_pattern on each line, not just the first.
+#  Read the 'sed' docs for an in-depth explanation.
+
+exit $?  # Redirect the output of this script to write to a file.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="LOGGINGWRAPPER"
+></A
+><P
+><B
+>Example 36-3.  A generic <I
+CLASS="FIRSTTERM"
+>shell wrapper</I
+> that
+	writes to a logfile</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+#  logging-wrapper.sh
+#  Generic shell wrapper that performs an operation
+#+ and logs it.
+
+DEFAULT_LOGFILE=logfile.txt
+
+# Set the following two variables.
+OPERATION=
+#         Can be a complex chain of commands,
+#+        for example an awk script or a pipe . . .
+
+LOGFILE=
+if [ -z "$LOGFILE" ]
+then     # If not set, default to ...
+  LOGFILE="$DEFAULT_LOGFILE"
+fi
+
+#         Command-line arguments, if any, for the operation.
+OPTIONS="$@"
+
+
+# Log it.
+echo "`date` + `whoami` + $OPERATION "$@"" &#62;&#62; $LOGFILE
+# Now, do it.
+exec $OPERATION "$@"
+
+# It's necessary to do the logging before the operation.
+# Why?</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="PRASC"
+></A
+><P
+><B
+>Example 36-4.  A <I
+CLASS="FIRSTTERM"
+>shell wrapper</I
+> around an awk
+	script</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# pr-ascii.sh: Prints a table of ASCII characters.
+
+START=33   # Range of printable ASCII characters (decimal).
+END=127    # Will not work for unprintable characters (&#62; 127).
+
+echo " Decimal   Hex     Character"   # Header.
+echo " -------   ---     ---------"
+
+for ((i=START; i&#60;=END; i++))
+do
+  echo $i | awk '{printf("  %3d       %2x         %c\n", $1, $1, $1)}'
+# The Bash printf builtin will not work in this context:
+#     printf "%c" "$i"
+done
+
+exit 0
+
+
+#  Decimal   Hex     Character
+#  -------   ---     ---------
+#    33       21         !
+#    34       22         "
+#    35       23         #
+#    36       24         $
+#
+#    . . .
+#
+#   122       7a         z
+#   123       7b         {
+#   124       7c         |
+#   125       7d         }
+
+
+#  Redirect the output of this script to a file
+#+ or pipe it to "more":  sh pr-asc.sh | more</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="COLTOTALER"
+></A
+><P
+><B
+>Example 36-5.  A <I
+CLASS="FIRSTTERM"
+>shell wrapper</I
+> around another
+	awk script</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# Adds up a specified column (of numbers) in the target file.
+# Floating-point (decimal) numbers okay, because awk can handle them.
+
+ARGS=2
+E_WRONGARGS=85
+
+if [ $# -ne "$ARGS" ] # Check for proper number of command-line args.
+then
+   echo "Usage: `basename $0` filename column-number"
+   exit $E_WRONGARGS
+fi
+
+filename=$1
+column_number=$2
+
+#  Passing shell variables to the awk part of the script is a bit tricky.
+#  One method is to strong-quote the Bash-script variable
+#+ within the awk script.
+#     $'$BASH_SCRIPT_VAR'
+#      ^                ^
+#  This is done in the embedded awk script below.
+#  See the awk documentation for more details.
+
+# A multi-line awk script is here invoked by
+#   awk '
+#   ...
+#   ...
+#   ...
+#   '
+
+
+# Begin awk script.
+# -----------------------------
+awk '
+
+{ total += $'"${column_number}"'
+}
+END {
+     print total
+}     
+
+' "$filename"
+# -----------------------------
+# End awk script.
+
+
+#   It may not be safe to pass shell variables to an embedded awk script,
+#+  so Stephane Chazelas proposes the following alternative:
+#   ---------------------------------------
+#   awk -v column_number="$column_number" '
+#   { total += $column_number
+#   }
+#   END {
+#       print total
+#   }' "$filename"
+#   ---------------------------------------
+
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="PERLREF"
+></A
+>For those scripts needing a single
+	do-it-all tool, a Swiss army knife, there is
+	<I
+CLASS="FIRSTTERM"
+>Perl</I
+>. Perl combines the
+	capabilities of <A
+HREF="sedawk.html#SEDREF"
+>sed</A
+> and <A
+HREF="awk.html#AWKREF"
+>awk</A
+>, and throws in a large subset of
+	<B
+CLASS="COMMAND"
+>C</B
+>, to boot. It is modular and contains support
+	for everything ranging from object-oriented programming up to and
+	including the kitchen sink. Short Perl scripts lend themselves to
+	embedding within shell scripts, and there may be some substance
+	to the claim that Perl can totally replace shell scripting
+	(though the author of the <EM
+>ABS Guide</EM
+> remains
+	skeptical).</P
+><P
+><A
+NAME="PERLEMB"
+></A
+></P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX56"
+></A
+><P
+><B
+>Example 36-6. Perl embedded in a <I
+CLASS="FIRSTTERM"
+>Bash</I
+> script</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+# Shell commands may precede the Perl script.
+echo "This precedes the embedded Perl script within \"$0\"."
+echo "==============================================================="
+
+perl -e 'print "This line prints from an embedded Perl script.\n";'
+# Like sed, Perl also uses the "-e" option.
+
+echo "==============================================================="
+echo "However, the script may also contain shell and system commands."
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>It is even possible to combine a Bash script and Perl script
+        within the same file. Depending on how the script is invoked, either
+	the Bash part or the Perl part will execute.</P
+><P
+><A
+NAME="BASHANDPERL0"
+></A
+></P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="BASHANDPERL"
+></A
+><P
+><B
+>Example 36-7. Bash and Perl scripts combined</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# bashandperl.sh
+
+echo "Greetings from the Bash part of the script, $0."
+# More Bash commands may follow here.
+
+exit
+# End of Bash part of the script.
+
+# =======================================================
+
+#!/usr/bin/perl
+# This part of the script must be invoked with
+#    perl -x bashandperl.sh
+
+print "Greetings from the Perl part of the script, $0.\n";
+#      Perl doesn't seem to like "echo" ...
+# More Perl commands may follow here.
+
+# End of Perl part of the script.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>	      <TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+><TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>bash bashandperl.sh</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Greetings from the Bash part of the script.</TT
+>
+
+
+<TT
+CLASS="PROMPT"
+>bash$ </TT
+><TT
+CLASS="USERINPUT"
+><B
+>perl -x bashandperl.sh</B
+></TT
+>
+<TT
+CLASS="COMPUTEROUTPUT"
+>Greetings from the Perl part of the script.</TT
+>
+	      </PRE
+></FONT
+></TD
+></TR
+></TABLE
+>
+	      </P
+><P
+>It is, of course, possible to embed even more exotic scripting
+        languages within shell wrappers.  <I
+CLASS="FIRSTTERM"
+>Python</I
+>,
+        for example ...</P
+><P
+><A
+NAME="PYTHONEMB"
+></A
+></P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX56PY"
+></A
+><P
+><B
+>Example 36-8. Python embedded in a <I
+CLASS="FIRSTTERM"
+>Bash</I
+> script</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# ex56py.sh
+
+# Shell commands may precede the Python script.
+echo "This precedes the embedded Python script within \"$0.\""
+echo "==============================================================="
+
+python -c 'print "This line prints from an embedded Python script.\n";'
+# Unlike sed and perl, Python uses the "-c" option.
+python -c 'k = raw_input( "Hit a key to exit to outer script. " )'
+
+echo "==============================================================="
+echo "However, the script may also contain shell and system commands."
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Wrapping a script around <I
+CLASS="FIRSTTERM"
+>mplayer</I
+>
+        and the Google's translation server, you can create something
+        that talks back to you.</P
+><P
+><A
+NAME="SPEECH00"
+></A
+></P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="SPEECH0"
+></A
+><P
+><B
+>Example 36-9. A script that speaks</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+#   Courtesy of:
+#   http://elinux.org/RPi_Text_to_Speech_(Speech_Synthesis)
+
+#  You must be on-line for this script to work,
+#+ so you can access the Google translation server.
+#  Of course, mplayer must be present on your computer.
+
+speak()
+  {
+  local IFS=+
+  # Invoke mplayer, then connect to Google translation server.
+  /usr/bin/mplayer -ao alsa -really-quiet -noconsolecontrols \
+ "http://translate.google.com/translate_tts?tl=en&#38;q="$*""
+  # Google translates, but can also speak.
+  }
+
+LINES=4
+
+spk=$(tail -$LINES $0) # Tail end of same script!
+speak "$spk"
+exit
+# Browns. Nice talking to you.</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>One interesting example of a complex shell wrapper is Martin
+         Matusiak's <A
+HREF="http://sourceforge.net/projects/undvd/"
+TARGET="_top"
+><I
+CLASS="FIRSTTERM"
+>undvd</I
+>
+         script</A
+>, which provides an easy-to-use
+         command-line interface to the complex <A
+HREF="http://www.mplayerhq.hu/DOCS/HTML/en/mencoder.html"
+TARGET="_top"
+>mencoder</A
+>
+         utility. Another example is Itzchak Rehberg's <A
+HREF="http://projects.izzysoft.de/trac/ext3undel"
+TARGET="_top"
+>Ext3Undel</A
+>,
+         a set of scripts to recover deleted file on an
+         <I
+CLASS="FIRSTTERM"
+>ext3</I
+> filesystem.</P
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN20130"
+HREF="wrapper.html#AEN20130"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Quite a number of Linux utilities are, in fact,
+	shell wrappers. Some examples are
+	<TT
+CLASS="FILENAME"
+>/usr/bin/pdf2ps</TT
+>,
+	<TT
+CLASS="FILENAME"
+>/usr/bin/batch</TT
+>, and
+	<TT
+CLASS="FILENAME"
+>/usr/bin/xmkmf</TT
+>.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="http://tldp.org/LDP/abs/html/intandnonint.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="http://tldp.org/LDP/abs/html/testsandcomparisons.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Interactive and non-interactive shells and scripts</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="miscellany.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Tests and Comparisons: Alternatives</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

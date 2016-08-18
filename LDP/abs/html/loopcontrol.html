@@ -1,0 +1,628 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Loop Control</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Advanced Bash-Scripting Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Loops and Branches"
+HREF="loops.html"><LINK
+REL="PREVIOUS"
+TITLE="Nested Loops"
+HREF="nestedloops.html"><LINK
+REL="NEXT"
+TITLE="Testing and Branching"
+HREF="testbranch.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Advanced Bash-Scripting Guide: </TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="nestedloops.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 11. Loops and Branches</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="testbranch.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="LOOPCONTROL"
+></A
+>11.3. Loop Control</H1
+><TABLE
+BORDER="0"
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+CLASS="EPIGRAPH"
+><TR
+><TD
+WIDTH="45%"
+>&nbsp;</TD
+><TD
+WIDTH="45%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+><P
+><I
+>Tournez cent tours, tournez mille tours,</I
+></P
+><P
+><I
+>Tournez souvent et tournez toujours . . .</I
+></P
+><P
+><I
+>--Verlaine, <SPAN
+CLASS="QUOTE"
+>"Chevaux de bois"</SPAN
+></I
+></P
+></I
+></TD
+></TR
+></TABLE
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><P
+><B
+><A
+NAME="BRKCONT1"
+></A
+>Commands affecting loop behavior</B
+></P
+><DL
+><DT
+><B
+CLASS="COMMAND"
+>break</B
+>, <B
+CLASS="COMMAND"
+>continue</B
+></DT
+><DD
+><P
+>The <B
+CLASS="COMMAND"
+>break</B
+> and <B
+CLASS="COMMAND"
+>continue</B
+>
+	      loop control commands
+		<A
+NAME="AEN6981"
+HREF="loopcontrol.html#FTN.AEN6981"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+	      correspond exactly to their counterparts in other
+	      programming languages. The <B
+CLASS="COMMAND"
+>break</B
+>
+	      command terminates the loop (<EM
+>breaks</EM
+>
+	      out of it), while <B
+CLASS="COMMAND"
+>continue</B
+> causes a jump
+	      to the next <A
+HREF="loops1.html#ITERATIONREF"
+>iteration</A
+>
+	      of the loop, skipping all the remaining commands in that
+	      particular loop cycle.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="EX28"
+></A
+><P
+><B
+>Example 11-21. Effects of <I
+CLASS="FIRSTTERM"
+>break</I
+> and
+		<B
+CLASS="COMMAND"
+>continue</B
+> in a loop</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+
+LIMIT=19  # Upper limit
+
+echo
+echo "Printing Numbers 1 through 20 (but not 3 and 11)."
+
+a=0
+
+while [ $a -le "$LIMIT" ]
+do
+ a=$(($a+1))
+
+ if [ "$a" -eq 3 ] || [ "$a" -eq 11 ]  # Excludes 3 and 11.
+ then
+   continue      # Skip rest of this particular loop iteration.
+ fi
+
+ echo -n "$a "   # This will not execute for 3 and 11.
+done 
+
+# Exercise:
+# Why does the loop print up to 20?
+
+echo; echo
+
+echo Printing Numbers 1 through 20, but something happens after 2.
+
+##################################################################
+
+# Same loop, but substituting 'break' for 'continue'.
+
+a=0
+
+while [ "$a" -le "$LIMIT" ]
+do
+ a=$(($a+1))
+
+ if [ "$a" -gt 2 ]
+ then
+   break  # Skip entire rest of loop.
+ fi
+
+ echo -n "$a "
+done
+
+echo; echo; echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+NAME="BREAKPARAM"
+></A
+></P
+><P
+>The <B
+CLASS="COMMAND"
+>break</B
+> command may optionally take a
+	      parameter. A plain <B
+CLASS="COMMAND"
+>break</B
+> terminates
+	      only the innermost loop in which it is embedded,
+	      but a <B
+CLASS="COMMAND"
+>break N</B
+> breaks out of
+	      <TT
+CLASS="PARAMETER"
+><I
+>N</I
+></TT
+> levels of loop.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="BREAKLEVELS"
+></A
+><P
+><B
+>Example 11-22. Breaking out of multiple loop levels</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# break-levels.sh: Breaking out of loops.
+
+# "break N" breaks out of N level loops.
+
+for outerloop in 1 2 3 4 5
+do
+  echo -n "Group $outerloop:   "
+
+  # --------------------------------------------------------
+  for innerloop in 1 2 3 4 5
+  do
+    echo -n "$innerloop "
+
+    if [ "$innerloop" -eq 3 ]
+    then
+      break  # Try   break 2   to see what happens.
+             # ("Breaks" out of both inner and outer loops.)
+    fi
+  done
+  # --------------------------------------------------------
+
+  echo
+done  
+
+echo
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>The <B
+CLASS="COMMAND"
+>continue</B
+> command, similar to
+	      <B
+CLASS="COMMAND"
+>break</B
+>, optionally takes a parameter. A
+	      plain <B
+CLASS="COMMAND"
+>continue</B
+> cuts short the
+	      current iteration within its loop and begins the next.
+	      A <B
+CLASS="COMMAND"
+>continue N</B
+> terminates all remaining
+	      iterations at its loop level and continues with the
+	      next iteration at the loop, <TT
+CLASS="OPTION"
+>N</TT
+> levels
+	      above.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="CONTINUELEVELS"
+></A
+><P
+><B
+>Example 11-23. Continuing at a higher loop level</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/bin/bash
+# The "continue N" command, continuing at the Nth level loop.
+
+for outer in I II III IV V           # outer loop
+do
+  echo; echo -n "Group $outer: "
+
+  # --------------------------------------------------------------------
+  for inner in 1 2 3 4 5 6 7 8 9 10  # inner loop
+  do
+
+    if [[ "$inner" -eq 7 &#38;&#38; "$outer" = "III" ]]
+    then
+      continue 2  # Continue at loop on 2nd level, that is "outer loop".
+                  # Replace above line with a simple "continue"
+                  # to see normal loop behavior.
+    fi  
+
+    echo -n "$inner "  # 7 8 9 10 will not echo on "Group III."
+  done  
+  # --------------------------------------------------------------------
+
+done
+
+echo; echo
+
+# Exercise:
+# Come up with a meaningful use for "continue N" in a script.
+
+exit 0</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="CONTINUENEX"
+></A
+><P
+><B
+>Example 11-24. Using <I
+CLASS="FIRSTTERM"
+>continue N</I
+> in an actual task</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="PROGRAMLISTING"
+># Albert Reiner gives an example of how to use "continue N":
+# ---------------------------------------------------------
+
+#  Suppose I have a large number of jobs that need to be run, with
+#+ any data that is to be treated in files of a given name pattern
+#+ in a directory. There are several machines that access
+#+ this directory, and I want to distribute the work over these
+#+ different boxen.
+#  Then I usually nohup something like the following on every box:
+
+while true
+do
+  for n in .iso.*
+  do
+    [ "$n" = ".iso.opts" ] &#38;&#38; continue
+    beta=${n#.iso.}
+    [ -r .Iso.$beta ] &#38;&#38; continue
+    [ -r .lock.$beta ] &#38;&#38; sleep 10 &#38;&#38; continue
+    lockfile -r0 .lock.$beta || continue
+    echo -n "$beta: " `date`
+    run-isotherm $beta
+    date
+    ls -alF .Iso.$beta
+    [ -r .Iso.$beta ] &#38;&#38; rm -f .lock.$beta
+    continue 2
+  done
+  break
+done
+
+exit 0
+
+#  The details, in particular the sleep N, are particular to my
+#+ application, but the general pattern is:
+
+while true
+do
+  for job in {pattern}
+  do
+    {job already done or running} &#38;&#38; continue
+    {mark job as running, do job, mark job as done}
+    continue 2
+  done
+  break        # Or something like `sleep 600' to avoid termination.
+done
+
+#  This way the script will stop only when there are no more jobs to do
+#+ (including jobs that were added during runtime). Through the use
+#+ of appropriate lockfiles it can be run on several machines
+#+ concurrently without duplication of calculations [which run a couple
+#+ of hours in my case, so I really want to avoid this]. Also, as search
+#+ always starts again from the beginning, one can encode priorities in
+#+ the file names. Of course, one could also do this without `continue 2',
+#+ but then one would have to actually check whether or not some job
+#+ was done (so that we should immediately look for the next job) or not
+#+ (in which case we terminate or sleep for a long time before checking
+#+ for a new job).</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+WIDTH="90%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The <B
+CLASS="COMMAND"
+>continue N</B
+> construct is
+	      difficult to understand and tricky to use in any meaningful
+	      context. It is probably best avoided.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN6981"
+HREF="loopcontrol.html#AEN6981"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>These are shell <A
+HREF="internal.html#BUILTINREF"
+>builtins</A
+>,
+		whereas other loop commands, such as <A
+HREF="loops1.html#WHILELOOPREF"
+>while</A
+> and <A
+HREF="testbranch.html#CASEESAC1"
+>case</A
+>, are <A
+HREF="internal.html#KEYWORDREF"
+>keywords</A
+>.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="nestedloops.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="testbranch.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Nested Loops</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="loops.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Testing and Branching</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
